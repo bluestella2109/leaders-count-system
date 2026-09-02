@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  >
+
+  <meta name="theme-color" content="#050505">
+
+  <title>SCORE LIST</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="list-page">
+
+  <div id="codeRain" class="code-rain"></div>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+
+
+  <main class="list-container">
+
+    <header class="list-header">
+
+      <div>
+
+        <div class="tiny-label">
+          FESTIVAL SCORE DATABASE
+        </div>
+
+        <h1
+          class="glitch-title list-title"
+          data-text="SCORE LIST"
+        >
+          SCORE LIST
+        </h1>
+
+      </div>
+
+
+      <a href="index.html" class="back-button">
+        ＋ SCORE
+      </a>
+
+    </header>
+
+
+    <!-- 情報表示 -->
+    <section class="database-info">
+
+      <div>
+        <span>ENTRIES</span>
+        <strong id="entryCount">0</strong>
+      </div>
+
+      <div>
+        <span>WAITING</span>
+        <strong id="waitingCount">0</strong>
+      </div>
+
+      <div>
+        <span>COMPLETE</span>
+        <strong id="completeCount">0</strong>
+      </div>
+
+    </section>
+
+
+    <!-- 表示切り替え -->
+    <div class="sort-switch">
+
+      <button
+        id="newestButton"
+        class="sort-button active"
+      >
+        NEWEST
+        <span>新着順</span>
+      </button>
+
+      <button
+        id="rankingButton"
+        class="sort-button"
+      >
+        RANKING
+        <span>ランキング</span>
+      </button>
+
+    </div>
+
+
+    <div class="table-header">
+
+      <div>PLAYER / SCORE</div>
+
+      <div id="sortModeText">
+        SORT : NEWEST
+      </div>
+
+    </div>
+
+
+    <!-- 点数一覧 -->
+    <section
+      id="scoreList"
+      class="score-list"
+    ></section>
+
+
+    <div
+      id="emptyMessage"
+      class="empty-message hidden"
+    >
+      NO DATA
+    </div>
+
+  </main>
+
+
+  <script type="module" src="js/scores.js"></script>
+
+</body>
+</html>
