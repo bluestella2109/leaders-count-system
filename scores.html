@@ -2,12 +2,11 @@
 <html lang="ja">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0"
   >
 
   <meta
@@ -15,164 +14,139 @@
     content="#050505"
   >
 
-  <meta
-    name="apple-mobile-web-app-capable"
-    content="yes"
-  >
-
   <title>SCORE LIST // FESTIVAL</title>
 
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
-
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 
-<body class="list-page">
+<body class="scores-page">
 
-
-  <!-- ======================================
+  <!-- ========================================
        BACKGROUND
-  ======================================= -->
+  ========================================= -->
 
-  <div
-    id="codeRain"
-    class="code-rain"
-    aria-hidden="true"
-  ></div>
+  <div id="codeRain" class="code-rain"></div>
 
-  <div
-    class="scanlines"
-    aria-hidden="true"
-  ></div>
+  <div class="scanlines"></div>
 
-  <div
-    class="noise"
-    aria-hidden="true"
-  ></div>
+  <div class="noise"></div>
 
 
-  <!-- ======================================
+  <!-- ========================================
        MAIN
-  ======================================= -->
+  ========================================= -->
 
-  <main class="list-container">
+  <main class="scores-container">
 
 
-    <!-- ====================================
+    <!-- ======================================
          HEADER
-    ===================================== -->
+    ======================================= -->
 
-    <header class="list-header">
+    <header class="scores-header">
 
-
-      <div class="list-header-title">
+      <div class="header-left">
 
         <div class="system-label">
-          SYS:// SCORE_DATABASE
+          FESTIVAL // SCORE DATABASE
         </div>
 
-        <h1
-          class="glitch-title list-title"
-          data-text="SCORE LIST"
-        >
+        <h1 class="scores-title">
           SCORE LIST
         </h1>
 
-        <p class="list-subtitle">
-          FESTIVAL SCORE DATABASE
-        </p>
+        <div class="header-status">
+          <span class="status-dot"></span>
+          LIVE DATABASE
+        </div>
 
       </div>
 
 
-      <div class="header-actions">
-
-
-        <!-- 入力画面 -->
-
-        <a
-          href="index.html"
-          class="header-list-button"
-        >
-          ＋ SCORE
-        </a>
-
-
-      </div>
+      <a
+        href="index.html"
+        class="back-button"
+      >
+        ← INPUT
+      </a>
 
     </header>
 
 
+
     <!-- ======================================
-         DATABASE STATUS
+         DATABASE INFO
     ======================================= -->
 
     <section class="database-info">
 
+      <div class="info-box">
 
-      <div class="database-stat">
-
-        <span class="stat-label">
+        <span class="info-label">
           ENTRIES
         </span>
 
-        <strong
-          id="entryCount"
-          class="stat-number"
-        >
+        <strong id="entryCount">
           0
         </strong>
+
+        <small>
+          TOTAL PLAYERS
+        </small>
 
       </div>
 
 
-      <div class="database-stat">
+      <div class="info-box">
 
-        <span class="stat-label">
+        <span class="info-label">
           WAITING
         </span>
 
-        <strong
-          id="waitingCount"
-          class="stat-number"
-        >
+        <strong id="waitingCount">
           0
         </strong>
+
+        <small>
+          NOT COMPLETED
+        </small>
 
       </div>
 
 
-      <div class="database-stat">
+      <div class="info-box">
 
-        <span class="stat-label">
+        <span class="info-label">
           COMPLETE
         </span>
 
-        <strong
-          id="completeCount"
-          class="stat-number"
-        >
+        <strong id="completeCount">
           0
         </strong>
 
+        <small>
+          FINISHED
+        </small>
+
       </div>
 
-
     </section>
+
 
 
     <!-- ======================================
          SORT SWITCH
     ======================================= -->
 
-    <section class="sort-area">
+    <section class="sort-section">
+
+      <div class="section-label">
+        DISPLAY MODE
+      </div>
 
 
       <div class="sort-switch">
-
 
         <button
           id="newestButton"
@@ -207,115 +181,81 @@
 
         </button>
 
-
       </div>
-
-
-      <div
-        id="sortModeText"
-        class="sort-mode-text"
-      >
-        SORT : NEWEST
-      </div>
-
 
     </section>
+
 
 
     <!-- ======================================
          TABLE
     ======================================= -->
 
-    <section class="score-table-area">
+    <section class="score-table-wrapper">
 
 
-      <!-- 横スクロール用 -->
+      <!-- TABLE HEADER -->
 
-      <div class="score-table-scroll">
+      <div class="score-table-header">
 
-
-        <!-- ==================================
-             TABLE HEADER
-        =================================== -->
-
-        <div class="score-table-header">
-
-
-          <div class="column-rank">
-            RANK
-          </div>
-
-
-          <div class="column-player">
-            PLAYER
-          </div>
-
-
-          <div class="column-date">
-            REGISTERED
-          </div>
-
-
-          <div class="column-quiz">
-            QUIZ
-          </div>
-
-
-          <div class="column-shooting">
-            SHOOTING
-          </div>
-
-
-          <div class="column-total">
-            TOTAL
-          </div>
-
-
-          <div class="column-status">
-            STATUS
-          </div>
-
-
-          <div class="column-action">
-            ACTION
-          </div>
-
-
+        <div class="col-rank">
+          順位
         </div>
 
+        <div class="col-player">
+          ニックネーム
+        </div>
 
-        <!-- ==================================
-             SCORE LIST
-        =================================== -->
+        <div class="col-quiz">
+          クイズ
+        </div>
 
-        <div
-          id="scoreList"
-          class="score-list"
-        ></div>
+        <div class="col-shooting">
+          射的
+        </div>
 
+        <div class="col-total">
+          合計
+        </div>
+
+        <div class="col-status">
+          状態
+        </div>
+
+        <div class="col-action">
+          操作
+        </div>
 
       </div>
 
 
-      <!-- ==================================
-           EMPTY
-      =================================== -->
+
+      <!-- SCORE ROWS -->
+
+      <div
+        id="scoreList"
+        class="score-list"
+      >
+      </div>
+
+
+      <!-- EMPTY -->
 
       <div
         id="emptyMessage"
         class="empty-message hidden"
       >
 
-        <div class="empty-code">
-          // DATABASE EMPTY
+        <div class="empty-icon">
+          00
         </div>
 
         <div class="empty-title">
           NO DATA
         </div>
 
-        <div class="empty-text">
-          SCORE DATA NOT FOUND
+        <div class="empty-sub">
+          SCORE DATABASE IS EMPTY
         </div>
 
       </div>
@@ -324,28 +264,28 @@
     </section>
 
 
+
     <!-- ======================================
-         RESET
+         ADMIN
     ======================================= -->
 
-    <section class="admin-area">
+    <section class="admin-panel">
 
+      <div class="admin-info">
 
-      <div class="admin-warning">
-
-        <span class="warning-mark">
+        <div class="admin-warning">
           !
-        </span>
+        </div>
 
         <div>
 
-          <strong>
+          <div class="admin-title">
             ADMIN AREA
-          </strong>
+          </div>
 
-          <p>
-            全データを削除すると元に戻せません。
-          </p>
+          <div class="admin-description">
+            データを初期化すると元に戻せません。
+          </div>
 
         </div>
 
@@ -353,30 +293,28 @@
 
 
       <button
-        id="resetAllButton"
+        id="resetButton"
         class="reset-button"
         type="button"
       >
 
-        <span>
-          RESET ALL DATA
-        </span>
+        RESET ALL DATA
 
-        <small>
+        <span>
           全データ初期化
-        </small>
+        </span>
 
       </button>
 
-
     </section>
+
 
 
     <!-- ======================================
          FOOTER
     ======================================= -->
 
-    <footer class="list-footer">
+    <footer class="scores-footer">
 
       <span>
         FESTIVAL // SCORE SYSTEM
@@ -392,15 +330,14 @@
   </main>
 
 
-  <!-- ======================================
+  <!-- ========================================
        JAVASCRIPT
-  ======================================= -->
+  ========================================= -->
 
   <script
     type="module"
     src="js/scores.js"
   ></script>
-
 
 </body>
 
