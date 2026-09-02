@@ -1,26 +1,31 @@
-/* =========================================================
-   FESTIVAL SCORE SYSTEM
-   scores.js
-========================================================= */
+// ========================================
+// FESTIVAL SCORE SYSTEM
+// scores.js
+// ========================================
 
 import { db } from "./firebase.js";
 
 import {
   collection,
   onSnapshot,
-  doc,
-  updateDoc,
   query,
-  orderBy
+  orderBy,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+// ========================================
+// ELEMENTS
+// ========================================
 
 const scoreList =
   document.getElementById("scoreList");
+
+const emptyMessage =
+  document.getElementById("emptyMessage");
 
 const entryCount =
   document.getElementById("entryCount");
@@ -40,148 +45,590 @@ const rankingButton =
 const sortModeText =
   document.getElementById("sortModeText");
 
-const emptyMessage =
-  document.getElementById("emptyMessage");
+const codeRain =
+  document.getElementById("codeRain");
 
 
-
-/* =========================================================
-   VARIABLES
-========================================================= */
+// ========================================
+// VARIABLES
+// ========================================
 
 let scores = [];
 
-let currentSort =
-  "newest";
+let currentMode = "newest";
 
-let isUpdating =
-  false;
+let isResetting = false;
 
 
+// ========================================
+// FIRESTORE REFERENCE
+// ========================================
 
-/* =========================================================
-   FIRESTORE QUERY
-========================================================= */
-
-const scoresQuery =
-  query(
-    collection(
-      db,
-      "festivalScores"
-    ),
-    orderBy(
-      "createdAt",
-      "desc"
-    )
+const scoresCollection =
+  collection(
+    db,
+    "festivalScores"
   );
 
 
+// ========================================
+// FORMAT SCORE
+// ========================================
 
-/* =========================================================
-   REALTIME LISTENER
-========================================================= */
+function formatScore(score) {
 
-onSnapshot(
-  scoresQuery,
-  (snapshot) => {
+  const number =
+    Number(score) || 0;
 
-    scores = [];
+  return number.toLocaleString(
+    "ja-JP"
+  );
 
-
-    snapshot.forEach(
-      (document) => {
-
-        const data =
-          document.data();
+}
 
 
-        scores.push({
+// ========================================
+// FORMAT DATE
+// ========================================
 
-          id:
-            document.id,
+function formatDate(timestamp) {
 
-          nickname:
-            data.nickname || "UNKNOWN",
+  if (!timestamp) {
 
-          quizScore:
-            Number(
-              data.quizScore || 0
-            ),
+    return "---";
 
-          shootingScore:
-            Number(
-              data.shootingScore || 0
-            ),
+  }
 
-          totalScore:
-            Number(
-              data.totalScore || 0
-            ),
 
-          completed:
-            data.completed === true,
+  try {
 
-          createdAt:
-            data.createdAt || null
+    const date =
+      timestamp.toDate();
 
-        });
+
+    const year =
+      date.getFullYear();
+
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, "0");
+
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, "0");
+
+
+    const hours =
+      String(
+        date.getHours()
+      ).padStart(2, "0");
+
+
+    const minutes =
+      String(
+        date.getMinutes()
+      ).padStart(2, "0");
+
+
+    return (
+      `${year}.${month}.${day} ` +
+      `${hours}:${minutes}`
+    );
+
+  } catch (error) {
+
+    return "---";
+
+  }
+
+}
+
+
+// ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    value ?? "";
+
+  return div.innerHTML;
+
+}
+
+
+// ========================================
+// SORT
+// ========================================
+
+function getSortedScores() {
+
+  const copied =
+    [...scores];
+
+
+  // ======================================
+  // NEWEST
+  // ======================================
+
+  if (currentMode === "newest") {
+
+    copied.sort(
+      (a, b) => {
+
+        const aTime =
+          a.createdAt?.toMillis?.() || 0;
+
+        const bTime =
+          b.createdAt?.toMillis?.() || 0;
+
+        return bTime - aTime;
 
       }
     );
 
-
-    updateInformation();
-
-    renderScores();
-
-  },
+  }
 
 
-  (error) => {
+  // ======================================
+  // RANKING
+  // ======================================
+
+  if (currentMode === "ranking") {
+
+    copied.sort(
+      (a, b) => {
+
+        const aScore =
+          Number(a.totalScore) || 0;
+
+        const bScore =
+          Number(b.totalScore) || 0;
+
+
+        // 点数が高い順
+
+        if (bScore !== aScore) {
+
+          return bScore - aScore;
+
+        }
+
+
+        // 同点なら新しい方を上
+
+        const aTime =
+          a.createdAt?.toMillis?.() || 0;
+
+        const bTime =
+          b.createdAt?.toMillis?.() || 0;
+
+        return bTime - aTime;
+
+      }
+    );
+
+  }
+
+
+  return copied;
+
+}
+
+
+// ========================================
+// RENDER
+// ========================================
+
+function renderScores() {
+
+  if (!scoreList) {
+    return;
+  }
+
+
+  scoreList.innerHTML = "";
+
+
+  // ======================================
+  // EMPTY
+  // ======================================
+
+  if (scores.length === 0) {
+
+    if (emptyMessage) {
+
+      emptyMessage.classList.remove(
+        "hidden"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  if (emptyMessage) {
+
+    emptyMessage.classList.add(
+      "hidden"
+    );
+
+  }
+
+
+  const sortedScores =
+    getSortedScores();
+
+
+  // ======================================
+  // CREATE ROWS
+  // ======================================
+
+  sortedScores.forEach(
+    (score, index) => {
+
+      const row =
+        document.createElement("div");
+
+
+      row.className =
+        "score-item";
+
+
+      if (score.completed === true) {
+
+        row.classList.add(
+          "completed"
+        );
+
+      }
+
+
+      // ==================================
+      // RANK
+      // ==================================
+
+      const rank =
+        document.createElement("div");
+
+      rank.className =
+        "score-rank";
+
+      rank.textContent =
+        String(index + 1).padStart(
+          2,
+          "0"
+        );
+
+
+      // ==================================
+      // PLAYER
+      // ==================================
+
+      const player =
+        document.createElement("div");
+
+      player.className =
+        "score-player";
+
+      player.textContent =
+        score.nickname || "---";
+
+      player.title =
+        score.nickname || "---";
+
+
+      // ==================================
+      // DATE
+      // ==================================
+
+      const date =
+        document.createElement("div");
+
+      date.className =
+        "score-date";
+
+      date.textContent =
+        formatDate(
+          score.createdAt
+        );
+
+
+      // ==================================
+      // QUIZ
+      // ==================================
+
+      const quiz =
+        document.createElement("div");
+
+      quiz.className =
+        "score-quiz";
+
+      quiz.textContent =
+        formatScore(
+          score.quizScore
+        );
+
+
+      // ==================================
+      // SHOOTING
+      // ==================================
+
+      const shooting =
+        document.createElement("div");
+
+      shooting.className =
+        "score-shooting";
+
+      shooting.textContent =
+        formatScore(
+          score.shootingScore
+        );
+
+
+      // ==================================
+      // TOTAL
+      // ==================================
+
+      const total =
+        document.createElement("div");
+
+      total.className =
+        "score-total";
+
+      total.textContent =
+        formatScore(
+          score.totalScore
+        );
+
+
+      // ==================================
+      // STATUS
+      // ==================================
+
+      const status =
+        document.createElement("div");
+
+
+      status.className =
+        "score-status";
+
+
+      if (score.completed === true) {
+
+        status.classList.add(
+          "complete"
+        );
+
+        status.textContent =
+          "COMPLETE";
+
+      } else {
+
+        status.classList.add(
+          "waiting"
+        );
+
+        status.textContent =
+          "WAITING";
+
+      }
+
+
+      // ==================================
+      // ACTION
+      // ==================================
+
+      const action =
+        document.createElement("div");
+
+      action.className =
+        "score-action";
+
+
+      const completeButton =
+        document.createElement("button");
+
+
+      completeButton.type =
+        "button";
+
+
+      completeButton.className =
+        "complete-button";
+
+
+      if (score.completed === true) {
+
+        completeButton.textContent =
+          "✓ COMPLETED";
+
+        completeButton.classList.add(
+          "completed"
+        );
+
+        completeButton.disabled =
+          true;
+
+      } else {
+
+        completeButton.textContent =
+          "案内完了";
+
+
+        completeButton.addEventListener(
+          "click",
+          () => {
+
+            completeScore(
+              score.id
+            );
+
+          }
+        );
+
+      }
+
+
+      action.appendChild(
+        completeButton
+      );
+
+
+      // ==================================
+      // APPEND
+      // ==================================
+
+      row.appendChild(rank);
+
+      row.appendChild(player);
+
+      row.appendChild(date);
+
+      row.appendChild(quiz);
+
+      row.appendChild(shooting);
+
+      row.appendChild(total);
+
+      row.appendChild(status);
+
+      row.appendChild(action);
+
+
+      scoreList.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+// ========================================
+// COMPLETE SCORE
+// ========================================
+
+async function completeScore(
+  scoreId
+) {
+
+  if (!scoreId) {
+    return;
+  }
+
+
+  const target =
+    scores.find(
+      (score) =>
+        score.id === scoreId
+    );
+
+
+  if (!target) {
+    return;
+  }
+
+
+  if (target.completed === true) {
+    return;
+  }
+
+
+  const confirmed =
+    window.confirm(
+      `${target.nickname || "この参加者"} の案内を完了しますか？`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    await updateDoc(
+      doc(
+        db,
+        "festivalScores",
+        scoreId
+      ),
+      {
+        completed: true
+      }
+    );
+
+  } catch (error) {
 
     console.error(
-      "Firestore error:",
+      "Complete Error:",
       error
     );
 
 
-    if (scoreList) {
-
-      scoreList.innerHTML = `
-        <div class="error-message">
-          <span>ERROR</span>
-          <strong>DATABASE CONNECTION FAILED</strong>
-          <small>通信状態を確認してください。</small>
-        </div>
-      `;
-
-    }
+    window.alert(
+      "案内完了の更新に失敗しました。"
+    );
 
   }
 
-);
+}
 
 
+// ========================================
+// UPDATE COUNTS
+// ========================================
 
-/* =========================================================
-   UPDATE INFORMATION
-========================================================= */
-
-function updateInformation() {
+function updateCounts() {
 
   const total =
     scores.length;
 
 
-  const completed =
+  const waiting =
+    scores.filter(
+      (score) =>
+        score.completed !== true
+    ).length;
+
+
+  const complete =
     scores.filter(
       (score) =>
         score.completed === true
     ).length;
-
-
-  const waiting =
-    total - completed;
 
 
   if (entryCount) {
@@ -207,7 +654,7 @@ function updateInformation() {
   if (completeCount) {
 
     completeCount.textContent =
-      completed.toLocaleString(
+      complete.toLocaleString(
         "ja-JP"
       );
 
@@ -216,78 +663,17 @@ function updateInformation() {
 }
 
 
+// ========================================
+// UPDATE MODE UI
+// ========================================
 
-/* =========================================================
-   SORT BUTTONS
-========================================================= */
-
-if (newestButton) {
-
-  newestButton.addEventListener(
-    "click",
-    () => {
-
-      if (
-        currentSort === "newest"
-      ) {
-        return;
-      }
-
-
-      currentSort =
-        "newest";
-
-
-      updateSortButtons();
-
-      renderScores();
-
-    }
-  );
-
-}
-
-
-
-if (rankingButton) {
-
-  rankingButton.addEventListener(
-    "click",
-    () => {
-
-      if (
-        currentSort === "ranking"
-      ) {
-        return;
-      }
-
-
-      currentSort =
-        "ranking";
-
-
-      updateSortButtons();
-
-      renderScores();
-
-    }
-  );
-
-}
-
-
-
-/* =========================================================
-   UPDATE SORT BUTTONS
-========================================================= */
-
-function updateSortButtons() {
+function updateModeUI() {
 
   if (newestButton) {
 
     newestButton.classList.toggle(
       "active",
-      currentSort === "newest"
+      currentMode === "newest"
     );
 
   }
@@ -297,7 +683,7 @@ function updateSortButtons() {
 
     rankingButton.classList.toggle(
       "active",
-      currentSort === "ranking"
+      currentMode === "ranking"
     );
 
   }
@@ -305,34 +691,129 @@ function updateSortButtons() {
 
   if (sortModeText) {
 
-    sortModeText.textContent =
-      currentSort === "newest"
-        ? "SORT : NEWEST"
-        : "SORT : RANKING";
+    if (currentMode === "ranking") {
+
+      sortModeText.textContent =
+        "RANKING";
+
+    } else {
+
+      sortModeText.textContent =
+        "NEWEST";
+
+    }
 
   }
 
 }
 
 
+// ========================================
+// NEWEST BUTTON
+// ========================================
 
-/* =========================================================
-   RENDER SCORES
-========================================================= */
+if (newestButton) {
 
-function renderScores() {
+  newestButton.addEventListener(
+    "click",
+    () => {
 
-  if (!scoreList) {
-    return;
-  }
+      if (
+        currentMode === "newest"
+      ) {
+        return;
+      }
 
 
-  if (
-    scores.length === 0
-  ) {
+      currentMode =
+        "newest";
 
-    scoreList.innerHTML =
-      "";
+
+      updateModeUI();
+
+      renderScores();
+
+    }
+  );
+
+}
+
+
+// ========================================
+// RANKING BUTTON
+// ========================================
+
+if (rankingButton) {
+
+  rankingButton.addEventListener(
+    "click",
+    () => {
+
+      if (
+        currentMode === "ranking"
+      ) {
+        return;
+      }
+
+
+      currentMode =
+        "ranking";
+
+
+      updateModeUI();
+
+      renderScores();
+
+    }
+  );
+
+}
+
+
+// ========================================
+// REALTIME DATABASE
+// ========================================
+
+const scoresQuery =
+  query(
+    scoresCollection,
+    orderBy(
+      "createdAt",
+      "desc"
+    )
+  );
+
+
+onSnapshot(
+  scoresQuery,
+  (snapshot) => {
+
+
+    scores =
+      snapshot.docs.map(
+        (document) => ({
+
+          id:
+            document.id,
+
+          ...document.data()
+
+        })
+      );
+
+
+    updateCounts();
+
+    renderScores();
+
+  },
+
+  (error) => {
+
+    console.error(
+      "Firestore Listener Error:",
+      error
+    );
 
 
     if (emptyMessage) {
@@ -341,677 +822,42 @@ function renderScores() {
         "hidden"
       );
 
-    }
-
-
-    return;
-
-  }
-
-
-  if (emptyMessage) {
-
-    emptyMessage.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  /*
-   * コピーを作成して
-   * 元データを壊さない
-   */
-
-  let sortedScores =
-    [...scores];
-
-
-  /* -------------------------------------------------------
-     NEWEST
-  ------------------------------------------------------- */
-
-  if (
-    currentSort === "newest"
-  ) {
-
-    sortedScores.sort(
-      (a, b) => {
-
-        const aTime =
-          getTime(
-            a.createdAt
-          );
-
-        const bTime =
-          getTime(
-            b.createdAt
-          );
-
-
-        return bTime - aTime;
-
-      }
-    );
-
-  }
-
-
-  /* -------------------------------------------------------
-     RANKING
-  ------------------------------------------------------- */
-
-  if (
-    currentSort === "ranking"
-  ) {
-
-    sortedScores.sort(
-      (a, b) => {
-
-        /*
-         * まず合計点
-         */
-
-        if (
-          b.totalScore !==
-          a.totalScore
-        ) {
-
-          return (
-            b.totalScore -
-            a.totalScore
-          );
-
-        }
-
-
-        /*
-         * 同点なら新しい方
-         */
-
-        const aTime =
-          getTime(
-            a.createdAt
-          );
-
-        const bTime =
-          getTime(
-            b.createdAt
-          );
-
-
-        return bTime - aTime;
-
-      }
-    );
-
-  }
-
-
-  /*
-   * HTML生成
-   */
-
-  scoreList.innerHTML =
-    sortedScores
-      .map(
-        (
-          score,
-          index
-        ) => {
-
-          return createScoreCard(
-            score,
-            index
-          );
-
-        }
-      )
-      .join("");
-
-
-  /*
-   * 完了ボタン
-   */
-
-  attachCompleteButtons();
-
-}
-
-
-
-/* =========================================================
-   CREATE SCORE CARD
-========================================================= */
-
-function createScoreCard(
-  score,
-  index
-) {
-
-  const rank =
-    index + 1;
-
-
-  const statusClass =
-    score.completed
-      ? "completed"
-      : "waiting";
-
-
-  const statusText =
-    score.completed
-      ? "COMPLETE"
-      : "WAITING";
-
-
-  const dateText =
-    formatDate(
-      score.createdAt
-    );
-
-
-  /*
-   * ランキング表示
-   */
-
-  let rankHTML =
-    "";
-
-
-  if (
-    currentSort === "ranking"
-  ) {
-
-    rankHTML = `
-      <div class="score-rank">
-        <span>RANK</span>
-        <strong>
-          ${rank
-            .toString()
-            .padStart(2, "0")}
-        </strong>
-      </div>
-    `;
-
-  }
-
-
-
-  /*
-   * 完了ボタン
-   */
-
-  let actionHTML =
-    "";
-
-
-  if (
-    score.completed
-  ) {
-
-    actionHTML = `
-      <div class="score-completed">
-        <span>✓</span>
-       案内完了
-      </div>
-    `;
-
-  } else {
-
-    actionHTML = `
-      <button
-        class="complete-button"
-        data-id="${escapeHTML(
-          score.id
-        )}"
-      >
-        案内完了
-      </button>
-    `;
-
-  }
-
-
-
-  return `
-    <article
-      class="score-card ${statusClass}"
-    >
-
-      <div class="score-main">
-
-        ${rankHTML}
-
-        <div class="player-info">
-
-          <div class="player-label">
-            PLAYER
-          </div>
-
-          <div class="player-name">
-            ${escapeHTML(
-              score.nickname
-            )}
-          </div>
-
-          <div class="score-date">
-            ${dateText}
-          </div>
-
+      emptyMessage.innerHTML = `
+        <div class="empty-code">
+          // DATABASE ERROR
         </div>
 
-
-        <div class="total-score">
-
-          <span>TOTAL</span>
-
-          <strong>
-            ${score.totalScore.toLocaleString(
-              "ja-JP"
-            )}
-          </strong>
-
-          <small>PTS</small>
-
+        <div class="empty-title">
+          CONNECTION ERROR
         </div>
 
-      </div>
-
-
-      <div class="score-details">
-
-        <div class="detail-item">
-
-          <span>QUIZ</span>
-
-          <strong>
-            ${score.quizScore.toLocaleString(
-              "ja-JP"
-            )}
-          </strong>
-
+        <div class="empty-text">
+          FIRESTORE CONNECTION FAILED
         </div>
-
-
-        <div class="detail-item">
-
-          <span>SHOOTING</span>
-
-          <strong>
-            ${score.shootingScore.toLocaleString(
-              "ja-JP"
-            )}
-          </strong>
-
-        </div>
-
-
-        <div class="detail-status">
-
-          <span
-            class="status-dot"
-          ></span>
-
-          ${statusText}
-
-        </div>
-
-
-        ${actionHTML}
-
-      </div>
-
-    </article>
-  `;
-
-}
-
-
-
-/* =========================================================
-   COMPLETE BUTTONS
-========================================================= */
-
-function attachCompleteButtons() {
-
-  const buttons =
-    document.querySelectorAll(
-      ".complete-button"
-    );
-
-
-  buttons.forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const id =
-            button.dataset.id;
-
-
-          if (!id) {
-            return;
-          }
-
-
-          completeScore(
-            id,
-            button
-          );
-
-        }
-      );
-
-    }
-  );
-
-}
-
-
-
-/* =========================================================
-   COMPLETE SCORE
-========================================================= */
-
-async function completeScore(
-  id,
-  button
-) {
-
-  if (isUpdating) {
-    return;
-  }
-
-
-  if (!id) {
-    return;
-  }
-
-
-  /*
-   * 確認
-   */
-
-  const confirmed =
-    window.confirm(
-      "この人を「案内完了」にしますか？"
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  isUpdating =
-    true;
-
-
-  /*
-   * ボタンを一時停止
-   */
-
-  if (button) {
-
-    button.disabled =
-      true;
-
-    button.textContent =
-      "UPDATING...";
-
-  }
-
-
-  try {
-
-    await updateDoc(
-      doc(
-        db,
-        "festivalScores",
-        id
-      ),
-      {
-
-        completed:
-          true
-
-      }
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "Complete update error:",
-      error
-    );
-
-
-    alert(
-      "案内完了の更新に失敗しました。"
-    );
-
-
-    if (button) {
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "案内完了";
+      `;
 
     }
 
-  } finally {
-
-    isUpdating =
-      false;
-
   }
-
-}
-
+);
 
 
-/* =========================================================
-   GET FIRESTORE TIMESTAMP
-========================================================= */
-
-function getTime(
-  timestamp
-) {
-
-  if (!timestamp) {
-    return 0;
-  }
-
-
-  /*
-   * Firestore Timestamp
-   */
-
-  if (
-    typeof timestamp.toMillis ===
-    "function"
-  ) {
-
-    return timestamp.toMillis();
-
-  }
-
-
-  /*
-   * Date
-   */
-
-  if (
-    timestamp instanceof Date
-  ) {
-
-    return timestamp.getTime();
-
-  }
-
-
-  /*
-   * number
-   */
-
-  if (
-    typeof timestamp ===
-    "number"
-  ) {
-
-    return timestamp;
-
-  }
-
-
-  return 0;
-
-}
-
-
-
-/* =========================================================
-   FORMAT DATE
-========================================================= */
-
-function formatDate(
-  timestamp
-) {
-
-  const time =
-    getTime(
-      timestamp
-    );
-
-
-  if (!time) {
-
-    return "TIME UNKNOWN";
-
-  }
-
-
-  const date =
-    new Date(
-      time
-    );
-
-
-  const year =
-    date.getFullYear();
-
-
-  const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  const day =
-    String(
-      date.getDate()
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  const hour =
-    String(
-      date.getHours()
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  const minute =
-    String(
-      date.getMinutes()
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  return `${year}.${month}.${day} ${hour}:${minute}`;
-
-}
-
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHTML(
-  value
-) {
-
-  return String(
-    value
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-
-/* =========================================================
-   CODE RAIN
-========================================================= */
+// ========================================
+// CODE RAIN
+// ========================================
 
 function createCodeRain() {
 
-  const container =
-    document.getElementById(
-      "codeRain"
-    );
-
-
-  if (!container) {
+  if (!codeRain) {
     return;
   }
 
 
-  /*
-   * 一度削除して再生成
-   */
-
-  container.innerHTML =
-    "";
+  codeRain.innerHTML = "";
 
 
   const characters =
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>/[]{}#%&";
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>[]{}";
 
 
   const width =
@@ -1033,22 +879,21 @@ function createCodeRain() {
     i++
   ) {
 
+
     const column =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
 
     column.className =
       "code-column";
 
 
-    /*
-     * 一部の列だけ赤
-     */
+    // ------------------------------------
+    // RED
+    // ------------------------------------
 
     if (
-      Math.random() < 0.12
+      Math.random() < 0.13
     ) {
 
       column.classList.add(
@@ -1058,12 +903,15 @@ function createCodeRain() {
     }
 
 
-    let text =
-      "";
+    // ------------------------------------
+    // TEXT
+    // ------------------------------------
+
+    let text = "";
 
 
     const length =
-      20 +
+      25 +
       Math.floor(
         Math.random() * 45
       );
@@ -1077,13 +925,16 @@ function createCodeRain() {
 
       const random =
         Math.floor(
-          Math.random() *
+          Math.random()
+          *
           characters.length
         );
 
 
       text +=
         characters[random];
+
+      text += "\n";
 
     }
 
@@ -1092,47 +943,47 @@ function createCodeRain() {
       text;
 
 
-    /*
-     * 横位置
-     */
+    // ------------------------------------
+    // POSITION
+    // ------------------------------------
 
     column.style.left =
       `${Math.random() * 100}%`;
 
 
-    /*
-     * アニメーション速度
-     */
+    // ------------------------------------
+    // FONT
+    // ------------------------------------
+
+    column.style.fontSize =
+      `${8 + Math.random() * 5}px`;
+
+
+    // ------------------------------------
+    // SPEED
+    // ------------------------------------
 
     column.style.animationDuration =
       `${8 + Math.random() * 18}s`;
 
 
-    /*
-     * 開始位置
-     */
+    // ------------------------------------
+    // DELAY
+    // ------------------------------------
 
     column.style.animationDelay =
       `${Math.random() * -20}s`;
 
 
-    /*
-     * 透明度
-     */
+    // ------------------------------------
+    // OPACITY
+    // ------------------------------------
 
     column.style.opacity =
-      `${0.18 + Math.random() * 0.5}`;
+      `${0.12 + Math.random() * 0.35}`;
 
 
-    /*
-     * 文字サイズ
-     */
-
-    column.style.fontSize =
-      `${10 + Math.random() * 5}px`;
-
-
-    container.appendChild(
+    codeRain.appendChild(
       column
     );
 
@@ -1141,22 +992,18 @@ function createCodeRain() {
 }
 
 
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-updateSortButtons();
+// ========================================
+// INITIAL CODE RAIN
+// ========================================
 
 createCodeRain();
 
 
+// ========================================
+// RESIZE
+// ========================================
 
-/* =========================================================
-   RESIZE
-========================================================= */
-
-let resizeTimer;
+let resizeTimer = null;
 
 
 window.addEventListener(
@@ -1175,8 +1022,154 @@ window.addEventListener(
           createCodeRain();
 
         },
-        250
+        300
       );
 
   }
+);
+
+
+// ========================================
+// ALL DATA RESET
+// ========================================
+
+async function resetAllData() {
+
+  if (isResetting) {
+    return;
+  }
+
+
+  // --------------------------------------
+  // CONFIRM 1
+  // --------------------------------------
+
+  const firstConfirm =
+    window.confirm(
+      "本当に全データを初期化しますか？\n\n登録されている点数データがすべて削除されます。"
+    );
+
+
+  if (!firstConfirm) {
+    return;
+  }
+
+
+  // --------------------------------------
+  // CONFIRM 2
+  // --------------------------------------
+
+  const secondConfirm =
+    window.confirm(
+      "【最終確認】\n\nすべての参加者データを削除します。\nこの操作は元に戻せません。\n\n本当に実行しますか？"
+    );
+
+
+  if (!secondConfirm) {
+    return;
+  }
+
+
+  isResetting = true;
+
+
+  try {
+
+
+    // ====================================
+    // GET ALL DOCUMENTS
+    // ====================================
+
+    const snapshot =
+      await getDocs(
+        scoresCollection
+      );
+
+
+    // ====================================
+    // DELETE
+    // ====================================
+
+    const deletePromises =
+      snapshot.docs.map(
+        (document) =>
+          deleteDoc(
+            doc(
+              db,
+              "festivalScores",
+              document.id
+            )
+          )
+      );
+
+
+    await Promise.all(
+      deletePromises
+    );
+
+
+    window.alert(
+      "全データを初期化しました。"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Reset Error:",
+      error
+    );
+
+
+    window.alert(
+      "データの初期化に失敗しました。"
+    );
+
+
+  } finally {
+
+    isResetting = false;
+
+  }
+
+}
+
+
+// ========================================
+// RESET BUTTON
+// ========================================
+//
+// index.html / scores.html のどちらかに
+// id="resetAllButton" があれば動作します。
+// ========================================
+
+const resetAllButton =
+  document.getElementById(
+    "resetAllButton"
+  );
+
+
+if (resetAllButton) {
+
+  resetAllButton.addEventListener(
+    "click",
+    resetAllData
+  );
+
+}
+
+
+// ========================================
+// INITIALIZE UI
+// ========================================
+
+updateModeUI();
+
+
+// ========================================
+// DEBUG
+// ========================================
+
+console.log(
+  "FESTIVAL SCORE SYSTEM / scores.js READY"
 );
