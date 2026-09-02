@@ -1,828 +1,173 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
-
-  <meta name="theme-color" content="#050505">
 
   <title>FESTIVAL SCORE SYSTEM</title>
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="input-page">
 
-  <!-- ================================
+<body>
+
+  <!-- ========================================
        BACKGROUND
-  ================================= -->
+  ========================================= -->
 
-  <div id="codeRain" class="code-rain"></div>
-  <div class="scanlines"></div>
   <div class="noise"></div>
 
+  <div
+    id="codeRain"
+    class="code-rain"
+    aria-hidden="true"
+  ></div>
 
-  <!-- ================================
-       MENU SCREEN
-  ================================= -->
 
-  <section id="menuScreen" class="start-screen">
+  <!-- ========================================
+       TOP HEADER
+  ========================================= -->
 
-    <div class="system-label">
+  <header class="top-header">
+
+    <div class="system-name">
       FESTIVAL SCORE SYSTEM
     </div>
 
+    <div class="system-status">
 
-    <div class="start-box">
+      <span class="status-dot"></span>
 
-      <div class="small-code">
-        CULTURE FESTIVAL // TERMINAL 01
+      SYSTEM ONLINE
+
+    </div>
+
+  </header>
+
+
+  <!-- ========================================
+       MAIN
+  ========================================= -->
+
+  <main class="home">
+
+    <section class="terminal-card">
+
+      <!-- small label -->
+
+      <div class="terminal-label">
+
+        <span>
+          CULTURE FESTIVAL
+        </span>
+
+        <span>
+          //
+        </span>
+
+        <span>
+          TERMINAL 01
+        </span>
+
       </div>
 
 
-      <h1
+      <!-- title -->
+
+      <div
         class="glitch-title"
-        data-text="SCORE SYSTEM"
+        data-text="SCORE"
       >
-        SCORE SYSTEM
-      </h1>
+        SCORE
+      </div>
 
 
-      <p class="start-description">
+      <div
+        class="glitch-title second"
+        data-text="SYSTEM"
+      >
+        SYSTEM
+      </div>
+
+
+      <!-- description -->
+
+      <p class="home-description">
+
         操作を選択してください
+
       </p>
 
 
-      <!-- 点数入力 -->
+      <!-- buttons -->
 
-      <button
-        id="goInputButton"
-        class="menu-button"
-      >
-
-        <span class="menu-number">
-          01
-        </span>
-
-        <span class="menu-main">
-          点数を入力する
-        </span>
-
-        <span class="menu-sub">
-          ENTER SCORE
-        </span>
-
-      </button>
-
-
-      <!-- 一覧 -->
-
-      <button
-        id="goListButton"
-        class="menu-button"
-      >
-
-        <span class="menu-number">
-          02
-        </span>
-
-        <span class="menu-main">
-          点数一覧を見る
-        </span>
-
-        <span class="menu-sub">
-          SCORE DATABASE
-        </span>
-
-      </button>
-
-
-    </div>
-
-
-    <div class="system-footer">
-      SYSTEM // READY
-    </div>
-
-  </section>
-
-
-  <!-- ================================
-       NICKNAME SCREEN
-  ================================= -->
-
-  <section
-    id="startScreen"
-    class="start-screen hidden"
-  >
-
-    <div class="system-label">
-      USER AUTHENTICATION
-    </div>
-
-
-    <div class="start-box">
-
-      <div class="small-code">
-        PLAYER REGISTRATION
-      </div>
-
-
-      <h1
-        class="glitch-title"
-        data-text="PLAYER NAME"
-      >
-        PLAYER NAME
-      </h1>
-
-
-      <p class="start-description">
-        ニックネームを入力してください
-      </p>
-
-
-      <input
-        id="nicknameInput"
-        class="nickname-input"
-        type="text"
-        maxlength="15"
-        autocomplete="off"
-        placeholder="NICKNAME"
-      >
-
-
-      <button
-        id="startButton"
-        class="main-button"
-      >
-        START
-      </button>
-
-
-      <button
-        id="backToMenuButton"
-        class="menu-back-button"
-      >
-        ← BACK
-      </button>
-
-    </div>
-
-
-    <div class="system-footer">
-      SYSTEM // WAITING
-    </div>
-
-  </section>
-
-
-  <!-- ================================
-       SCORE INPUT SCREEN
-  ================================= -->
-
-  <main
-    id="scoreScreen"
-    class="score-screen hidden"
-  >
-
-    <header class="top-header">
-
-      <div>
-
-        <div class="tiny-label">
-          FESTIVAL SCORE TERMINAL
-        </div>
-
-        <h1 class="header-title">
-          SCORE INPUT
-        </h1>
-
-      </div>
-
-
-      <div class="player-area">
-
-        <span class="player-label">
-          PLAYER
-        </span>
-
-        <span id="playerName">
-          ---
-        </span>
-
-      </div>
-
-    </header>
-
-
-    <!-- QUIZ -->
-
-    <section class="score-section">
-
-      <div class="section-header">
-
-        <div>
-
-          <div class="section-number">
-            01
-          </div>
-
-          <h2>
-            QUIZ
-          </h2>
-
-        </div>
-
-
-        <div class="score-unit">
-          SCORE
-        </div>
-
-      </div>
-
-
-      <div
-        id="quizDisplay"
-        class="score-display"
-      >
-        0
-      </div>
-
-
-      <div
-        class="keypad"
-        data-target="quiz"
-      >
-
-        <button class="key" data-value="1">
-          1
-        </button>
-
-        <button class="key" data-value="2">
-          2
-        </button>
-
-        <button class="key" data-value="3">
-          3
-        </button>
-
-        <button class="key" data-value="4">
-          4
-        </button>
-
-        <button class="key" data-value="5">
-          5
-        </button>
-
-        <button class="key" data-value="6">
-          6
-        </button>
-
-        <button class="key" data-value="7">
-          7
-        </button>
-
-        <button class="key" data-value="8">
-          8
-        </button>
-
-        <button class="key" data-value="9">
-          9
-        </button>
+      <div class="home-buttons">
 
         <button
-          class="key key-function"
-          data-action="clear"
+          class="main-button"
+          onclick="location.href='input.html'"
         >
-          C
+
+          <span class="button-main">
+            点数を入力する
+          </span>
+
+          <span class="button-sub">
+            ENTER SCORE
+          </span>
+
         </button>
 
-        <button class="key" data-value="0">
-          0
-        </button>
 
         <button
-          class="key key-function"
-          data-action="back"
+          class="main-button"
+          onclick="location.href='list.html'"
         >
-          ←
+
+          <span class="button-main">
+            点数一覧を見る
+          </span>
+
+          <span class="button-sub">
+            SCORE DATABASE
+          </span>
+
         </button>
+
+      </div>
+
+
+      <!-- bottom information -->
+
+      <div class="terminal-footer">
+
+        <span>
+          SYSTEM://READY
+        </span>
+
+        <span>
+          2026
+        </span>
 
       </div>
 
     </section>
-
-
-    <div class="section-divider">
-      +
-    </div>
-
-
-    <!-- SHOOTING -->
-
-    <section class="score-section">
-
-      <div class="section-header">
-
-        <div>
-
-          <div class="section-number">
-            02
-          </div>
-
-          <h2>
-            SHOOTING
-          </h2>
-
-        </div>
-
-
-        <div class="score-unit">
-          SCORE
-        </div>
-
-      </div>
-
-
-      <div
-        id="shootingDisplay"
-        class="score-display"
-      >
-        0
-      </div>
-
-
-      <div
-        class="keypad"
-        data-target="shooting"
-      >
-
-        <button class="key" data-value="1">
-          1
-        </button>
-
-        <button class="key" data-value="2">
-          2
-        </button>
-
-        <button class="key" data-value="3">
-          3
-        </button>
-
-        <button class="key" data-value="4">
-          4
-        </button>
-
-        <button class="key" data-value="5">
-          5
-        </button>
-
-        <button class="key" data-value="6">
-          6
-        </button>
-
-        <button class="key" data-value="7">
-          7
-        </button>
-
-        <button class="key" data-value="8">
-          8
-        </button>
-
-        <button class="key" data-value="9">
-          9
-        </button>
-
-        <button
-          class="key key-function"
-          data-action="clear"
-        >
-          C
-        </button>
-
-        <button class="key" data-value="0">
-          0
-        </button>
-
-        <button
-          class="key key-function"
-          data-action="back"
-        >
-          ←
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- TOTAL -->
-
-    <section class="total-preview">
-
-      <div>
-
-        <span class="tiny-label">
-          CALCULATED TOTAL
-        </span>
-
-        <span class="total-title">
-          TOTAL
-        </span>
-
-      </div>
-
-
-      <div
-        id="totalPreview"
-        class="total-number"
-      >
-        0
-      </div>
-
-    </section>
-
-
-    <!-- SEND -->
-
-    <button
-      id="submitButton"
-      class="submit-button"
-    >
-
-      <span>
-        送信
-      </span>
-
-      <small>
-        SEND SCORE
-      </small>
-
-    </button>
-
-
-    <button
-      id="backFromScoreButton"
-      class="input-screen-back"
-    >
-      ← MENU
-    </button>
-
-
-    <div
-      id="sendStatus"
-      class="send-status"
-    ></div>
 
   </main>
 
 
-  <!-- ================================
-       RESULT
-  ================================= -->
-
-  <div
-    id="resultOverlay"
-    class="result-overlay hidden"
-  >
-
-    <div class="result-grid"></div>
-
-
-    <div class="result-content">
-
-      <div class="result-label">
-        SCORE REGISTERED
-      </div>
-
-
-      <div
-        id="resultName"
-        class="result-name"
-      >
-        PLAYER
-      </div>
-
-
-      <div class="result-small">
-        TOTAL SCORE
-      </div>
-
-
-      <div
-        id="resultTotal"
-        class="result-total glitch-result"
-        data-text="0"
-      >
-        0
-      </div>
-
-
-      <div class="result-breakdown">
-
-        <div>
-
-          <span>
-            QUIZ
-          </span>
-
-          <strong id="resultQuiz">
-            0
-          </strong>
-
-        </div>
-
-
-        <div class="result-plus">
-          +
-        </div>
-
-
-        <div>
-
-          <span>
-            SHOOTING
-          </span>
-
-          <strong id="resultShooting">
-            0
-          </strong>
-
-        </div>
-
-      </div>
-
-
-      <button
-        id="newEntryButton"
-        class="main-button result-button"
-      >
-        NEXT PLAYER
-      </button>
-
-
-      <a
-        href="scores.html"
-        class="text-link"
-      >
-        SCORE LIST →
-      </a>
-
-    </div>
-
-  </div>
-
-
-  <!-- ================================
-       MENU / NAVIGATION SCRIPT
-  ================================= -->
-
-  <script type="module">
-
-    const menuScreen =
-      document.getElementById(
-        "menuScreen"
-      );
-
-    const startScreen =
-      document.getElementById(
-        "startScreen"
-      );
-
-    const scoreScreen =
-      document.getElementById(
-        "scoreScreen"
-      );
-
-
-    const goInputButton =
-      document.getElementById(
-        "goInputButton"
-      );
-
-    const goListButton =
-      document.getElementById(
-        "goListButton"
-      );
-
-    const backToMenuButton =
-      document.getElementById(
-        "backToMenuButton"
-      );
-
-    const backFromScoreButton =
-      document.getElementById(
-        "backFromScoreButton"
-      );
-
-
-    /*
-     * 点数入力を選択
-     */
-
-    goInputButton.addEventListener(
-      "click",
-      () => {
-
-        menuScreen.classList.add(
-          "hidden"
-        );
-
-        startScreen.classList.remove(
-          "hidden"
-        );
-
-      }
-    );
-
-
-    /*
-     * 一覧を選択
-     */
-
-    goListButton.addEventListener(
-      "click",
-      () => {
-
-        window.location.href =
-          "scores.html";
-
-      }
-    );
-
-
-    /*
-     * ニックネーム画面から戻る
-     */
-
-    backToMenuButton.addEventListener(
-      "click",
-      () => {
-
-        startScreen.classList.add(
-          "hidden"
-        );
-
-        menuScreen.classList.remove(
-          "hidden"
-        );
-
-      }
-    );
-
-
-    /*
-     * 点数入力画面から戻る
-     */
-
-    backFromScoreButton.addEventListener(
-      "click",
-      () => {
-
-        scoreScreen.classList.add(
-          "hidden"
-        );
-
-        menuScreen.classList.remove(
-          "hidden"
-        );
-
-      }
-    );
-
-
-  </script>
-
-
-  <!-- SCORE INPUT -->
-
-  <script type="module" src="js/input.js"></script>
-
-
-  <!-- ================================
-       CODE RAIN
-  ================================= -->
-
-  <script>
-
-    function createCodeRain() {
-
-      const container =
-        document.getElementById(
-          "codeRain"
-        );
-
-
-      const characters =
-        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/[]{}#%&";
-
-
-      const width =
-        window.innerWidth;
-
-
-      const columnCount =
-        Math.max(
-          15,
-          Math.floor(
-            width / 35
-          )
-        );
-
-
-      for (
-        let i = 0;
-        i < columnCount;
-        i++
-      ) {
-
-        const column =
-          document.createElement(
-            "div"
-          );
-
-
-        column.className =
-          "code-column";
-
-
-        if (
-          Math.random() < 0.12
-        ) {
-
-          column.classList.add(
-            "red"
-          );
-
-        }
-
-
-        let text = "";
-
-
-        const length =
-          20 +
-          Math.floor(
-            Math.random() * 40
-          );
-
-
-        for (
-          let j = 0;
-          j < length;
-          j++
-        ) {
-
-          const random =
-            Math.floor(
-              Math.random()
-              *
-              characters.length
-            );
-
-
-          text +=
-            characters[random];
-
-        }
-
-
-        column.textContent =
-          text;
-
-
-        column.style.left =
-          `${Math.random() * 100}%`;
-
-
-        column.style.animationDuration =
-          `${8 + Math.random() * 18}s`;
-
-
-        column.style.animationDelay =
-          `${Math.random() * -20}s`;
-
-
-        column.style.opacity =
-          `${0.2 + Math.random() * 0.6}`;
-
-
-        container.appendChild(
-          column
-        );
-
-      }
-
-    }
-
-
-    createCodeRain();
-
-  </script>
+  <!-- ========================================
+       JS
+  ========================================= -->
+
+  <script type="module" src="js/codeRain.js"></script>
 
 </body>
+
 </html>
