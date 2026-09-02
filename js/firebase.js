@@ -1,44 +1,76 @@
-// ========================================
-// Firebase 初期設定
-// ========================================
+/* =========================================================
+   FESTIVAL SCORE SYSTEM
+   js/firebase.js
+
+   Firebase / Firestore connection
+========================================================= */
 
 import {
   initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+} from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
 import {
   getFirestore
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-// ========================================
-// Firebase Config
-// ========================================
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCiSxUY5BVu2DB_b2bpe9mZxk5LR4Q7PBQ",
 
-  authDomain: "leaders-count-system.firebaseapp.com",
+  apiKey:
+    "AIzaSyCiSxUY5BVu2DB_b2bpe9mZxk5LR4Q7PBQ",
 
-  projectId: "leaders-count-system",
+  authDomain:
+    "leaders-count-system.firebaseapp.com",
 
-  storageBucket: "leaders-count-system.firebasestorage.app",
+  projectId:
+    "leaders-count-system",
 
-  messagingSenderId: "242036957530",
+  storageBucket:
+    "leaders-count-system.firebasestorage.app",
 
-  appId: "1:242036957530:web:822d539394f3cb83b6d363"
+  messagingSenderId:
+    "242036957530",
+
+  appId:
+    "1:242036957530:web:822d539394f3cb83b6d363"
+
 };
 
 
-// ========================================
-// Firebase 初期化
-// ========================================
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(firebaseConfig);
 
 
-// ========================================
-// Firestore
-// ========================================
+/* =========================================================
+   FIRESTORE
+========================================================= */
 
-export const db = getFirestore(app);
+export const db =
+  getFirestore(app);
+
+
+/* =========================================================
+   COLLECTION NAME
+========================================================= */
+
+/*
+  input.js / scores.js の両方で
+  同じコレクションを使用します。
+
+  Firestore:
+  festivalScores
+*/
+
+export const SCORES_COLLECTION =
+  "festivalScores";
