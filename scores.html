@@ -7,7 +7,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
   <meta
@@ -15,7 +15,12 @@
     content="#050505"
   >
 
-  <title>SCORE LIST // DATABASE</title>
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <title>SCORE LIST // FESTIVAL</title>
 
   <link
     rel="stylesheet"
@@ -25,11 +30,12 @@
 </head>
 
 
-<body class="scores-page">
+<body class="list-page">
 
-  <!-- =========================================
-       BACKGROUND EFFECT
-  ========================================== -->
+
+  <!-- ======================================
+       BACKGROUND
+  ======================================= -->
 
   <div
     id="codeRain"
@@ -48,146 +54,125 @@
   ></div>
 
 
-  <!-- =========================================
+  <!-- ======================================
        MAIN
-  ========================================== -->
+  ======================================= -->
 
-  <main class="scores-container">
+  <main class="list-container">
 
 
-    <!-- =========================================
+    <!-- ====================================
          HEADER
-    ========================================== -->
+    ===================================== -->
 
-    <header class="scores-header">
+    <header class="list-header">
 
-      <div class="header-left">
 
-        <div class="tiny-label">
-          FESTIVAL SCORE DATABASE
+      <div class="list-header-title">
+
+        <div class="system-label">
+          SYS:// SCORE_DATABASE
         </div>
 
         <h1
-          class="glitch-title"
+          class="glitch-title list-title"
           data-text="SCORE LIST"
         >
           SCORE LIST
         </h1>
 
-        <p class="header-subtitle">
-          PARTICIPANT RECORDS
+        <p class="list-subtitle">
+          FESTIVAL SCORE DATABASE
         </p>
 
       </div>
 
 
-      <div class="header-right">
+      <div class="header-actions">
 
-        <div class="live-status">
 
-          <span class="live-dot"></span>
-
-          <span>
-            LIVE DATABASE
-          </span>
-
-        </div>
-
+        <!-- 入力画面 -->
 
         <a
           href="index.html"
-          class="back-button"
+          class="header-list-button"
         >
-          ← INPUT
+          ＋ SCORE
         </a>
+
 
       </div>
 
     </header>
 
 
-
-    <!-- =========================================
-         DATABASE INFO
-    ========================================== -->
+    <!-- ======================================
+         DATABASE STATUS
+    ======================================= -->
 
     <section class="database-info">
 
-      <div class="info-card">
 
-        <span class="info-label">
+      <div class="database-stat">
+
+        <span class="stat-label">
           ENTRIES
         </span>
 
         <strong
           id="entryCount"
-          class="info-number"
+          class="stat-number"
         >
           0
         </strong>
 
-        <span class="info-description">
-          TOTAL PLAYERS
-        </span>
-
       </div>
 
 
-      <div class="info-card">
+      <div class="database-stat">
 
-        <span class="info-label">
+        <span class="stat-label">
           WAITING
         </span>
 
         <strong
           id="waitingCount"
-          class="info-number"
+          class="stat-number"
         >
           0
         </strong>
 
-        <span class="info-description">
-          NOT COMPLETED
-        </span>
-
       </div>
 
 
-      <div class="info-card">
+      <div class="database-stat">
 
-        <span class="info-label">
+        <span class="stat-label">
           COMPLETE
         </span>
 
         <strong
           id="completeCount"
-          class="info-number"
+          class="stat-number"
         >
           0
         </strong>
 
-        <span class="info-description">
-          GUIDANCE COMPLETE
-        </span>
-
       </div>
+
 
     </section>
 
 
-
-    <!-- =========================================
-         SORT AREA
-    ========================================== -->
+    <!-- ======================================
+         SORT SWITCH
+    ======================================= -->
 
     <section class="sort-area">
 
-      <div class="section-label">
-        DISPLAY MODE
-      </div>
-
 
       <div class="sort-switch">
+
 
         <button
           id="newestButton"
@@ -217,106 +202,104 @@
           </span>
 
           <span class="sort-sub">
-            点数順
+            ランキング
           </span>
 
         </button>
 
+
       </div>
+
+
+      <div
+        id="sortModeText"
+        class="sort-mode-text"
+      >
+        SORT : NEWEST
+      </div>
+
 
     </section>
 
 
+    <!-- ======================================
+         TABLE
+    ======================================= -->
 
-    <!-- =========================================
-         CURRENT MODE
-    ========================================== -->
+    <section class="score-table-area">
 
-    <div class="list-status-bar">
 
-      <div>
+      <!-- 横スクロール用 -->
 
-        <span class="status-label">
-          SORT MODE
-        </span>
+      <div class="score-table-scroll">
 
-        <strong
-          id="sortModeText"
-        >
-          NEWEST
-        </strong>
+
+        <!-- ==================================
+             TABLE HEADER
+        =================================== -->
+
+        <div class="score-table-header">
+
+
+          <div class="column-rank">
+            RANK
+          </div>
+
+
+          <div class="column-player">
+            PLAYER
+          </div>
+
+
+          <div class="column-date">
+            REGISTERED
+          </div>
+
+
+          <div class="column-quiz">
+            QUIZ
+          </div>
+
+
+          <div class="column-shooting">
+            SHOOTING
+          </div>
+
+
+          <div class="column-total">
+            TOTAL
+          </div>
+
+
+          <div class="column-status">
+            STATUS
+          </div>
+
+
+          <div class="column-action">
+            ACTION
+          </div>
+
+
+        </div>
+
+
+        <!-- ==================================
+             SCORE LIST
+        =================================== -->
+
+        <div
+          id="scoreList"
+          class="score-list"
+        ></div>
+
 
       </div>
 
 
-      <div class="database-state">
-
-        <span class="live-dot"></span>
-
-        DATABASE CONNECTED
-
-      </div>
-
-    </div>
-
-
-
-    <!-- =========================================
-         SCORE TABLE
-    ========================================== -->
-
-    <section
-      class="score-table-wrapper"
-    >
-
-      <!-- TABLE HEADER -->
-
-      <div class="score-table-header">
-
-        <div class="col-rank">
-          #
-        </div>
-
-        <div class="col-player">
-          PLAYER
-        </div>
-
-        <div class="col-date">
-          REGISTERED
-        </div>
-
-        <div class="col-quiz">
-          QUIZ
-        </div>
-
-        <div class="col-shooting">
-          SHOOTING
-        </div>
-
-        <div class="col-total">
-          TOTAL
-        </div>
-
-        <div class="col-status">
-          STATUS
-        </div>
-
-        <div class="col-action">
-          ACTION
-        </div>
-
-      </div>
-
-
-      <!-- SCORE ITEMS ARE INSERTED HERE -->
-
-      <div
-        id="scoreList"
-        class="score-list"
-      ></div>
-
-
-      <!-- EMPTY -->
+      <!-- ==================================
+           EMPTY
+      =================================== -->
 
       <div
         id="emptyMessage"
@@ -324,7 +307,7 @@
       >
 
         <div class="empty-code">
-          // 404
+          // DATABASE EMPTY
         </div>
 
         <div class="empty-title">
@@ -332,31 +315,76 @@
         </div>
 
         <div class="empty-text">
-          SCORE RECORDS NOT FOUND
+          SCORE DATA NOT FOUND
         </div>
 
       </div>
 
+
     </section>
 
 
+    <!-- ======================================
+         RESET
+    ======================================= -->
 
-    <!-- =========================================
-         FOOTER
-    ========================================== -->
+    <section class="admin-area">
 
-    <footer class="scores-footer">
 
-      <div>
-        FESTIVAL SCORE SYSTEM
-      </div>
+      <div class="admin-warning">
 
-      <div>
-        SYSTEM STATUS :
-        <span class="footer-online">
-          ONLINE
+        <span class="warning-mark">
+          !
         </span>
+
+        <div>
+
+          <strong>
+            ADMIN AREA
+          </strong>
+
+          <p>
+            全データを削除すると元に戻せません。
+          </p>
+
+        </div>
+
       </div>
+
+
+      <button
+        id="resetAllButton"
+        class="reset-button"
+        type="button"
+      >
+
+        <span>
+          RESET ALL DATA
+        </span>
+
+        <small>
+          全データ初期化
+        </small>
+
+      </button>
+
+
+    </section>
+
+
+    <!-- ======================================
+         FOOTER
+    ======================================= -->
+
+    <footer class="list-footer">
+
+      <span>
+        FESTIVAL // SCORE SYSTEM
+      </span>
+
+      <span>
+        DATABASE ONLINE
+      </span>
 
     </footer>
 
@@ -364,15 +392,15 @@
   </main>
 
 
-
-  <!-- =========================================
+  <!-- ======================================
        JAVASCRIPT
-  ========================================== -->
+  ======================================= -->
 
   <script
     type="module"
     src="js/scores.js"
   ></script>
+
 
 </body>
 
