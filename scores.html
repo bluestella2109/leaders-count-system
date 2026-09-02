@@ -7,7 +7,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0"
   >
 
   <meta
@@ -27,21 +27,15 @@
 
 <body class="scores-page">
 
-
-  <!-- ==================================================
-       CODE RAIN BACKGROUND
-  =================================================== -->
+  <!-- =========================================
+       BACKGROUND EFFECT
+  ========================================== -->
 
   <div
     id="codeRain"
     class="code-rain"
     aria-hidden="true"
   ></div>
-
-
-  <!-- ==================================================
-       SCREEN EFFECTS
-  =================================================== -->
 
   <div
     class="scanlines"
@@ -54,140 +48,72 @@
   ></div>
 
 
-
-  <!-- ==================================================
-       SYSTEM HEADER
-  =================================================== -->
-
-  <header class="system-header">
-
-    <div class="system-brand">
-
-      <span class="system-brand-main">
-        SCORE DATABASE
-      </span>
-
-      <span class="system-brand-sub">
-        CULTURE FESTIVAL // 2026
-      </span>
-
-    </div>
-
-
-    <div class="system-status">
-
-      <span class="status-light"></span>
-
-      DATABASE ONLINE
-
-    </div>
-
-  </header>
-
-
-
-  <!-- ==================================================
+  <!-- =========================================
        MAIN
-  =================================================== -->
+  ========================================== -->
 
   <main class="scores-container">
 
 
-    <!-- ==================================================
-         PAGE HEADER
-    =================================================== -->
+    <!-- =========================================
+         HEADER
+    ========================================== -->
 
-    <section class="scores-title-area">
+    <header class="scores-header">
 
+      <div class="header-left">
 
-      <div class="title-meta">
+        <div class="tiny-label">
+          FESTIVAL SCORE DATABASE
+        </div>
 
-        <span>
-          SYSTEM://DATABASE
-        </span>
+        <h1
+          class="glitch-title"
+          data-text="SCORE LIST"
+        >
+          SCORE LIST
+        </h1>
 
-        <span>
-          DATA_STREAM
-        </span>
+        <p class="header-subtitle">
+          PARTICIPANT RECORDS
+        </p>
 
       </div>
 
 
-      <div class="title-number">
-        02
-      </div>
+      <div class="header-right">
+
+        <div class="live-status">
+
+          <span class="live-dot"></span>
+
+          <span>
+            LIVE DATABASE
+          </span>
+
+        </div>
 
 
-      <p class="eyebrow">
-        FESTIVAL SCORE DATABASE
-      </p>
-
-
-      <h1
-        class="glitch-title"
-        data-text="SCORE LIST"
-      >
-        SCORE LIST
-      </h1>
-
-
-      <p class="glitch-subtitle">
-        PARTICIPANT RECORDS
-      </p>
-
-
-    </section>
-
-
-
-    <!-- ==================================================
-         NAVIGATION
-    =================================================== -->
-
-    <nav class="scores-navigation">
-
-
-      <a
-        href="index.html"
-        class="nav-button"
-      >
-
-        <span>
+        <a
+          href="index.html"
+          class="back-button"
+        >
           ← INPUT
-        </span>
-
-        <small>
-          点数入力へ戻る
-        </small>
-
-      </a>
-
-
-      <div class="database-status">
-
-        <span class="status-dot"></span>
-
-        <span>
-          LIVE DATABASE
-        </span>
+        </a>
 
       </div>
 
-
-    </nav>
-
+    </header>
 
 
-    <!-- ==================================================
-         DATABASE INFORMATION
-    =================================================== -->
+
+    <!-- =========================================
+         DATABASE INFO
+    ========================================== -->
 
     <section class="database-info">
 
-
-      <!-- TOTAL -->
-
-      <div class="info-box">
+      <div class="info-card">
 
         <span class="info-label">
           ENTRIES
@@ -207,10 +133,7 @@
       </div>
 
 
-
-      <!-- WAITING -->
-
-      <div class="info-box">
+      <div class="info-card">
 
         <span class="info-label">
           WAITING
@@ -230,10 +153,7 @@
       </div>
 
 
-
-      <!-- COMPLETE -->
-
-      <div class="info-box">
+      <div class="info-card">
 
         <span class="info-label">
           COMPLETE
@@ -252,35 +172,22 @@
 
       </div>
 
-
     </section>
 
 
 
-    <!-- ==================================================
-         SORT SWITCH
-    =================================================== -->
+    <!-- =========================================
+         SORT AREA
+    ========================================== -->
 
     <section class="sort-area">
 
-
-      <div class="sort-heading">
-
-        <span>
-          DISPLAY MODE
-        </span>
-
-        <span id="sortModeText">
-          SORT : NEWEST
-        </span>
-
+      <div class="section-label">
+        DISPLAY MODE
       </div>
 
 
       <div class="sort-switch">
-
-
-        <!-- NEWEST -->
 
         <button
           id="newestButton"
@@ -288,19 +195,16 @@
           type="button"
         >
 
-          <span class="sort-button-main">
+          <span class="sort-main">
             NEWEST
           </span>
 
-          <span class="sort-button-sub">
+          <span class="sort-sub">
             新着順
           </span>
 
         </button>
 
-
-
-        <!-- RANKING -->
 
         <button
           id="rankingButton"
@@ -308,143 +212,151 @@
           type="button"
         >
 
-          <span class="sort-button-main">
+          <span class="sort-main">
             RANKING
           </span>
 
-          <span class="sort-button-sub">
-            ランキング
+          <span class="sort-sub">
+            点数順
           </span>
 
         </button>
 
-
       </div>
-
 
     </section>
 
 
 
-    <!-- ==================================================
-         TABLE HEADER
-    =================================================== -->
+    <!-- =========================================
+         CURRENT MODE
+    ========================================== -->
 
-    <div class="list-header">
+    <div class="list-status-bar">
 
+      <div>
 
-      <div class="list-header-player">
-        PLAYER
+        <span class="status-label">
+          SORT MODE
+        </span>
+
+        <strong
+          id="sortModeText"
+        >
+          NEWEST
+        </strong>
+
       </div>
 
 
-      <div class="list-header-detail">
-        BREAKDOWN
+      <div class="database-state">
+
+        <span class="live-dot"></span>
+
+        DATABASE CONNECTED
+
       </div>
-
-
-      <div class="list-header-score">
-        TOTAL
-      </div>
-
-
-      <div class="list-header-status">
-        STATUS
-      </div>
-
 
     </div>
 
 
 
-    <!-- ==================================================
-         SCORE LIST
-    =================================================== -->
+    <!-- =========================================
+         SCORE TABLE
+    ========================================== -->
 
     <section
-      id="scoreList"
-      class="score-list"
+      class="score-table-wrapper"
     >
 
-      <!--
-        JavaScriptでここに
-        スコアデータが追加されます。
-      -->
+      <!-- TABLE HEADER -->
 
-    </section>
+      <div class="score-table-header">
 
+        <div class="col-rank">
+          #
+        </div>
 
+        <div class="col-player">
+          PLAYER
+        </div>
 
-    <!-- ==================================================
-         EMPTY
-    =================================================== -->
+        <div class="col-date">
+          REGISTERED
+        </div>
 
-    <section
-      id="emptyMessage"
-      class="empty-message hidden"
-    >
+        <div class="col-quiz">
+          QUIZ
+        </div>
 
-      <div class="empty-code">
-        404
+        <div class="col-shooting">
+          SHOOTING
+        </div>
+
+        <div class="col-total">
+          TOTAL
+        </div>
+
+        <div class="col-status">
+          STATUS
+        </div>
+
+        <div class="col-action">
+          ACTION
+        </div>
+
       </div>
 
-      <h2>
-        NO DATA
-      </h2>
 
-      <p>
-        SCORE DATABASE IS EMPTY
-      </p>
+      <!-- SCORE ITEMS ARE INSERTED HERE -->
+
+      <div
+        id="scoreList"
+        class="score-list"
+      ></div>
+
+
+      <!-- EMPTY -->
+
+      <div
+        id="emptyMessage"
+        class="empty-message hidden"
+      >
+
+        <div class="empty-code">
+          // 404
+        </div>
+
+        <div class="empty-title">
+          NO DATA
+        </div>
+
+        <div class="empty-text">
+          SCORE RECORDS NOT FOUND
+        </div>
+
+      </div>
 
     </section>
 
 
 
-    <!-- ==================================================
+    <!-- =========================================
          FOOTER
-    =================================================== -->
+    ========================================== -->
 
     <footer class="scores-footer">
 
-
       <div>
-
-        <span>
-          DATABASE
-        </span>
-
-        <strong>
-          FESTIVAL_SCORE_DB
-        </strong>
-
+        FESTIVAL SCORE SYSTEM
       </div>
 
-
       <div>
-
-        <span>
-          STATUS
-        </span>
-
-        <strong>
+        SYSTEM STATUS :
+        <span class="footer-online">
           ONLINE
-        </strong>
-
-      </div>
-
-
-      <div>
-
-        <span>
-          CONNECTION
         </span>
-
-        <strong>
-          FIRESTORE
-        </strong>
-
       </div>
-
 
     </footer>
 
@@ -453,21 +365,14 @@
 
 
 
-  <!-- ==================================================
+  <!-- =========================================
        JAVASCRIPT
-  =================================================== -->
+  ========================================== -->
 
   <script
     type="module"
     src="js/scores.js"
   ></script>
-
-
-  <script
-    type="module"
-    src="js/codeRain.js"
-  ></script>
-
 
 </body>
 
