@@ -1,38 +1,26 @@
-/* =========================================================
-   FESTIVAL SCORE SYSTEM
-   STYLE.CSS
-   BLACK / RED / GLITCH / TERMINAL
-   ========================================================= */
-
-
-/* =========================================================
-   RESET
-   ========================================================= */
-
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
+
 html {
-  width: 100%;
-  min-height: 100%;
-  background: #030303;
-  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  background: #050505;
 }
 
+
 body {
-  width: 100%;
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 
   background:
     radial-gradient(
-      circle at 50% 40%,
-      rgba(255, 0, 0, 0.035),
+      circle at 50% 20%,
+      rgba(120, 0, 0, 0.08),
       transparent 45%
     ),
-    #030303;
+    #050505;
 
   color: #f2f2f2;
 
@@ -41,1076 +29,337 @@ body {
     "Noto Sans JP",
     monospace;
 
+  min-height: 100vh;
+
   overflow-x: hidden;
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-button,
-input,
-a {
-  font: inherit;
-}
-
-button {
-  -webkit-tap-highlight-color: transparent;
-}
-
-a {
-  color: inherit;
 }
 
 
-/* =========================================================
-   CODE RAIN
-   ========================================================= */
+
+/* =========================================
+   BACKGROUND EFFECT
+========================================= */
 
 .code-rain {
+
   position: fixed;
 
   inset: 0;
 
-  width: 100%;
-  height: 100%;
-
-  overflow: hidden;
+  z-index: 0;
 
   pointer-events: none;
 
-  z-index: 0;
+  overflow: hidden;
 
-  opacity: 0.65;
+  opacity: 0.9;
+
 }
 
+
 .code-column {
+
   position: absolute;
 
   top: -120%;
 
-  width: 18px;
+  width: 24px;
 
-  color: rgba(255, 255, 255, 0.08);
+  color: rgba(
+    255,
+    255,
+    255,
+    0.18
+  );
 
-  font-size: 11px;
-  line-height: 1.15;
+  font-size: 12px;
 
-  letter-spacing: 2px;
+  line-height: 1.45;
 
-  writing-mode: vertical-rl;
+  white-space: pre;
 
-  white-space: normal;
-
-  user-select: none;
-
-  animation-name: codeFall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  animation:
+    codeFall linear infinite;
 
   text-shadow:
-    0 0 4px rgba(255, 255, 255, 0.05);
+    0 0 5px
+    rgba(
+      255,
+      255,
+      255,
+      0.15
+    );
+
 }
+
 
 .code-column.red {
-  color: rgba(255, 30, 30, 0.2);
+
+  color:
+    rgba(
+      220,
+      20,
+      30,
+      0.40
+    );
 
   text-shadow:
-    0 0 6px rgba(255, 0, 0, 0.15);
+    0 0 8px
+    rgba(
+      220,
+      20,
+      30,
+      0.25
+    );
+
 }
 
+
 @keyframes codeFall {
+
   from {
-    transform: translateY(-20%);
+    transform:
+      translateY(0);
   }
 
   to {
-    transform: translateY(180%);
+    transform:
+      translateY(220vh);
   }
+
 }
 
 
-/* =========================================================
+
+/* =========================================
    SCANLINES
-   ========================================================= */
+========================================= */
 
 .scanlines {
+
   position: fixed;
 
   inset: 0;
 
-  z-index: 999;
+  z-index: 1;
 
   pointer-events: none;
 
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.018) 0px,
-      rgba(255, 255, 255, 0.018) 1px,
+      rgba(
+        255,
+        255,
+        255,
+        0.025
+      ) 0px,
+      rgba(
+        255,
+        255,
+        255,
+        0.025
+      ) 1px,
       transparent 1px,
       transparent 4px
     );
 
-  opacity: 0.45;
 }
 
-
-/* =========================================================
-   NOISE
-   ========================================================= */
 
 .noise {
+
   position: fixed;
 
   inset: 0;
 
-  z-index: 998;
+  z-index: 2;
 
   pointer-events: none;
 
-  opacity: 0.045;
+  opacity: 0.06;
 
   background-image:
-    repeating-radial-gradient(
-      circle at 0 0,
-      #fff 0,
-      #fff 1px,
-      transparent 1px,
-      transparent 3px
-    );
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
 
-  background-size: 5px 5px;
-
-  mix-blend-mode: screen;
 }
 
 
-/* =========================================================
-   COMMON
-   ========================================================= */
 
-.hidden {
-  display: none !important;
-}
+/* =========================================
+   CONTAINER
+========================================= */
 
-::selection {
-  background: #b40000;
-  color: #fff;
-}
+.scores-container {
 
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
-}
-
-::-webkit-scrollbar-track {
-  background: #050505;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #8b0000;
-}
-
-
-/* =========================================================
-   GLITCH TITLE
-   ========================================================= */
-
-.glitch-title {
-  position: relative;
-
-  color: #f4f4f4;
-
-  font-weight: 900;
-
-  letter-spacing: 5px;
-
-  line-height: 0.95;
-
-  text-shadow:
-    2px 0 #a80000,
-    -2px 0 rgba(255, 255, 255, 0.4);
-
-  animation: titleGlitch 5s infinite;
-}
-
-.glitch-title::before,
-.glitch-title::after {
-  content: attr(data-text);
-
-  position: absolute;
-
-  inset: 0;
-
-  pointer-events: none;
-
-  opacity: 0;
-}
-
-.glitch-title::before {
-  color: #ff3030;
-
-  transform: translateX(3px);
-
-  clip-path: inset(0 0 70% 0);
-}
-
-.glitch-title::after {
-  color: #fff;
-
-  transform: translateX(-3px);
-
-  clip-path: inset(65% 0 0 0);
-}
-
-.glitch-title:hover::before {
-  opacity: 0.8;
-
-  animation: glitchRed 0.25s steps(2) infinite;
-}
-
-.glitch-title:hover::after {
-  opacity: 0.6;
-
-  animation: glitchWhite 0.25s steps(2) infinite;
-}
-
-@keyframes titleGlitch {
-  0%,
-  94%,
-  100% {
-    transform: translateX(0);
-  }
-
-  95% {
-    transform: translateX(-2px);
-  }
-
-  96% {
-    transform: translateX(3px);
-  }
-
-  97% {
-    transform: translateX(-1px);
-  }
-}
-
-@keyframes glitchRed {
-  0% {
-    transform: translateX(3px);
-  }
-
-  50% {
-    transform: translateX(-5px);
-  }
-
-  100% {
-    transform: translateX(4px);
-  }
-}
-
-@keyframes glitchWhite {
-  0% {
-    transform: translateX(-3px);
-  }
-
-  50% {
-    transform: translateX(4px);
-  }
-
-  100% {
-    transform: translateX(-5px);
-  }
-}
-
-
-/* =========================================================
-   SMALL LABEL
-   ========================================================= */
-
-.tiny-label {
-  color: #777;
-
-  font-size: 10px;
-
-  letter-spacing: 4px;
-
-  line-height: 1.5;
-
-  text-transform: uppercase;
-}
-
-
-/* =========================================================
-   INPUT PAGE
-   ========================================================= */
-
-.input-page,
-body:has(#scoreScreen),
-body:has(#startScreen) {
-  position: relative;
-
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255, 0, 0, 0.025),
-      transparent 60%
-    ),
-    #030303;
-}
-
-#startScreen,
-#scoreScreen {
   position: relative;
 
   z-index: 5;
 
-  width: min(94%, 850px);
+  width: min(
+    1160px,
+    calc(100% - 40px)
+  );
 
   margin: 0 auto;
 
-  padding: 40px 0 60px;
+  padding:
+    70px
+    0
+    50px;
+
 }
 
 
-/* =========================================================
-   START SCREEN
-   ========================================================= */
 
-#startScreen {
-  min-height: 100vh;
+/* =========================================
+   HEADER
+========================================= */
+
+.scores-header {
 
   display: flex;
-
-  flex-direction: column;
-
-  justify-content: center;
-
-  align-items: center;
-}
-
-#startScreen .panel,
-#startScreen .card,
-.start-panel {
-  position: relative;
-
-  width: 100%;
-
-  padding: 45px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.025),
-      rgba(255, 0, 0, 0.01)
-    );
-
-  border: 1px solid #292929;
-
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.015),
-    0 20px 70px rgba(0, 0, 0, 0.8);
-}
-
-#startScreen .panel::before,
-#startScreen .card::before,
-.start-panel::before {
-  content: "";
-
-  position: absolute;
-
-  top: -1px;
-  left: -1px;
-
-  width: 100px;
-  height: 3px;
-
-  background: #b00000;
-
-  box-shadow:
-    0 0 12px rgba(255, 0, 0, 0.3);
-}
-
-
-/* =========================================================
-   NICKNAME
-   ========================================================= */
-
-#nicknameInput,
-.nickname-input {
-  display: block;
-
-  width: 100%;
-
-  min-height: 65px;
-
-  margin-top: 25px;
-
-  padding: 0 20px;
-
-  background: #070707;
-
-  color: #fff;
-
-  border: 1px solid #363636;
-
-  outline: none;
-
-  font-size: 20px;
-
-  letter-spacing: 2px;
-
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-#nicknameInput::placeholder,
-.nickname-input::placeholder {
-  color: #555;
-}
-
-#nicknameInput:focus,
-.nickname-input:focus {
-  border-color: #a00000;
-
-  box-shadow:
-    0 0 0 1px rgba(180, 0, 0, 0.2),
-    0 0 25px rgba(180, 0, 0, 0.08);
-}
-
-
-/* =========================================================
-   BUTTON COMMON
-   ========================================================= */
-
-#startButton,
-#submitButton,
-#newEntryButton,
-.start-button,
-.submit-button {
-  position: relative;
-
-  width: 100%;
-
-  min-height: 65px;
-
-  margin-top: 20px;
-
-  padding: 14px 22px;
-
-  border: 1px solid #9e0000;
-
-  background:
-    linear-gradient(
-      90deg,
-      #720000,
-      #b00000
-    );
-
-  color: #fff;
-
-  cursor: pointer;
-
-  font-weight: 800;
-
-  letter-spacing: 3px;
-
-  transition:
-    transform 0.15s,
-    background 0.15s,
-    box-shadow 0.15s;
-}
-
-#startButton:hover,
-#submitButton:hover,
-#newEntryButton:hover,
-.start-button:hover,
-.submit-button:hover {
-  background:
-    linear-gradient(
-      90deg,
-      #980000,
-      #d00000
-    );
-
-  box-shadow:
-    0 0 25px rgba(220, 0, 0, 0.15);
-}
-
-#startButton:active,
-#submitButton:active,
-#newEntryButton:active,
-.start-button:active,
-.submit-button:active {
-  transform: scale(0.985);
-}
-
-button:disabled {
-  opacity: 0.45;
-
-  cursor: not-allowed;
-}
-
-
-/* =========================================================
-   SCORE SCREEN
-   ========================================================= */
-
-#scoreScreen {
-  width: min(96%, 760px);
-
-  margin: 0 auto;
-
-  padding-bottom: 70px;
-}
-
-#scoreScreen > * {
-  position: relative;
-
-  z-index: 5;
-}
-
-
-/* =========================================================
-   PLAYER HEADER
-   ========================================================= */
-
-.player-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  gap: 20px;
-
-  padding: 15px 0 18px;
-
-  margin-bottom: 20px;
-
-  border-bottom: 1px solid #282828;
-}
-
-#playerName,
-.player-name {
-  color: #fff;
-
-  font-size: 22px;
-
-  font-weight: 700;
-
-  letter-spacing: 2px;
-}
-
-
-/* =========================================================
-   SCORE SECTION
-   ========================================================= */
-
-.score-section,
-.score-card,
-.score-block {
-  position: relative;
-
-  width: 100%;
-
-  margin-bottom: 18px;
-
-  padding: 22px;
-
-  background:
-    rgba(8, 8, 8, 0.94);
-
-  border: 1px solid #292929;
-
-  overflow: hidden;
-}
-
-.score-section::before,
-.score-card::before,
-.score-block::before {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  top: 0;
-
-  width: 3px;
-  height: 100%;
-
-  background: #7d0000;
-}
-
-
-/* =========================================================
-   SCORE SECTION HEADER
-   ========================================================= */
-
-.score-section-header,
-.score-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  gap: 15px;
-
-  margin-bottom: 15px;
-}
-
-.score-number,
-.section-number {
-  color: #a60000;
-
-  font-size: 12px;
-
-  letter-spacing: 3px;
-
-  font-weight: 700;
-}
-
-.score-label,
-.section-title {
-  color: #ddd;
-
-  font-size: 15px;
-
-  letter-spacing: 3px;
-
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   SCORE DISPLAY
-   ========================================================= */
-
-#quizDisplay,
-#shootingDisplay,
-.score-display {
-  width: 100%;
-
-  min-height: 75px;
-
-  display: flex;
-
-  justify-content: flex-end;
-
-  align-items: center;
-
-  padding: 10px 20px;
-
-  margin-bottom: 15px;
-
-  background: #020202;
-
-  border: 1px solid #262626;
-
-  color: #fff;
-
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size: clamp(36px, 8vw, 58px);
-
-  font-weight: 700;
-
-  line-height: 1;
-
-  text-align: right;
-
-  letter-spacing: 3px;
-
-  overflow: hidden;
-}
-
-
-/* =========================================================
-   KEYPAD
-   ========================================================= */
-
-.keypad {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 8px;
-}
-
-.key {
-  position: relative;
-
-  min-width: 0;
-
-  min-height: 65px;
-
-  border: 1px solid #292929;
-
-  background:
-    linear-gradient(
-      145deg,
-      #111,
-      #080808
-    );
-
-  color: #e5e5e5;
-
-  font-size: 22px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  user-select: none;
-
-  touch-action: manipulation;
-
-  transition:
-    background 0.1s,
-    border-color 0.1s,
-    transform 0.1s;
-}
-
-.key:hover {
-  background: #171717;
-
-  border-color: #555;
-}
-
-.key:active {
-  background: #300000;
-
-  border-color: #900;
-
-  transform: scale(0.96);
-}
-
-.key[data-action="clear"] {
-  color: #e40000;
-
-  border-color: #520000;
-}
-
-.key[data-action="back"] {
-  color: #aaa;
-}
-
-
-/* =========================================================
-   TOTAL PREVIEW
-   ========================================================= */
-
-.total-area,
-.total-panel {
-  position: relative;
-
-  width: 100%;
-
-  margin-top: 22px;
-
-  padding: 25px;
-
-  text-align: center;
-
-  border-top: 1px solid #2b2b2b;
-
-  border-bottom: 1px solid #2b2b2b;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 0, 0, 0.025),
-      transparent
-    );
-}
-
-.total-label {
-  display: block;
-
-  margin-bottom: 8px;
-
-  color: #666;
-
-  font-size: 10px;
-
-  letter-spacing: 4px;
-}
-
-#totalPreview,
-.total-number {
-  display: block;
-
-  color: #c40000;
-
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size: clamp(48px, 13vw, 88px);
-
-  font-weight: 900;
-
-  line-height: 1;
-
-  letter-spacing: 3px;
-
-  text-shadow:
-    0 0 15px rgba(220, 0, 0, 0.15);
-}
-
-
-/* =========================================================
-   SEND STATUS
-   ========================================================= */
-
-#sendStatus,
-.send-status {
-  min-height: 24px;
-
-  margin-top: 10px;
-
-  color: #b50000;
-
-  font-size: 12px;
-
-  text-align: center;
-
-  letter-spacing: 1px;
-}
-
-
-/* =========================================================
-   RESULT OVERLAY
-   ========================================================= */
-
-#resultOverlay {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 2000;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  padding: 20px;
-
-  background:
-    rgba(0, 0, 0, 0.88);
-
-  backdrop-filter: blur(5px);
-}
-
-#resultOverlay.hidden {
-  display: none;
-}
-
-.result-panel,
-.result-card {
-  position: relative;
-
-  width: min(92vw, 650px);
-
-  padding: 35px;
-
-  background:
-    #070707;
-
-  border: 1px solid #4b4b4b;
-
-  box-shadow:
-    0 0 0 1px rgba(255, 0, 0, 0.06),
-    0 30px 100px rgba(0, 0, 0, 0.9);
-}
-
-.result-panel::before,
-.result-card::before {
-  content: "";
-
-  position: absolute;
-
-  top: -1px;
-  left: -1px;
-
-  width: 120px;
-  height: 3px;
-
-  background: #b00000;
-}
-
-
-/* =========================================================
-   RESULT TEXT
-   ========================================================= */
-
-#resultName {
-  color: #fff;
-
-  font-size: 24px;
-
-  font-weight: 800;
-}
-
-#resultTotal {
-  display: block;
-
-  margin: 25px 0;
-
-  color: #d00000;
-
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size: clamp(60px, 16vw, 110px);
-
-  font-weight: 900;
-
-  line-height: 1;
-
-  text-align: center;
-
-  text-shadow:
-    0 0 25px rgba(220, 0, 0, 0.2);
-
-  animation: resultGlitch 2.8s infinite;
-}
-
-@keyframes resultGlitch {
-  0%,
-  90%,
-  100% {
-    transform: translateX(0);
-  }
-
-  92% {
-    transform: translateX(-3px);
-  }
-
-  94% {
-    transform: translateX(3px);
-  }
-
-  96% {
-    transform: translateX(-1px);
-  }
-}
-
-
-/* =========================================================
-   RESULT BREAKDOWN
-   ========================================================= */
-
-.result-breakdown {
-  display: grid;
-
-  grid-template-columns:
-    1fr 50px 1fr;
-
-  align-items: center;
-
-  gap: 10px;
-
-  margin: 20px 0;
-
-  text-align: center;
-}
-
-.result-breakdown strong {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #fff;
-
-  font-size: 26px;
-}
-
-.result-breakdown span {
-  color: #666;
-
-  font-size: 10px;
-
-  letter-spacing: 2px;
-}
-
-
-/* =========================================================
-   SCORE LIST PAGE
-   ========================================================= */
-
-.list-page {
-  position: relative;
-
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255, 0, 0, 0.025),
-      transparent 60%
-    ),
-    #030303;
-}
-
-.list-container {
-  position: relative;
-
-  z-index: 5;
-
-  width: min(96%, 1160px);
-
-  margin: 0 auto;
-
-  padding: 55px 0 70px;
-}
-
-
-/* =========================================================
-   LIST HEADER
-   ========================================================= */
-
-.list-header {
-  display: flex;
-
-  justify-content: space-between;
 
   align-items: flex-end;
+
+  justify-content: space-between;
 
   gap: 30px;
 
   padding-bottom: 28px;
 
-  border-bottom: 1px solid #292929;
+  border-bottom:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.15
+    );
+
 }
 
-.list-title {
-  margin-top: 10px;
 
-  font-size: clamp(42px, 7vw, 82px);
+.header-left {
 
-  white-space: nowrap;
+  position: relative;
+
 }
+
+
+.system-label {
+
+  margin-bottom: 12px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
+
+  font-size: 11px;
+
+  letter-spacing:
+    4px;
+
+}
+
+
+.scores-title {
+
+  margin: 0;
+
+  color: #f5f5f5;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      52px,
+      8vw,
+      96px
+    );
+
+  line-height: 0.9;
+
+  letter-spacing:
+    2px;
+
+  text-shadow:
+    3px 3px 0
+    rgba(
+      180,
+      0,
+      0,
+      0.75
+    );
+
+}
+
+
+.header-status {
+
+  position: absolute;
+
+  right: 0;
+
+  bottom: -30px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.35
+    );
+
+  font-size: 9px;
+
+  letter-spacing:
+    2px;
+
+}
+
+
+.status-dot {
+
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #d71920;
+
+  box-shadow:
+    0 0 10px
+    rgba(
+      215,
+      25,
+      32,
+      0.8
+    );
+
+}
+
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
 
 .back-button {
-  flex: 0 0 auto;
 
   display: inline-flex;
 
@@ -1118,15 +367,20 @@ button:disabled {
 
   justify-content: center;
 
-  min-height: 45px;
+  min-width: 130px;
 
-  padding: 0 18px;
+  padding: 13px 20px;
 
-  border: 1px solid #363636;
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.2
+    );
 
-  background: #080808;
-
-  color: #ccc;
+  color: #eee;
 
   text-decoration: none;
 
@@ -1135,506 +389,797 @@ button:disabled {
   letter-spacing: 2px;
 
   transition:
-    color 0.15s,
-    border-color 0.15s,
-    background 0.15s;
+    0.2s ease;
+
 }
+
 
 .back-button:hover {
+
+  border-color: #d71920;
+
   color: #fff;
 
-  border-color: #850000;
+  background:
+    rgba(
+      215,
+      25,
+      32,
+      0.08
+    );
 
-  background: #160000;
 }
 
 
-/* =========================================================
+
+/* =========================================
    DATABASE INFO
-   ========================================================= */
+========================================= */
 
 .database-info {
+
   display: grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(
+      3,
+      1fr
+    );
+
+  gap: 12px;
+
+  margin-top: 45px;
+
+}
+
+
+.info-box {
+
+  min-height: 125px;
+
+  padding: 22px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    );
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.35
+    );
+
+}
+
+
+.info-label {
+
+  display: block;
+
+  margin-bottom: 10px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
+
+  font-size: 9px;
+
+  letter-spacing:
+    3px;
+
+}
+
+
+.info-box strong {
+
+  display: block;
+
+  color: #fff;
+
+  font-size: 35px;
+
+  line-height: 1;
+
+}
+
+
+.info-box small {
+
+  display: block;
+
+  margin-top: 10px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.28
+    );
+
+  font-size: 8px;
+
+  letter-spacing:
+    1px;
+
+}
+
+
+
+/* =========================================
+   SORT
+========================================= */
+
+.sort-section {
+
+  margin-top: 30px;
+
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    );
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.30
+    );
+
+}
+
+
+.section-label {
+
+  margin-bottom: 12px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.35
+    );
+
+  font-size: 8px;
+
+  letter-spacing:
+    3px;
+
+}
+
+
+.sort-switch {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
 
   gap: 10px;
 
-  margin: 30px 0 20px;
 }
 
-.database-info > div {
-  min-width: 0;
-
-  min-height: 100px;
-
-  padding: 18px;
-
-  border: 1px solid #292929;
-
-  background:
-    rgba(7, 7, 7, 0.92);
-}
-
-.database-info span {
-  display: block;
-
-  color: #555;
-
-  font-size: 9px;
-
-  letter-spacing: 3px;
-}
-
-.database-info strong {
-  display: block;
-
-  margin-top: 8px;
-
-  color: #eee;
-
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size: 30px;
-
-  line-height: 1;
-}
-
-
-/* =========================================================
-   SORT SWITCH
-   ========================================================= */
-
-.sort-switch {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 0;
-
-  margin: 20px 0;
-
-  border: 1px solid #292929;
-}
 
 .sort-button {
+
   min-height: 65px;
 
-  padding: 10px;
+  padding: 12px 18px;
 
-  border: 0;
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
 
-  border-right: 1px solid #292929;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.015
+    );
 
-  background: #070707;
-
-  color: #666;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
 
   cursor: pointer;
 
-  font-weight: 700;
-
-  letter-spacing: 2px;
-
   text-align: left;
 
+  font-family: inherit;
+
   transition:
-    color 0.15s,
-    background 0.15s;
+    0.2s ease;
+
 }
 
-.sort-button:last-child {
-  border-right: 0;
-}
-
-.sort-button span {
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 9px;
-
-  font-weight: 400;
-
-  letter-spacing: 1px;
-}
 
 .sort-button:hover {
-  color: #ddd;
 
-  background: #101010;
+  border-color:
+    rgba(
+      215,
+      25,
+      32,
+      0.5
+    );
+
 }
 
+
 .sort-button.active {
-  position: relative;
+
+  border-color: #d71920;
+
+  background:
+    rgba(
+      215,
+      25,
+      32,
+      0.08
+    );
 
   color: #fff;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(100, 0, 0, 0.35),
-      #080808
-    );
-}
-
-.sort-button.active::before {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  top: 0;
-
-  width: 3px;
-  height: 100%;
-
-  background: #e00000;
-
   box-shadow:
-    0 0 12px rgba(220, 0, 0, 0.3);
+    inset 3px 0 0 #d71920;
+
 }
 
 
-/* =========================================================
-   TABLE HEADER
-   ========================================================= */
+.sort-main {
 
-.table-header {
-  display: grid;
+  display: block;
 
-  grid-template-columns:
-    1fr auto;
+  font-size: 12px;
 
-  align-items: center;
+  letter-spacing:
+    2px;
 
-  min-height: 40px;
+}
 
-  padding: 0 14px;
 
-  border-top: 1px solid #292929;
+.sort-sub {
 
-  border-bottom: 1px solid #292929;
+  display: block;
 
-  color: #555;
+  margin-top: 5px;
 
   font-size: 9px;
 
-  letter-spacing: 3px;
+  opacity: 0.5;
+
 }
 
 
-/* =========================================================
-   ★ SCORE LIST
-   横一列を絶対に崩さないための重要部分
-   ========================================================= */
 
-#scoreList {
+/* =========================================
+   TABLE WRAPPER
+========================================= */
+
+.score-table-wrapper {
+
   width: 100%;
 
-  margin-top: 0;
+  margin-top: 28px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    );
 
   overflow-x: auto;
 
-  overflow-y: visible;
+  overflow-y: hidden;
 
-  -webkit-overflow-scrolling: touch;
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.42
+    );
 
-  scrollbar-width: thin;
-
-  scrollbar-color: #444 #050505;
 }
 
 
-/* ---------------------------------------------------------
-   各行
-   --------------------------------------------------------- */
 
-#scoreList > *,
-#scoreList .score-row,
-#scoreList .score-item,
-#scoreList .score-entry,
-#scoreList article {
-  position: relative;
+/* =========================================
+   TABLE HEADER
+========================================= */
 
-  width: 100%;
-
-  min-width: 980px;
+.score-table-header {
 
   display: grid;
 
-  /*
-    順位
-    ニックネーム
-    クイズ
-    射的
-    合計
-    状態
-    操作
-  */
   grid-template-columns:
     70px
-    minmax(220px, 1fr)
+    minmax(180px, 1fr)
+    100px
+    100px
     110px
-    110px
-    130px
-    110px
-    150px;
+    120px
+    140px;
+
+  min-width: 820px;
+
+  height: 52px;
 
   align-items: center;
 
-  min-height: 76px;
+  border-bottom:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.15
+    );
 
-  border-bottom: 1px solid #191919;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.35
+    );
 
-  background:
-    rgba(4, 4, 4, 0.84);
+  font-size: 8px;
+
+  letter-spacing:
+    2px;
+
+}
+
+
+
+/* =========================================
+   ROW
+========================================= */
+
+.score-row {
+
+  display: grid;
+
+  grid-template-columns:
+    70px
+    minmax(180px, 1fr)
+    100px
+    100px
+    110px
+    120px
+    140px;
+
+  min-width: 820px;
+
+  min-height: 78px;
+
+  align-items: center;
+
+  border-bottom:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.07
+    );
 
   transition:
-    background 0.15s;
+    background
+    0.2s ease;
+
 }
 
 
-/* ---------------------------------------------------------
-   行ホバー
-   --------------------------------------------------------- */
+.score-row:last-child {
 
-#scoreList > *:hover,
-#scoreList .score-row:hover,
-#scoreList .score-item:hover,
-#scoreList .score-entry:hover {
+  border-bottom: none;
+
+}
+
+
+.score-row:hover {
+
   background:
-    linear-gradient(
-      90deg,
-      rgba(100, 0, 0, 0.08),
-      rgba(255, 255, 255, 0.015)
+    rgba(
+      255,
+      255,
+      255,
+      0.025
     );
+
 }
 
 
-/* =========================================================
-   行の中のセル
-   ========================================================= */
+.score-row.is-complete {
 
-#scoreList > * > *,
-#scoreList .score-row > *,
-#scoreList .score-item > *,
-#scoreList .score-entry > *,
-#scoreList article > * {
+  opacity: 0.72;
+
+}
+
+
+
+/* =========================================
+   COLUMNS
+========================================= */
+
+.score-table-header > div,
+.score-row > div {
+
   min-width: 0;
 
-  padding: 10px 14px;
+  padding:
+    0
+    14px;
+
+}
+
+
+.col-rank {
+
+  text-align: center;
+
+}
+
+
+.col-player {
+
+  text-align: left;
+
+}
+
+
+.col-quiz,
+.col-shooting,
+.col-total,
+.col-status,
+.col-action {
+
+  text-align: center;
+
+}
+
+
+
+/* =========================================
+   RANK
+========================================= */
+
+.rank-cell {
+
+  color: #d71920;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  letter-spacing:
+    1px;
+
+}
+
+
+
+/* =========================================
+   PLAYER
+========================================= */
+
+.player-cell {
 
   overflow: hidden;
 
   white-space: nowrap;
 
   text-overflow: ellipsis;
-}
 
-
-/* =========================================================
-   よく使われるセルクラスにも対応
-   ========================================================= */
-
-.rank,
-.score-rank,
-.player-rank {
-  color: #a90000;
-
-  font-family:
-    "Courier New",
-    monospace;
+  color: #fff;
 
   font-size: 14px;
 
-  font-weight: 700;
-
-  text-align: left;
 }
 
-.nickname,
-.player-name-cell,
-.name-cell {
-  color: #eee;
+
+
+/* =========================================
+   SCORE
+========================================= */
+
+.score-cell {
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
 
   font-size: 15px;
 
-  font-weight: 700;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
 }
 
-.quiz,
-.quiz-score,
-.shooting,
-.shooting-score,
-.total,
-.total-score {
-  color: #ddd;
 
-  font-family:
-    "Courier New",
-    monospace;
+.total-cell {
 
-  font-size: 15px;
-
-  text-align: right;
-}
-
-.total,
-.total-score {
   color: #fff;
 
   font-size: 18px;
 
-  font-weight: 900;
+  font-weight: bold;
+
 }
 
 
-/* =========================================================
+
+/* =========================================
    STATUS
-   ========================================================= */
+========================================= */
 
-.status,
-.score-status {
-  color: #aaa;
+.status-cell {
 
-  font-size: 12px;
+  font-size: 11px;
+
+}
+
+
+.waiting-status {
+
+  display: inline-block;
+
+  padding: 6px 9px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.65
+    );
+
+}
+
+
+.complete-status {
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.75
+    );
+
+}
+
+
+
+/* =========================================
+   ACTION
+========================================= */
+
+.action-cell {
 
   text-align: center;
 
-  white-space: nowrap;
-}
-
-.status.waiting,
-.score-status.waiting {
-  color: #aaa;
-}
-
-.status.completed,
-.status.complete,
-.score-status.completed,
-.score-status.complete {
-  color: #eee;
 }
 
 
-/* =========================================================
-   ACTION
-   ========================================================= */
+.complete-button {
 
-.action,
-.score-action {
+  width: 100%;
+
+  max-width: 115px;
+
+  padding: 10px 8px;
+
+  border:
+    1px solid
+    rgba(
+      215,
+      25,
+      32,
+      0.65
+    );
+
+  background:
+    rgba(
+      215,
+      25,
+      32,
+      0.06
+    );
+
+  color: #fff;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  cursor: pointer;
+
+  transition:
+    0.2s ease;
+
+}
+
+
+.complete-button:hover {
+
+  background:
+    #d71920;
+
+  border-color:
+    #d71920;
+
+}
+
+
+.completed-action {
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+
+  font-size: 11px;
+
+}
+
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.empty-message {
+
+  min-height: 240px;
+
   display: flex;
+
+  flex-direction: column;
 
   align-items: center;
 
   justify-content: center;
 
-  min-width: 0;
-}
+  text-align: center;
 
-.action button,
-.score-action button,
-.complete-button,
-.complete-btn {
-  width: 100%;
-
-  min-height: 38px;
-
-  padding: 7px 10px;
-
-  border: 1px solid #4a4a4a;
-
-  background: #090909;
-
-  color: #ccc;
-
-  cursor: pointer;
-
-  font-size: 10px;
-
-  white-space: nowrap;
-
-  transition:
-    border-color 0.15s,
-    color 0.15s,
-    background 0.15s;
-}
-
-.action button:hover,
-.score-action button:hover,
-.complete-button:hover,
-.complete-btn:hover {
-  color: #fff;
-
-  border-color: #a00000;
-
-  background: #210000;
 }
 
 
-/* =========================================================
-   完了済み
-   ========================================================= */
+.empty-icon {
 
-#scoreList .completed-row,
-#scoreList .is-complete,
-#scoreList .completed {
-  opacity: 0.72;
-}
+  color:
+    rgba(
+      215,
+      25,
+      32,
+      0.5
+    );
 
-#scoreList .completed-row .action button,
-#scoreList .completed-row .score-action button,
-#scoreList .is-complete .action button {
-  color: #888;
+  font-size: 32px;
 
-  border-color: #292929;
-
-  cursor: default;
 }
 
 
-/* =========================================================
-   EMPTY
-   ========================================================= */
+.empty-title {
 
-.empty-message {
-  width: 100%;
+  margin-top: 10px;
 
-  padding: 70px 20px;
+  font-size: 18px;
 
-  border-bottom: 1px solid #202020;
+  letter-spacing:
+    3px;
 
-  color: #555;
+}
+
+
+.empty-sub {
+
+  margin-top: 7px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.25
+    );
+
+  font-size: 8px;
+
+  letter-spacing:
+    2px;
+
+}
+
+
+.hidden {
+
+  display: none !important;
+
+}
+
+
+
+/* =========================================
+   DATABASE ERROR
+========================================= */
+
+.database-error {
+
+  padding: 50px;
+
+  text-align: center;
+
+  color: #d71920;
 
   font-size: 12px;
 
-  letter-spacing: 4px;
+  letter-spacing:
+    2px;
 
-  text-align: center;
 }
 
 
-/* =========================================================
-   ADMIN AREA
-   ========================================================= */
 
-.admin-area {
+/* =========================================
+   ADMIN
+========================================= */
+
+.admin-panel {
+
   display: flex;
 
-  justify-content: space-between;
-
   align-items: center;
+
+  justify-content: space-between;
 
   gap: 20px;
 
@@ -1642,302 +1187,334 @@ button:disabled {
 
   padding: 18px;
 
-  border: 1px solid #3b2020;
+  border:
+    1px solid
+    rgba(
+      215,
+      25,
+      32,
+      0.28
+    );
 
   background:
-    rgba(35, 0, 0, 0.12);
+    rgba(
+      70,
+      0,
+      0,
+      0.08
+    );
+
 }
 
-.admin-area button {
-  min-height: 42px;
 
-  padding: 8px 20px;
+.admin-info {
 
-  border: 1px solid #750000;
+  display: flex;
 
-  background: #090909;
+  align-items: center;
 
-  color: #b40000;
+  gap: 13px;
+
+}
+
+
+.admin-warning {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 30px;
+
+  height: 30px;
+
+  border:
+    1px solid
+    rgba(
+      215,
+      25,
+      32,
+      0.55
+    );
+
+  color: #d71920;
+
+  font-weight: bold;
+
+}
+
+
+.admin-title {
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.5
+    );
+
+  font-size: 9px;
+
+  letter-spacing:
+    2px;
+
+}
+
+
+.admin-description {
+
+  margin-top: 4px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.25
+    );
+
+  font-size: 8px;
+
+}
+
+
+.reset-button {
+
+  min-width: 150px;
+
+  padding: 11px 15px;
+
+  border:
+    1px solid
+    rgba(
+      215,
+      25,
+      32,
+      0.65
+    );
+
+  background:
+    transparent;
+
+  color: #d71920;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  letter-spacing:
+    1px;
 
   cursor: pointer;
 
-  font-size: 10px;
-
-  letter-spacing: 2px;
-}
-
-.admin-area button:hover {
-  background: #220000;
-
-  color: #fff;
 }
 
 
-/* =========================================================
-   RESET BUTTON
-   ========================================================= */
+.reset-button span {
 
-#resetButton,
-.reset-button,
-#resetAllButton {
-  min-height: 45px;
+  display: block;
 
-  padding: 8px 22px;
+  margin-top: 4px;
 
-  border: 1px solid #750000;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.35
+    );
 
-  background: #090909;
+  font-size: 8px;
 
-  color: #c00000;
-
-  cursor: pointer;
-
-  font-size: 10px;
-
-  letter-spacing: 2px;
-
-  transition: 0.15s;
-}
-
-#resetButton:hover,
-.reset-button:hover,
-#resetAllButton:hover {
-  background: #280000;
-
-  border-color: #d00000;
-
-  color: #fff;
 }
 
 
-/* =========================================================
-   FOOTER / SYSTEM STATUS
-   ========================================================= */
+.reset-button:hover {
 
-.system-status {
+  background:
+    rgba(
+      215,
+      25,
+      32,
+      0.12
+    );
+
+}
+
+
+.reset-button:disabled {
+
+  opacity: 0.4;
+
+  cursor:
+    not-allowed;
+
+}
+
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.scores-footer {
+
   display: flex;
 
   justify-content: space-between;
 
-  align-items: center;
-
-  gap: 20px;
-
-  margin-top: 25px;
+  margin-top: 24px;
 
   padding-top: 15px;
 
-  border-top: 1px solid #202020;
+  border-top:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
 
-  color: #444;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
 
-  font-size: 8px;
+  font-size: 7px;
 
-  letter-spacing: 3px;
+  letter-spacing:
+    2px;
+
 }
 
 
-/* =========================================================
+
+/* =========================================
    MOBILE
-   ========================================================= */
+========================================= */
 
-@media (max-width: 800px) {
+@media (
+  max-width: 700px
+) {
 
-  #startScreen,
-  #scoreScreen {
-    width: calc(100% - 28px);
+  .scores-container {
 
-    padding-top: 25px;
+    width:
+      calc(
+        100% - 24px
+      );
+
+    padding-top: 35px;
+
   }
 
-  .list-container {
-    width: calc(100% - 24px);
 
-    padding-top: 30px;
+  .scores-header {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
   }
 
-  .list-header {
-    align-items: flex-start;
 
-    flex-direction: column;
+  .scores-title {
+
+    font-size: 55px;
+
   }
 
-  .list-title {
-    white-space: normal;
 
-    font-size: clamp(40px, 13vw, 70px);
+  .header-status {
+
+    position: static;
+
+    margin-top: 15px;
+
   }
+
 
   .back-button {
+
     width: 100%;
+
   }
 
+
   .database-info {
+
     grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+      1fr;
+
   }
 
-  .database-info > div {
-    min-height: 85px;
 
-    padding: 12px;
+  .sort-switch {
+
+    grid-template-columns:
+      1fr;
+
   }
 
-  .database-info strong {
-    font-size: 24px;
+
+  /*
+   * 重要：
+   * テーブルは縦積みにしない。
+   * 横一列を維持してスクロールする。
+   */
+
+  .score-table-wrapper {
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling:
+      touch;
+
   }
 
-  .score-section,
-  .score-card,
-  .score-block {
-    padding: 16px;
+
+  .score-table-header,
+  .score-row {
+
+    min-width: 820px;
+
   }
 
-  .key {
-    min-height: 68px;
-  }
-}
 
+  .admin-panel {
 
-/* =========================================================
-   iPad PORTRAIT
-   ========================================================= */
+    flex-direction:
+      column;
 
-@media (min-width: 801px) and (max-width: 1100px) {
+    align-items:
+      stretch;
 
-  #scoreScreen {
-    width: min(92%, 720px);
   }
 
-  .list-container {
-    width: 94%;
+
+  .reset-button {
+
+    width: 100%;
+
   }
 
-  #scoreList > *,
-  #scoreList .score-row,
-  #scoreList .score-item,
-  #scoreList .score-entry,
-  #scoreList article {
-    min-width: 980px;
-  }
-}
 
+  .scores-footer {
 
-/* =========================================================
-   SMALL PHONE
-   ========================================================= */
+    flex-direction:
+      column;
 
-@media (max-width: 480px) {
+    gap: 8px;
 
-  .tiny-label {
-    font-size: 8px;
-
-    letter-spacing: 2px;
   }
 
-  #startScreen,
-  #scoreScreen {
-    width: calc(100% - 20px);
-  }
-
-  #nicknameInput {
-    min-height: 58px;
-
-    font-size: 17px;
-  }
-
-  #startButton,
-  #submitButton,
-  #newEntryButton {
-    min-height: 58px;
-  }
-
-  .keypad {
-    gap: 6px;
-  }
-
-  .key {
-    min-height: 60px;
-
-    font-size: 19px;
-  }
-
-  #quizDisplay,
-  #shootingDisplay {
-    min-height: 65px;
-
-    font-size: 40px;
-  }
-
-  .database-info {
-    gap: 5px;
-  }
-
-  .database-info > div {
-    min-height: 75px;
-
-    padding: 10px 8px;
-  }
-
-  .database-info span {
-    font-size: 7px;
-
-    letter-spacing: 1px;
-  }
-
-  .database-info strong {
-    font-size: 20px;
-  }
-
-  .sort-button {
-    min-height: 58px;
-
-    font-size: 10px;
-  }
-}
-
-
-/* =========================================================
-   RED GLITCH FLASH
-   ========================================================= */
-
-@keyframes redFlash {
-
-  0%,
-  92%,
-  100% {
-    opacity: 1;
-  }
-
-  94% {
-    opacity: 0.5;
-  }
-
-  96% {
-    opacity: 1;
-  }
-}
-
-body {
-  animation: redFlash 8s infinite;
-}
-
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-
-    animation-iteration-count: 1 !important;
-
-    scroll-behavior: auto !important;
-
-    transition-duration: 0.001ms !important;
-  }
 }
