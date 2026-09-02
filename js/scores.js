@@ -2,6 +2,8 @@ import { db } from "./firebase.js";
 
 import {
   collection,
+  query,
+  orderBy,
   onSnapshot,
   doc,
   updateDoc
@@ -9,220 +11,239 @@ import {
   "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-/* =========================================
+/* =========================================================
    ELEMENTS
-========================================= */
+========================================================= */
 
 const scoreList =
-  document.getElementById(
-    "scoreList"
-  );
+  document.getElementById("scoreList");
 
 const emptyMessage =
-  document.getElementById(
-    "emptyMessage"
-  );
-
-
-const newestButton =
-  document.getElementById(
-    "newestButton"
-  );
-
-const rankingButton =
-  document.getElementById(
-    "rankingButton"
-  );
-
-
-const sortModeText =
-  document.getElementById(
-    "sortModeText"
-  );
-
+  document.getElementById("emptyMessage");
 
 const entryCount =
-  document.getElementById(
-    "entryCount"
-  );
+  document.getElementById("entryCount");
 
 const waitingCount =
-  document.getElementById(
-    "waitingCount"
-  );
+  document.getElementById("waitingCount");
 
 const completeCount =
-  document.getElementById(
-    "completeCount"
-  );
+  document.getElementById("completeCount");
+
+const newestButton =
+  document.getElementById("newestButton");
+
+const rankingButton =
+  document.getElementById("rankingButton");
+
+const sortModeText =
+  document.getElementById("sortModeText");
 
 
-/* =========================================
-   DATA
-========================================= */
+/* =========================================================
+   VARIABLES
+========================================================= */
 
 let scores = [];
 
-let currentSort =
-  "newest";
+let sortMode = "newest";
+
+let unsubscribe = null;
 
 
-/* =========================================
-   FIRESTORE REALTIME
-========================================= */
+/* =========================================================
+   START
+========================================================= */
 
-onSnapshot(
-  collection(
-    db,
-    "festivalScores"
-  ),
-
-  (snapshot) => {
-
-    scores =
-      snapshot.docs.map(
-        (documentSnapshot) => {
-
-          return {
-
-            id:
-              documentSnapshot.id,
-
-            ...documentSnapshot.data()
-
-          };
-
-        }
-      );
+loadScores();
 
 
-    updateCounters();
+/* =========================================================
+   LOAD FIRESTORE
+========================================================= */
 
-    renderScores();
+function loadScores() {
 
-  },
-
-  (error) => {
-
-    console.error(error);
-
-    emptyMessage.textContent =
-      "DATABASE ERROR";
-
-    emptyMessage.classList.remove(
-      "hidden"
+  const scoresRef =
+    collection(
+      db,
+      "festivalScores"
     );
 
-  }
-);
 
+  /*
+    createdAtの新しい順で取得
 
-/* =========================================
-   SORT
-========================================= */
+    ランキング表示は
+    JavaScript側で並び替える
+  */
 
-newestButton.addEventListener(
-  "click",
-  () => {
-
-    currentSort =
-      "newest";
-
-    newestButton.classList.add(
-      "active"
+  const scoresQuery =
+    query(
+      scoresRef,
+      orderBy(
+        "createdAt",
+        "desc"
+      )
     );
 
-    rankingButton.classList.remove(
-      "active"
+
+  unsubscribe =
+    onSnapshot(
+      scoresQuery,
+
+      (snapshot) => {
+
+        scores = [];
+
+
+        snapshot.forEach(
+          (documentSnapshot) => {
+
+            const data =
+              documentSnapshot.data();
+
+
+            scores.push({
+
+              id:
+                documentSnapshot.id,
+
+              nickname:
+                data.nickname || "UNKNOWN",
+
+              quizScore:
+                Number(
+                  data.quizScore || 0
+                ),
+
+              shootingScore:
+                Number(
+                  data.shootingScore || 0
+                ),
+
+              totalScore:
+                Number(
+                  data.totalScore || 0
+                ),
+
+              completed:
+                data.completed === true,
+
+              createdAt:
+                data.createdAt || null
+
+            });
+
+          }
+        );
+
+
+        updateInformation();
+
+        renderScores();
+
+      },
+
+
+      (error) => {
+
+        console.error(
+          "Firestore error:",
+          error
+        );
+
+
+        scoreList.innerHTML = "";
+
+
+        emptyMessage.classList.remove(
+          "hidden"
+        );
+
+
+        emptyMessage.innerHTML = `
+
+          <div class="empty-code">
+            ERROR
+          </div>
+
+          <div class="empty-title">
+            DATABASE ERROR
+          </div>
+
+          <div class="empty-description">
+            FIRESTORE CONNECTION FAILED
+          </div>
+
+        `;
+
+      }
+
     );
 
-    sortModeText.textContent =
-      "SORT : NEWEST";
-
-    renderScores();
-
-  }
-);
+}
 
 
-rankingButton.addEventListener(
-  "click",
-  () => {
+/* =========================================================
+   INFORMATION
+========================================================= */
 
-    currentSort =
-      "ranking";
-
-    rankingButton.classList.add(
-      "active"
-    );
-
-    newestButton.classList.remove(
-      "active"
-    );
-
-    sortModeText.textContent =
-      "SORT : SCORE";
-
-    renderScores();
-
-  }
-);
-
-
-/* =========================================
-   COUNTERS
-========================================= */
-
-function updateCounters() {
+function updateInformation() {
 
   const total =
     scores.length;
 
 
-  const completed =
+  const complete =
     scores.filter(
-      score =>
+      (score) =>
         score.completed === true
     ).length;
 
 
   const waiting =
-    total - completed;
+    total - complete;
 
 
   entryCount.textContent =
     total;
 
+
   waitingCount.textContent =
     waiting;
 
+
   completeCount.textContent =
-    completed;
+    complete;
 
 }
 
 
-/* =========================================
-   SORT DATA
-========================================= */
+/* =========================================================
+   SORT
+========================================================= */
 
-function getSortedScores() {
+function sortScores() {
 
-  const copied =
+  const sorted =
     [...scores];
 
 
-  if (currentSort === "newest") {
+  /* -----------------------------------------
+     NEWEST
+  ----------------------------------------- */
 
-    copied.sort(
+  if (sortMode === "newest") {
+
+    sorted.sort(
       (a, b) => {
 
         const aTime =
-          a.createdAt?.seconds || 0;
+          getTime(a.createdAt);
 
         const bTime =
-          b.createdAt?.seconds || 0;
-
+          getTime(b.createdAt);
 
         return bTime - aTime;
 
@@ -232,32 +253,40 @@ function getSortedScores() {
   }
 
 
-  if (currentSort === "ranking") {
+  /* -----------------------------------------
+     RANKING
+  ----------------------------------------- */
 
-    copied.sort(
+  if (sortMode === "ranking") {
+
+    sorted.sort(
       (a, b) => {
 
-        const scoreDifference =
-          (b.totalScore || 0)
-          -
-          (a.totalScore || 0);
+        /*
+          点数が高い順
+        */
 
+        if (
+          b.totalScore !==
+          a.totalScore
+        ) {
 
-        if (scoreDifference !== 0) {
-
-          return scoreDifference;
+          return (
+            b.totalScore -
+            a.totalScore
+          );
 
         }
 
 
-        const aTime =
-          a.createdAt?.seconds || 0;
+        /*
+          同点なら新しい順
+        */
 
-        const bTime =
-          b.createdAt?.seconds || 0;
-
-
-        return aTime - bTime;
+        return (
+          getTime(b.createdAt) -
+          getTime(a.createdAt)
+        );
 
       }
     );
@@ -265,25 +294,64 @@ function getSortedScores() {
   }
 
 
-  return copied;
+  return sorted;
 
 }
 
 
-/* =========================================
+/* =========================================================
+   GET TIME
+========================================================= */
+
+function getTime(timestamp) {
+
+  if (!timestamp) {
+    return 0;
+  }
+
+
+  /*
+    Firestore Timestamp
+  */
+
+  if (
+    typeof timestamp.toMillis ===
+    "function"
+  ) {
+
+    return timestamp.toMillis();
+
+  }
+
+
+  /*
+    Date
+  */
+
+  if (
+    timestamp instanceof Date
+  ) {
+
+    return timestamp.getTime();
+
+  }
+
+
+  return 0;
+
+}
+
+
+/* =========================================================
    RENDER
-========================================= */
+========================================================= */
 
 function renderScores() {
 
   scoreList.innerHTML = "";
 
 
-  const sorted =
-    getSortedScores();
-
-
-  if (sorted.length === 0) {
+  if (scores.length === 0) {
 
     emptyMessage.classList.remove(
       "hidden"
@@ -299,18 +367,22 @@ function renderScores() {
   );
 
 
+  const sorted =
+    sortScores();
+
+
   sorted.forEach(
     (score, index) => {
 
-      const card =
-        createScoreCard(
+      const item =
+        createScoreItem(
           score,
           index
         );
 
 
       scoreList.appendChild(
-        card
+        item
       );
 
     }
@@ -319,223 +391,163 @@ function renderScores() {
 }
 
 
-/* =========================================
-   CREATE CARD
-========================================= */
+/* =========================================================
+   CREATE SCORE ITEM
+========================================================= */
 
-function createScoreCard(
+function createScoreItem(
   score,
   index
 ) {
 
-  const card =
-    document.createElement("article");
+  const article =
+    document.createElement(
+      "article"
+    );
 
 
-  card.className =
-    "score-card";
+  article.className =
+    "score-item";
 
 
   if (score.completed) {
 
-    card.classList.add(
+    article.classList.add(
       "completed"
-    );
-
-  } else {
-
-    card.classList.add(
-      "waiting"
     );
 
   }
 
 
-  /* rank */
+  /* -----------------------------------------
+     PLAYER AREA
+  ----------------------------------------- */
 
-  const rank =
-    document.createElement("div");
+  const player =
+    document.createElement(
+      "div"
+    );
 
-  rank.className =
-    "card-rank";
+
+  player.className =
+    "score-player";
 
 
-  if (currentSort === "ranking") {
+  const name =
+    document.createElement(
+      "div"
+    );
+
+
+  name.className =
+    "score-player-name";
+
+
+  name.textContent =
+    score.nickname;
+
+
+  const detail =
+    document.createElement(
+      "div"
+    );
+
+
+  detail.className =
+    "score-player-detail";
+
+
+  detail.textContent =
+    `QUIZ ${formatNumber(score.quizScore)}  /  SHOOTING ${formatNumber(score.shootingScore)}`;
+
+
+  player.appendChild(
+    name
+  );
+
+
+  player.appendChild(
+    detail
+  );
+
+
+  /* -----------------------------------------
+     SCORE AREA
+  ----------------------------------------- */
+
+  const scoreArea =
+    document.createElement(
+      "div"
+    );
+
+
+  scoreArea.className =
+    "score-value";
+
+
+  /*
+    ランキング時だけ順位を表示
+  */
+
+  if (sortMode === "ranking") {
+
+    const rank =
+      document.createElement(
+        "span"
+      );
+
+
+    rank.className =
+      "score-rank";
+
 
     rank.textContent =
       `#${index + 1}`;
 
-    if (index < 3) {
 
-      rank.classList.add(
-        "top-rank"
-      );
-
-    }
-
-  } else {
-
-    rank.textContent =
-      String(index + 1)
-        .padStart(2, "0");
+    scoreArea.appendChild(
+      rank
+    );
 
   }
 
 
-  /* player */
-
-  const player =
-    document.createElement("div");
-
-  player.className =
-    "card-player";
-
-
-  const name =
-    document.createElement("div");
-
-  name.className =
-    "card-player-name";
-
-  name.textContent =
-    score.nickname || "NO NAME";
-
-
-  const time =
-    document.createElement("div");
-
-  time.className =
-    "card-time";
-
-  time.textContent =
-    formatDate(
-      score.createdAt
-    );
-
-
-  player.appendChild(name);
-
-  player.appendChild(time);
-
-
-  /* subscores */
-
-  const detail =
-    document.createElement("div");
-
-  detail.className =
-    "card-subscore";
-
-
-  const quizLine =
-    document.createElement("div");
-
-  quizLine.append(
-    "QUIZ "
-  );
-
-
-  const quizStrong =
-    document.createElement("strong");
-
-  quizStrong.textContent =
-    Number(
-      score.quizScore || 0
-    ).toLocaleString("ja-JP");
-
-
-  quizLine.appendChild(
-    quizStrong
-  );
-
-
-  const shootingLine =
-    document.createElement("div");
-
-  shootingLine.append(
-    "SHOT "
-  );
-
-
-  const shootingStrong =
-    document.createElement("strong");
-
-  shootingStrong.textContent =
-    Number(
-      score.shootingScore || 0
-    ).toLocaleString("ja-JP");
-
-
-  shootingLine.appendChild(
-    shootingStrong
-  );
-
-
-  detail.appendChild(
-    quizLine
-  );
-
-  detail.appendChild(
-    shootingLine
-  );
-
-
-  /* total */
-
   const total =
-    document.createElement("div");
-
-  total.className =
-    "card-total";
-
-
-  const totalLabel =
-    document.createElement("span");
-
-  totalLabel.textContent =
-    "TOTAL";
-
-
-  const totalScore =
-    document.createElement("strong");
-
-  totalScore.textContent =
-    Number(
-      score.totalScore || 0
-    ).toLocaleString("ja-JP");
-
-
-  total.appendChild(
-    totalLabel
-  );
-
-  total.appendChild(
-    totalScore
-  );
-
-
-  /* button */
-
-  const completeButton =
-    document.createElement("button");
-
-  completeButton.className =
-    "complete-button";
-
-
-  if (score.completed) {
-
-    completeButton.textContent =
-      "✓ 案内完了";
-
-    completeButton.disabled =
-      true;
-
-    completeButton.classList.add(
-      "done"
+    document.createElement(
+      "span"
     );
 
-  } else {
+
+  total.textContent =
+    formatNumber(
+      score.totalScore
+    );
+
+
+  scoreArea.appendChild(
+    total
+  );
+
+
+  /* -----------------------------------------
+     COMPLETE BUTTON
+  ----------------------------------------- */
+
+  if (!score.completed) {
+
+    const completeButton =
+      document.createElement(
+        "button"
+      );
+
+
+    completeButton.type =
+      "button";
+
+
+    completeButton.className =
+      "complete-button";
+
 
     completeButton.textContent =
       "案内完了";
@@ -543,9 +555,9 @@ function createScoreCard(
 
     completeButton.addEventListener(
       "click",
-      async () => {
+      () => {
 
-        await completeScore(
+        completeScore(
           score.id,
           completeButton
         );
@@ -553,62 +565,82 @@ function createScoreCard(
       }
     );
 
+
+    player.appendChild(
+      completeButton
+    );
+
   }
 
 
-  card.appendChild(
-    rank
-  );
+  /* -----------------------------------------
+     APPEND
+  ----------------------------------------- */
 
-  card.appendChild(
+  article.appendChild(
     player
   );
 
-  card.appendChild(
-    detail
-  );
 
-  card.appendChild(
-    total
-  );
-
-  card.appendChild(
-    completeButton
+  article.appendChild(
+    scoreArea
   );
 
 
-  return card;
+  return article;
 
 }
 
 
-/* =========================================
+/* =========================================================
    COMPLETE
-========================================= */
+========================================================= */
 
 async function completeScore(
   id,
   button
 ) {
 
+  if (!id) {
+    return;
+  }
+
+
+  const confirmed =
+    window.confirm(
+      "この参加者を「案内完了」にしますか？"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
   button.disabled =
     true;
 
+
   button.textContent =
-    "UPDATING...";
+    "処理中...";
 
 
   try {
 
-    await updateDoc(
+    const scoreRef =
       doc(
         db,
         "festivalScores",
         id
-      ),
+      );
+
+
+    await updateDoc(
+      scoreRef,
       {
 
-        completed: true
+        completed:
+          true
 
       }
     );
@@ -616,164 +648,140 @@ async function completeScore(
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Complete error:",
+      error
+    );
+
 
     button.disabled =
       false;
 
+
     button.textContent =
-      "ERROR / RETRY";
+      "案内完了";
+
+
+    alert(
+      "更新に失敗しました。\n通信状態を確認してください。"
+    );
 
   }
 
 }
 
 
-/* =========================================
-   DATE FORMAT
-========================================= */
+/* =========================================================
+   NEWEST BUTTON
+========================================================= */
 
-function formatDate(timestamp) {
+newestButton.addEventListener(
+  "click",
+  () => {
 
-  if (!timestamp) {
+    if (
+      sortMode === "newest"
+    ) {
+      return;
+    }
 
-    return "SYNCING...";
+
+    sortMode =
+      "newest";
+
+
+    newestButton.classList.add(
+      "active"
+    );
+
+
+    rankingButton.classList.remove(
+      "active"
+    );
+
+
+    sortModeText.textContent =
+      "SORT : NEWEST";
+
+
+    renderScores();
 
   }
+);
 
 
-  const date =
-    timestamp.toDate();
+/* =========================================================
+   RANKING BUTTON
+========================================================= */
 
+rankingButton.addEventListener(
+  "click",
+  () => {
 
-  return new Intl.DateTimeFormat(
-    "ja-JP",
-    {
-
-      month: "2-digit",
-
-      day: "2-digit",
-
-      hour: "2-digit",
-
-      minute: "2-digit",
-
-      second: "2-digit"
-
+    if (
+      sortMode === "ranking"
+    ) {
+      return;
     }
-  ).format(date);
+
+
+    sortMode =
+      "ranking";
+
+
+    rankingButton.classList.add(
+      "active"
+    );
+
+
+    newestButton.classList.remove(
+      "active"
+    );
+
+
+    sortModeText.textContent =
+      "SORT : RANKING";
+
+
+    renderScores();
+
+  }
+);
+
+
+/* =========================================================
+   FORMAT NUMBER
+========================================================= */
+
+function formatNumber(
+  number
+) {
+
+  return Number(
+    number || 0
+  ).toLocaleString(
+    "ja-JP"
+  );
 
 }
 
 
-/* =========================================
-   CODE RAIN
-========================================= */
+/* =========================================================
+   PAGE LEAVE
+========================================================= */
 
-function createCodeRain() {
+window.addEventListener(
+  "beforeunload",
+  () => {
 
-  const container =
-    document.getElementById(
-      "codeRain"
-    );
-
-
-  const characters =
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/[]{}#%&";
-
-
-  const width =
-    window.innerWidth;
-
-
-  const columnCount =
-    Math.max(
-      15,
-      Math.floor(width / 35)
-    );
-
-
-  for (
-    let i = 0;
-    i < columnCount;
-    i++
-  ) {
-
-    const column =
-      document.createElement(
-        "div"
-      );
-
-
-    column.className =
-      "code-column";
-
-
-    if (Math.random() < 0.12) {
-
-      column.classList.add(
-        "red"
-      );
-
-    }
-
-
-    let text = "";
-
-
-    const length =
-      20 +
-      Math.floor(
-        Math.random() * 40
-      );
-
-
-    for (
-      let j = 0;
-      j < length;
-      j++
+    if (
+      typeof unsubscribe ===
+      "function"
     ) {
 
-      const random =
-        Math.floor(
-          Math.random()
-          * characters.length
-        );
-
-
-      text +=
-        characters[random];
+      unsubscribe();
 
     }
 
-
-    column.textContent =
-      text;
-
-
-    column.style.left =
-      `${Math.random() * 100}%`;
-
-
-    column.style.animationDuration =
-      `${8 + Math.random() * 18}s`;
-
-
-    column.style.animationDelay =
-      `${Math.random() * -20}s`;
-
-
-    column.style.opacity =
-      `${0.2 + Math.random() * 0.6}`;
-
-
-    container.appendChild(
-      column
-    );
-
   }
-
-}
-
-
-createCodeRain();
+);
