@@ -1,7 +1,6 @@
-/* =========================================================
-   FIREBASE CONFIG
-   FESTIVAL SCORE SYSTEM
-========================================================= */
+// ========================================
+// Firebase 初期設定
+// ========================================
 
 import {
   initializeApp
@@ -12,44 +11,34 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+// ========================================
+// Firebase Config
+// ========================================
 
 const firebaseConfig = {
+  apiKey: "AIzaSyCiSxUY5BVu2DB_b2bpe9mZxk5LR4Q7PBQ",
 
-  apiKey:
-    "AIzaSyCiSxUY5BVu2DB_b2bpe9mZxk5LR4Q7PBQ",
+  authDomain: "leaders-count-system.firebaseapp.com",
 
-  authDomain:
-    "leaders-count-system.firebaseapp.com",
+  projectId: "leaders-count-system",
 
-  projectId:
-    "leaders-count-system",
+  storageBucket: "leaders-count-system.firebasestorage.app",
 
-  storageBucket:
-    "leaders-count-system.firebasestorage.app",
+  messagingSenderId: "242036957530",
 
-  messagingSenderId:
-    "242036957530",
-
-  appId:
-    "1:242036957530:web:822d539394f3cb83b6d363"
-
+  appId: "1:242036957530:web:822d539394f3cb83b6d363"
 };
 
 
-/* =========================================================
-   INITIALIZE FIREBASE
-========================================================= */
+// ========================================
+// Firebase 初期化
+// ========================================
 
-const app =
-  initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 
-/* =========================================================
-   FIRESTORE
-========================================================= */
+// ========================================
+// Firestore
+// ========================================
 
-export const db =
-  getFirestore(app);
+export const db = getFirestore(app);
