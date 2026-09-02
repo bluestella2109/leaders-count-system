@@ -7,7 +7,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
   <meta
@@ -25,18 +25,23 @@
 </head>
 
 
-<body class="input-page">
+<body>
 
 
-  <!-- ========================================
-       BACKGROUND
-  ========================================= -->
+  <!-- ==================================================
+       CODE RAIN BACKGROUND
+  =================================================== -->
 
   <div
     id="codeRain"
     class="code-rain"
     aria-hidden="true"
   ></div>
+
+
+  <!-- ==================================================
+       SCREEN EFFECTS
+  =================================================== -->
 
   <div
     class="scanlines"
@@ -50,19 +55,28 @@
 
 
 
-  <!-- ========================================
-       SYSTEM BAR
-  ========================================= -->
+  <!-- ==================================================
+       SYSTEM HEADER
+  =================================================== -->
 
-  <header class="system-bar">
+  <header class="system-header">
 
-    <div class="system-name">
-      FESTIVAL SCORE SYSTEM
+    <div class="system-brand">
+
+      <span class="system-brand-main">
+        SCORE SYSTEM
+      </span>
+
+      <span class="system-brand-sub">
+        CULTURE FESTIVAL // 2026
+      </span>
+
     </div>
+
 
     <div class="system-status">
 
-      <span class="status-dot"></span>
+      <span class="status-light"></span>
 
       SYSTEM ONLINE
 
@@ -72,114 +86,177 @@
 
 
 
-  <!-- ========================================
+  <!-- ==================================================
        START SCREEN
-  ========================================= -->
+  =================================================== -->
 
   <main
     id="startScreen"
-    class="start-screen"
+    class="screen start-screen"
   >
 
-    <section class="terminal-card">
+    <section class="start-card">
 
 
-      <div class="terminal-top">
+      <!-- TOP INFORMATION -->
+
+      <div class="card-header">
 
         <span>
-          CULTURE FESTIVAL
+          SYSTEM://PLAYER_REGISTRATION
         </span>
 
         <span>
-          // TERMINAL 01
+          01 / 03
         </span>
 
       </div>
 
 
-      <div class="terminal-line"></div>
+      <div class="card-line"></div>
 
 
-      <div class="hero-number">
+
+      <!-- DECORATION -->
+
+      <div
+        class="background-number"
+        aria-hidden="true"
+      >
         01
       </div>
 
 
+
+      <!-- TITLE -->
+
+      <p class="eyebrow">
+        PARTICIPANT SCORE DATABASE
+      </p>
+
+
       <h1
         class="glitch-title"
-        data-text="SCORE SYSTEM"
+        data-text="SCORE"
       >
-        SCORE SYSTEM
+        SCORE
       </h1>
 
 
-      <p class="hero-subtitle">
+      <p class="glitch-subtitle">
+        INPUT TERMINAL
+      </p>
 
-        FESTIVAL SCORE DATABASE
+
+      <p class="description">
+
+        ニックネームを入力して<br>
+        スコア入力を開始してください。
 
       </p>
 
 
-      <p class="hero-description">
 
-        操作を選択してください
+      <!-- ==================================================
+           NICKNAME
+      =================================================== -->
 
-      </p>
+      <div class="nickname-area">
 
-
-
-      <!-- ====================================
-           MENU
-      ===================================== -->
-
-      <div class="start-menu">
-
-
-        <button
-          id="enterScoreButton"
-          class="menu-button"
-          type="button"
-          onclick="showScoreScreen()"
+        <label
+          for="nicknameInput"
+          class="input-label"
         >
+          NICKNAME
+        </label>
 
-          <span class="menu-jp">
-            点数を入力する
+
+        <div class="input-wrapper">
+
+          <span class="input-prefix">
+            &gt;_
           </span>
 
-          <span class="menu-en">
-            ENTER SCORE
-          </span>
 
-        </button>
+          <input
+            id="nicknameInput"
+            class="nickname-input"
+            type="text"
+            maxlength="20"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+            placeholder="ニックネームを入力"
+          >
+
+        </div>
 
 
-        <a
-          href="scores.html"
-          class="menu-button"
-        >
-
-          <span class="menu-jp">
-            点数一覧を見る
-          </span>
-
-          <span class="menu-en">
-            SCORE DATABASE
-          </span>
-
-        </a>
-
+        <p class="input-help">
+          MAX 20 CHARACTERS
+        </p>
 
       </div>
 
 
-      <div class="terminal-bottom">
+
+      <!-- ==================================================
+           START BUTTON
+      =================================================== -->
+
+      <button
+        id="startButton"
+        class="primary-button"
+        type="button"
+      >
+
+        <span class="button-main">
+          START
+        </span>
+
+        <span class="button-sub">
+          BEGIN SCORE INPUT →
+        </span>
+
+      </button>
+
+
+
+      <!-- ==================================================
+           LINKS
+      =================================================== -->
+
+      <div class="start-links">
+
+        <a
+          href="scores.html"
+          class="secondary-link"
+        >
+          <span>
+            SCORE LIST
+          </span>
+
+          <small>
+            点数一覧を見る →
+          </small>
+        </a>
+
+      </div>
+
+
+
+      <!-- ==================================================
+           FOOTER
+      =================================================== -->
+
+      <div class="card-footer">
 
         <span>
-          ACCESS : PUBLIC
+          ID://NEW_PLAYER
         </span>
 
         <span>
-          2026
+          CONNECTION:SECURE
         </span>
 
       </div>
@@ -191,101 +268,85 @@
 
 
 
-  <!-- ========================================
-       SCORE SCREEN
-  ========================================= -->
+  <!-- ==================================================
+       SCORE INPUT SCREEN
+  =================================================== -->
 
   <main
     id="scoreScreen"
-    class="score-screen hidden"
+    class="screen score-screen hidden"
   >
 
+    <section class="score-card">
 
-    <section class="score-terminal">
 
-
-      <!-- HEADER -->
+      <!-- ==================================================
+           PLAYER HEADER
+      =================================================== -->
 
       <header class="score-header">
 
-
         <div>
 
-          <div class="tiny-label">
-            CULTURE FESTIVAL // SCORE INPUT
-          </div>
+          <p class="eyebrow">
+            CURRENT PLAYER
+          </p>
 
-          <h1
-            class="glitch-title score-page-title"
-            data-text="ENTER SCORE"
+          <h2
+            id="playerName"
+            class="player-name"
           >
-            ENTER SCORE
-          </h1>
+            PLAYER
+          </h2>
 
         </div>
 
 
         <a
           href="scores.html"
-          class="header-link"
+          class="small-link"
         >
           LIST →
         </a>
-
 
       </header>
 
 
 
-      <!-- PLAYER -->
+      <!-- ==================================================
+           QUIZ SCORE
+      =================================================== -->
 
-      <section class="player-panel">
-
-
-        <div class="panel-label">
-          PLAYER
-        </div>
-
-
-        <div
-          id="playerName"
-          class="player-name"
-        >
-          PLAYER
-        </div>
+      <section
+        class="score-block"
+        id="quizSection"
+      >
 
 
-      </section>
-
-
-
-      <!-- ====================================
-           QUIZ
-      ===================================== -->
-
-      <section class="score-input-section">
-
-
-        <div class="score-section-header">
+        <header class="score-block-header">
 
           <div>
 
-            <span class="section-number">
+            <span class="block-number">
               01
             </span>
 
-            <span class="section-name">
+            <span class="block-title">
               QUIZ
             </span>
 
           </div>
 
-          <span class="section-jp">
+
+          <span class="block-japanese">
             クイズ
           </span>
 
-        </div>
+        </header>
 
+
+
+        <!-- SCORE DISPLAY -->
 
         <div
           id="quizDisplay"
@@ -295,31 +356,99 @@
         </div>
 
 
+
+        <!-- KEYPAD -->
+
         <div
           class="keypad"
           data-target="quiz"
         >
 
-          <button class="key" data-value="1">1</button>
-          <button class="key" data-value="2">2</button>
-          <button class="key" data-value="3">3</button>
-
-          <button class="key" data-value="4">4</button>
-          <button class="key" data-value="5">5</button>
-          <button class="key" data-value="6">6</button>
-
-          <button class="key" data-value="7">7</button>
-          <button class="key" data-value="8">8</button>
-          <button class="key" data-value="9">9</button>
-
           <button
-            class="key key-function"
-            data-action="clear"
+            type="button"
+            class="key"
+            data-value="1"
           >
-            C
+            1
           </button>
 
           <button
+            type="button"
+            class="key"
+            data-value="2"
+          >
+            2
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="3"
+          >
+            3
+          </button>
+
+
+          <button
+            type="button"
+            class="key"
+            data-value="4"
+          >
+            4
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="5"
+          >
+            5
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="6"
+          >
+            6
+          </button>
+
+
+          <button
+            type="button"
+            class="key"
+            data-value="7"
+          >
+            7
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="8"
+          >
+            8
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="9"
+          >
+            9
+          </button>
+
+
+          <button
+            type="button"
+            class="key key-function"
+            data-action="clear"
+          >
+            CLR
+          </button>
+
+          <button
+            type="button"
             class="key"
             data-value="0"
           >
@@ -327,6 +456,7 @@
           </button>
 
           <button
+            type="button"
             class="key key-function"
             data-action="back"
           >
@@ -340,33 +470,40 @@
 
 
 
-      <!-- ====================================
-           SHOOTING
-      ===================================== -->
+      <!-- ==================================================
+           SHOOTING SCORE
+      =================================================== -->
 
-      <section class="score-input-section shooting-section">
+      <section
+        class="score-block"
+        id="shootingSection"
+      >
 
 
-        <div class="score-section-header">
+        <header class="score-block-header">
 
           <div>
 
-            <span class="section-number">
+            <span class="block-number">
               02
             </span>
 
-            <span class="section-name">
+            <span class="block-title">
               SHOOTING
             </span>
 
           </div>
 
-          <span class="section-jp">
+
+          <span class="block-japanese">
             射的
           </span>
 
-        </div>
+        </header>
 
+
+
+        <!-- SCORE DISPLAY -->
 
         <div
           id="shootingDisplay"
@@ -376,31 +513,99 @@
         </div>
 
 
+
+        <!-- KEYPAD -->
+
         <div
           class="keypad"
           data-target="shooting"
         >
 
-          <button class="key" data-value="1">1</button>
-          <button class="key" data-value="2">2</button>
-          <button class="key" data-value="3">3</button>
-
-          <button class="key" data-value="4">4</button>
-          <button class="key" data-value="5">5</button>
-          <button class="key" data-value="6">6</button>
-
-          <button class="key" data-value="7">7</button>
-          <button class="key" data-value="8">8</button>
-          <button class="key" data-value="9">9</button>
-
           <button
-            class="key key-function"
-            data-action="clear"
+            type="button"
+            class="key"
+            data-value="1"
           >
-            C
+            1
           </button>
 
           <button
+            type="button"
+            class="key"
+            data-value="2"
+          >
+            2
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="3"
+          >
+            3
+          </button>
+
+
+          <button
+            type="button"
+            class="key"
+            data-value="4"
+          >
+            4
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="5"
+          >
+            5
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="6"
+          >
+            6
+          </button>
+
+
+          <button
+            type="button"
+            class="key"
+            data-value="7"
+          >
+            7
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="8"
+          >
+            8
+          </button>
+
+          <button
+            type="button"
+            class="key"
+            data-value="9"
+          >
+            9
+          </button>
+
+
+          <button
+            type="button"
+            class="key key-function"
+            data-action="clear"
+          >
+            CLR
+          </button>
+
+          <button
+            type="button"
             class="key"
             data-value="0"
           >
@@ -408,6 +613,7 @@
           </button>
 
           <button
+            type="button"
             class="key key-function"
             data-action="back"
           >
@@ -421,22 +627,15 @@
 
 
 
-      <!-- ====================================
+      <!-- ==================================================
            TOTAL
-      ===================================== -->
+      =================================================== -->
 
-      <section class="total-panel">
+      <section class="total-section">
 
-
-        <div class="total-label">
-
+        <p class="total-label">
           TOTAL SCORE
-
-          <span>
-            合計点
-          </span>
-
-        </div>
+        </p>
 
 
         <div
@@ -447,16 +646,17 @@
         </div>
 
 
-        <div class="total-line"></div>
-
+        <p class="total-unit">
+          POINTS
+        </p>
 
       </section>
 
 
 
-      <!-- ====================================
+      <!-- ==================================================
            SUBMIT
-      ===================================== -->
+      =================================================== -->
 
       <button
         id="submitButton"
@@ -464,33 +664,39 @@
         type="button"
       >
 
-        <span class="submit-main">
+        <span class="button-main">
           SUBMIT SCORE
         </span>
 
-        <span class="submit-sub">
-          点数を送信する
+        <span class="button-sub">
+          SEND TO DATABASE →
         </span>
 
       </button>
 
 
-      <div
+      <p
         id="sendStatus"
         class="send-status"
-      ></div>
+      ></p>
 
 
-      <!-- FOOTER -->
 
-      <footer class="input-footer">
+      <!-- ==================================================
+           SCORE FOOTER
+      =================================================== -->
+
+      <footer class="score-footer">
 
         <span>
-          SYSTEM://INPUT
+          PLAYER:
+          <strong id="footerPlayer">
+            —
+          </strong>
         </span>
 
         <span>
-          DATABASE CONNECTION : ACTIVE
+          DATABASE: READY
         </span>
 
       </footer>
@@ -502,105 +708,77 @@
 
 
 
-  <!-- ========================================
-       NICKNAME MODAL
-  ========================================= -->
-
-  <div
-    id="nicknameModal"
-    class="modal hidden"
-  >
-
-    <div class="modal-card">
-
-
-      <div class="modal-code">
-        ACCESS 01
-      </div>
-
-
-      <div class="modal-title">
-        PLAYER IDENTIFICATION
-      </div>
-
-
-      <p class="modal-description">
-        ニックネームを入力してください
-      </p>
-
-
-      <input
-        id="nicknameInput"
-        class="nickname-input"
-        type="text"
-        maxlength="20"
-        autocomplete="off"
-        placeholder="NICKNAME"
-      >
-
-
-      <button
-        id="startButton"
-        class="start-button"
-        type="button"
-      >
-
-        <span>
-          START
-        </span>
-
-        <small>
-          ENTER SYSTEM
-        </small>
-
-      </button>
-
-
-    </div>
-
-  </div>
-
-
-
-  <!-- ========================================
-       RESULT
-  ========================================= -->
+  <!-- ==================================================
+       RESULT OVERLAY
+  =================================================== -->
 
   <div
     id="resultOverlay"
     class="result-overlay hidden"
   >
 
-    <div class="result-card">
+    <section class="result-card">
 
 
-      <div class="result-top">
+      <!-- HEADER -->
+
+      <div class="result-header">
 
         <span>
-          SCORE SUBMITTED
+          TRANSACTION COMPLETE
         </span>
 
-        <span>
-          // COMPLETE
+        <span class="result-ok">
+          OK
         </span>
 
       </div>
 
 
-      <div class="result-glitch">
-        RESULT
-      </div>
+      <div class="result-line"></div>
 
 
-      <div
+
+      <!-- TITLE -->
+
+      <p class="eyebrow">
+        SCORE REGISTERED
+      </p>
+
+
+      <h2
         id="resultName"
         class="result-name"
       >
         PLAYER
+      </h2>
+
+
+
+      <!-- TOTAL SCORE -->
+
+      <p class="result-total-label">
+        TOTAL SCORE
+      </p>
+
+
+      <div
+        id="resultTotal"
+        class="result-total"
+      >
+        0
       </div>
 
 
-      <div class="result-details">
+      <p class="result-total-unit">
+        POINTS
+      </p>
+
+
+
+      <!-- BREAKDOWN -->
+
+      <div class="result-breakdown">
 
 
         <div class="result-row">
@@ -632,61 +810,97 @@
       </div>
 
 
-      <div class="result-total-label">
-        TOTAL SCORE
+
+      <!-- COMPLETE MESSAGE -->
+
+      <div class="result-message">
+
+        SCORE HAS BEEN
+        <strong>REGISTERED</strong>
+
       </div>
 
 
-      <div
-        id="resultTotal"
-        class="result-total"
-        data-text="0"
-      >
-        0
-      </div>
 
-
-      <div class="result-complete">
-        SCORE REGISTERED
-      </div>
-
+      <!-- NEW ENTRY -->
 
       <button
         id="newEntryButton"
-        class="new-entry-button"
+        class="primary-button"
         type="button"
       >
 
-        NEXT PLAYER
+        <span class="button-main">
+          NEXT PLAYER
+        </span>
+
+        <span class="button-sub">
+          NEW SCORE ENTRY →
+
+        </span>
 
       </button>
 
 
+
+      <!-- LIST -->
+
       <a
         href="scores.html"
-        class="result-list-button"
+        class="secondary-link"
       >
 
-        VIEW SCORE LIST →
+        <span>
+          SCORE LIST
+        </span>
+
+        <small>
+          点数一覧を見る →
+        </small>
 
       </a>
 
 
-    </div>
+    </section>
 
   </div>
 
 
 
-  <!-- ========================================
-       SCRIPTS
-  ========================================= -->
+  <!-- ==================================================
+       ADMIN / RESET AREA
+  =================================================== -->
 
-  <script
-    type="module"
-    src="js/codeRain.js"
-  ></script>
+  <section
+    id="adminArea"
+    class="admin-area"
+  >
 
+
+    <button
+      id="resetDataButton"
+      class="reset-data-button"
+      type="button"
+    >
+
+      <span>
+        ⚠ 全データ初期化
+      </span>
+
+      <small>
+        RESET ALL SCORE DATA
+      </small>
+
+    </button>
+
+
+  </section>
+
+
+
+  <!-- ==================================================
+       JAVASCRIPT
+  =================================================== -->
 
   <script
     type="module"
@@ -694,42 +908,10 @@
   ></script>
 
 
-  <!-- ========================================
-       START SCREEN CONTROL
-  ========================================= -->
-
-  <script>
-
-    /*
-     * トップ画面から
-     * 点数入力画面へ移動
-     */
-
-    function showScoreScreen() {
-
-      const modal =
-        document.getElementById("nicknameModal");
-
-      if (modal) {
-
-        modal.classList.remove("hidden");
-
-        setTimeout(() => {
-
-          const input =
-            document.getElementById("nicknameInput");
-
-          if (input) {
-            input.focus();
-          }
-
-        }, 100);
-
-      }
-
-    }
-
-  </script>
+  <script
+    type="module"
+    src="js/codeRain.js"
+  ></script>
 
 
 </body>
