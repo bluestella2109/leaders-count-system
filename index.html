@@ -15,6 +15,11 @@
     content="#050505"
   >
 
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
   <title>FESTIVAL SCORE SYSTEM</title>
 
   <link
@@ -25,23 +30,18 @@
 </head>
 
 
-<body>
+<body class="input-page">
 
 
-  <!-- ==================================================
-       CODE RAIN BACKGROUND
-  =================================================== -->
+  <!-- ======================================
+       BACKGROUND
+  ======================================= -->
 
   <div
     id="codeRain"
     class="code-rain"
     aria-hidden="true"
   ></div>
-
-
-  <!-- ==================================================
-       SCREEN EFFECTS
-  =================================================== -->
 
   <div
     class="scanlines"
@@ -54,112 +54,45 @@
   ></div>
 
 
-
-  <!-- ==================================================
-       SYSTEM HEADER
-  =================================================== -->
-
-  <header class="system-header">
-
-    <div class="system-brand">
-
-      <span class="system-brand-main">
-        SCORE SYSTEM
-      </span>
-
-      <span class="system-brand-sub">
-        CULTURE FESTIVAL // 2026
-      </span>
-
-    </div>
-
-
-    <div class="system-status">
-
-      <span class="status-light"></span>
-
-      SYSTEM ONLINE
-
-    </div>
-
-  </header>
-
-
-
-  <!-- ==================================================
+  <!-- ======================================
        START SCREEN
-  =================================================== -->
+  ======================================= -->
 
   <main
     id="startScreen"
     class="screen start-screen"
   >
 
-    <section class="start-card">
+    <div class="start-content">
 
 
-      <!-- TOP INFORMATION -->
-
-      <div class="card-header">
-
-        <span>
-          SYSTEM://PLAYER_REGISTRATION
-        </span>
-
-        <span>
-          01 / 03
-        </span>
-
+      <div class="system-label">
+        <span>SYS://</span>
+        SCORE_COLLECTION
       </div>
-
-
-      <div class="card-line"></div>
-
-
-
-      <!-- DECORATION -->
-
-      <div
-        class="background-number"
-        aria-hidden="true"
-      >
-        01
-      </div>
-
-
-
-      <!-- TITLE -->
-
-      <p class="eyebrow">
-        PARTICIPANT SCORE DATABASE
-      </p>
 
 
       <h1
         class="glitch-title"
-        data-text="SCORE"
+        data-text="SCORE SYSTEM"
       >
-        SCORE
+        SCORE SYSTEM
       </h1>
 
 
-      <p class="glitch-subtitle">
-        INPUT TERMINAL
+      <p class="system-subtitle">
+        FESTIVAL SCORE DATABASE
       </p>
 
 
-      <p class="description">
-
-        ニックネームを入力して<br>
-        スコア入力を開始してください。
-
-      </p>
-
+      <div class="terminal-line">
+        <span>&gt;</span>
+        ENTER PLAYER IDENTIFICATION
+        <span class="cursor">_</span>
+      </div>
 
 
-      <!-- ==================================================
-           NICKNAME
-      =================================================== -->
+      <!-- NICKNAME -->
 
       <div class="nickname-area">
 
@@ -171,42 +104,30 @@
         </label>
 
 
-        <div class="input-wrapper">
-
-          <span class="input-prefix">
-            &gt;_
-          </span>
-
-
-          <input
-            id="nicknameInput"
-            class="nickname-input"
-            type="text"
-            maxlength="20"
-            autocomplete="off"
-            autocapitalize="none"
-            spellcheck="false"
-            placeholder="ニックネームを入力"
-          >
-
-        </div>
+        <input
+          id="nicknameInput"
+          class="nickname-input"
+          type="text"
+          maxlength="20"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="ニックネームを入力"
+        >
 
 
-        <p class="input-help">
+        <div class="input-hint">
           MAX 20 CHARACTERS
-        </p>
+        </div>
 
       </div>
 
 
-
-      <!-- ==================================================
-           START BUTTON
-      =================================================== -->
+      <!-- START -->
 
       <button
         id="startButton"
-        class="primary-button"
+        class="primary-button start-button"
         type="button"
       >
 
@@ -215,568 +136,519 @@
         </span>
 
         <span class="button-sub">
-          BEGIN SCORE INPUT →
+          点数入力を開始
         </span>
 
       </button>
 
 
+      <!-- SCORE LIST -->
 
-      <!-- ==================================================
-           LINKS
-      =================================================== -->
+      <a
+        href="scores.html"
+        class="secondary-button"
+      >
 
-      <div class="start-links">
-
-        <a
-          href="scores.html"
-          class="secondary-link"
-        >
-          <span>
-            SCORE LIST
-          </span>
-
-          <small>
-            点数一覧を見る →
-          </small>
-        </a>
-
-      </div>
-
-
-
-      <!-- ==================================================
-           FOOTER
-      =================================================== -->
-
-      <div class="card-footer">
-
-        <span>
-          ID://NEW_PLAYER
+        <span class="button-main">
+          SCORE LIST
         </span>
 
-        <span>
-          CONNECTION:SECURE
+        <span class="button-sub">
+          一覧を見る
         </span>
 
-      </div>
+      </a>
 
 
-    </section>
+      <div
+        id="sendStatus"
+        class="send-status"
+      ></div>
+
+
+    </div>
+
+
+    <div class="start-footer">
+
+      <span>
+        FESTIVAL // SCORE SYSTEM
+      </span>
+
+      <span>
+        ONLINE
+      </span>
+
+    </div>
 
   </main>
 
 
-
-  <!-- ==================================================
+  <!-- ======================================
        SCORE INPUT SCREEN
-  =================================================== -->
+  ======================================= -->
 
   <main
     id="scoreScreen"
     class="screen score-screen hidden"
   >
 
-    <section class="score-card">
+
+    <!-- HEADER -->
+
+    <header class="input-header">
 
 
-      <!-- ==================================================
-           PLAYER HEADER
-      =================================================== -->
+      <div class="header-player">
 
-      <header class="score-header">
+        <span class="header-label">
+          PLAYER
+        </span>
+
+        <strong
+          id="playerName"
+          class="header-name"
+        >
+          ---
+        </strong>
+
+      </div>
+
+
+      <a
+        href="scores.html"
+        class="header-list-button"
+      >
+        LIST
+      </a>
+
+    </header>
+
+
+    <!-- ====================================
+         QUIZ
+    ===================================== -->
+
+    <section
+      class="score-section quiz-section"
+    >
+
+
+      <div class="section-heading">
+
 
         <div>
 
-          <p class="eyebrow">
-            CURRENT PLAYER
-          </p>
+          <span class="section-index">
+            01
+          </span>
 
-          <h2
-            id="playerName"
-            class="player-name"
-          >
-            PLAYER
+          <h2>
+            QUIZ
           </h2>
 
+          <p>
+            クイズの点数
+          </p>
+
         </div>
 
 
-        <a
-          href="scores.html"
-          class="small-link"
-        >
-          LIST →
-        </a>
+        <div class="score-display-wrap">
 
-      </header>
-
-
-
-      <!-- ==================================================
-           QUIZ SCORE
-      =================================================== -->
-
-      <section
-        class="score-block"
-        id="quizSection"
-      >
-
-
-        <header class="score-block-header">
-
-          <div>
-
-            <span class="block-number">
-              01
-            </span>
-
-            <span class="block-title">
-              QUIZ
-            </span>
-
-          </div>
-
-
-          <span class="block-japanese">
-            クイズ
-          </span>
-
-        </header>
-
-
-
-        <!-- SCORE DISPLAY -->
-
-        <div
-          id="quizDisplay"
-          class="score-display"
-        >
-          0
-        </div>
-
-
-
-        <!-- KEYPAD -->
-
-        <div
-          class="keypad"
-          data-target="quiz"
-        >
-
-          <button
-            type="button"
-            class="key"
-            data-value="1"
-          >
-            1
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="2"
-          >
-            2
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="3"
-          >
-            3
-          </button>
-
-
-          <button
-            type="button"
-            class="key"
-            data-value="4"
-          >
-            4
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="5"
-          >
-            5
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="6"
-          >
-            6
-          </button>
-
-
-          <button
-            type="button"
-            class="key"
-            data-value="7"
-          >
-            7
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="8"
-          >
-            8
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="9"
-          >
-            9
-          </button>
-
-
-          <button
-            type="button"
-            class="key key-function"
-            data-action="clear"
-          >
-            CLR
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="0"
+          <span
+            id="quizDisplay"
+            class="score-display"
           >
             0
-          </button>
-
-          <button
-            type="button"
-            class="key key-function"
-            data-action="back"
-          >
-            ←
-          </button>
-
-        </div>
-
-
-      </section>
-
-
-
-      <!-- ==================================================
-           SHOOTING SCORE
-      =================================================== -->
-
-      <section
-        class="score-block"
-        id="shootingSection"
-      >
-
-
-        <header class="score-block-header">
-
-          <div>
-
-            <span class="block-number">
-              02
-            </span>
-
-            <span class="block-title">
-              SHOOTING
-            </span>
-
-          </div>
-
-
-          <span class="block-japanese">
-            射的
           </span>
 
-        </header>
+          <span class="score-unit">
+            PTS
+          </span>
+
+        </div>
+
+      </div>
 
 
+      <!-- QUIZ KEYPAD -->
 
-        <!-- SCORE DISPLAY -->
+      <div
+        class="keypad"
+        data-target="quiz"
+      >
 
-        <div
-          id="shootingDisplay"
-          class="score-display"
+        <button
+          class="key"
+          type="button"
+          data-value="1"
+        >
+          1
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="2"
+        >
+          2
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="3"
+        >
+          3
+        </button>
+
+
+        <button
+          class="key"
+          type="button"
+          data-value="4"
+        >
+          4
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="5"
+        >
+          5
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="6"
+        >
+          6
+        </button>
+
+
+        <button
+          class="key"
+          type="button"
+          data-value="7"
+        >
+          7
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="8"
+        >
+          8
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="9"
+        >
+          9
+        </button>
+
+
+        <button
+          class="key key-clear"
+          type="button"
+          data-action="clear"
+        >
+          CLR
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="0"
         >
           0
+        </button>
+
+        <button
+          class="key key-back"
+          type="button"
+          data-action="back"
+        >
+          ←
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ====================================
+         DIVIDER
+    ===================================== -->
+
+    <div class="score-divider">
+
+      <span></span>
+
+      <div>
+        <span>+</span>
+      </div>
+
+      <span></span>
+
+    </div>
+
+
+    <!-- ====================================
+         SHOOTING
+    ===================================== -->
+
+    <section
+      class="score-section shooting-section"
+    >
+
+
+      <div class="section-heading">
+
+
+        <div>
+
+          <span class="section-index">
+            02
+          </span>
+
+          <h2>
+            SHOOTING
+          </h2>
+
+          <p>
+            射的の点数
+          </p>
+
         </div>
 
 
+        <div class="score-display-wrap">
 
-        <!-- KEYPAD -->
-
-        <div
-          class="keypad"
-          data-target="shooting"
-        >
-
-          <button
-            type="button"
-            class="key"
-            data-value="1"
-          >
-            1
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="2"
-          >
-            2
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="3"
-          >
-            3
-          </button>
-
-
-          <button
-            type="button"
-            class="key"
-            data-value="4"
-          >
-            4
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="5"
-          >
-            5
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="6"
-          >
-            6
-          </button>
-
-
-          <button
-            type="button"
-            class="key"
-            data-value="7"
-          >
-            7
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="8"
-          >
-            8
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="9"
-          >
-            9
-          </button>
-
-
-          <button
-            type="button"
-            class="key key-function"
-            data-action="clear"
-          >
-            CLR
-          </button>
-
-          <button
-            type="button"
-            class="key"
-            data-value="0"
+          <span
+            id="shootingDisplay"
+            class="score-display"
           >
             0
-          </button>
+          </span>
 
-          <button
-            type="button"
-            class="key key-function"
-            data-action="back"
-          >
-            ←
-          </button>
+          <span class="score-unit">
+            PTS
+          </span>
 
         </div>
 
-
-      </section>
-
+      </div>
 
 
-      <!-- ==================================================
-           TOTAL
-      =================================================== -->
+      <!-- SHOOTING KEYPAD -->
 
-      <section class="total-section">
+      <div
+        class="keypad"
+        data-target="shooting"
+      >
 
-        <p class="total-label">
-          TOTAL SCORE
-        </p>
+        <button
+          class="key"
+          type="button"
+          data-value="1"
+        >
+          1
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="2"
+        >
+          2
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="3"
+        >
+          3
+        </button>
 
 
-        <div
+        <button
+          class="key"
+          type="button"
+          data-value="4"
+        >
+          4
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="5"
+        >
+          5
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="6"
+        >
+          6
+        </button>
+
+
+        <button
+          class="key"
+          type="button"
+          data-value="7"
+        >
+          7
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="8"
+        >
+          8
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="9"
+        >
+          9
+        </button>
+
+
+        <button
+          class="key key-clear"
+          type="button"
+          data-action="clear"
+        >
+          CLR
+        </button>
+
+        <button
+          class="key"
+          type="button"
+          data-value="0"
+        >
+          0
+        </button>
+
+        <button
+          class="key key-back"
+          type="button"
+          data-action="back"
+        >
+          ←
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ====================================
+         TOTAL
+    ===================================== -->
+
+    <section class="total-section">
+
+
+      <div class="total-label">
+        TOTAL SCORE
+      </div>
+
+
+      <div class="total-value-wrap">
+
+        <strong
           id="totalPreview"
           class="total-preview"
         >
           0
-        </div>
-
-
-        <p class="total-unit">
-          POINTS
-        </p>
-
-      </section>
-
-
-
-      <!-- ==================================================
-           SUBMIT
-      =================================================== -->
-
-      <button
-        id="submitButton"
-        class="submit-button"
-        type="button"
-      >
-
-        <span class="button-main">
-          SUBMIT SCORE
-        </span>
-
-        <span class="button-sub">
-          SEND TO DATABASE →
-        </span>
-
-      </button>
-
-
-      <p
-        id="sendStatus"
-        class="send-status"
-      ></p>
-
-
-
-      <!-- ==================================================
-           SCORE FOOTER
-      =================================================== -->
-
-      <footer class="score-footer">
+        </strong>
 
         <span>
-          PLAYER:
-          <strong id="footerPlayer">
-            —
-          </strong>
+          PTS
         </span>
 
-        <span>
-          DATABASE: READY
-        </span>
-
-      </footer>
+      </div>
 
 
     </section>
 
+
+    <!-- ====================================
+         SUBMIT
+    ===================================== -->
+
+    <button
+      id="submitButton"
+      class="primary-button submit-button"
+      type="button"
+    >
+
+      <span class="button-main">
+        SUBMIT SCORE
+      </span>
+
+      <span class="button-sub">
+        点数を送信する
+      </span>
+
+    </button>
+
+
+    <div
+      id="sendStatus"
+      class="send-status score-status"
+    ></div>
+
+
   </main>
 
 
-
-  <!-- ==================================================
+  <!-- ======================================
        RESULT OVERLAY
-  =================================================== -->
+  ======================================= -->
 
   <div
     id="resultOverlay"
     class="result-overlay hidden"
   >
 
-    <section class="result-card">
+
+    <div class="result-box">
 
 
-      <!-- HEADER -->
-
-      <div class="result-header">
-
-        <span>
-          TRANSACTION COMPLETE
-        </span>
-
-        <span class="result-ok">
-          OK
-        </span>
-
+      <div class="result-top-line">
+        SCORE REGISTERED
       </div>
 
 
-      <div class="result-line"></div>
-
-
-
-      <!-- TITLE -->
-
-      <p class="eyebrow">
-        SCORE REGISTERED
-      </p>
-
-
-      <h2
-        id="resultName"
-        class="result-name"
-      >
+      <div class="result-player-label">
         PLAYER
-      </h2>
-
-
-
-      <!-- TOTAL SCORE -->
-
-      <p class="result-total-label">
-        TOTAL SCORE
-      </p>
+      </div>
 
 
       <div
-        id="resultTotal"
-        class="result-total"
+        id="resultName"
+        class="result-name"
       >
-        0
+        ---
       </div>
 
-
-      <p class="result-total-unit">
-        POINTS
-      </p>
-
-
-
-      <!-- BREAKDOWN -->
 
       <div class="result-breakdown">
 
@@ -791,6 +663,10 @@
             0
           </strong>
 
+          <small>
+            PTS
+          </small>
+
         </div>
 
 
@@ -804,29 +680,38 @@
             0
           </strong>
 
+          <small>
+            PTS
+          </small>
+
         </div>
 
 
       </div>
 
 
-
-      <!-- COMPLETE MESSAGE -->
-
-      <div class="result-message">
-
-        SCORE HAS BEEN
-        <strong>REGISTERED</strong>
-
+      <div class="result-total-label">
+        TOTAL
       </div>
 
 
+      <div
+        id="resultTotal"
+        class="result-total glitch-number"
+        data-text="0"
+      >
+        0
+      </div>
 
-      <!-- NEW ENTRY -->
+
+      <div class="result-total-unit">
+        POINTS
+      </div>
+
 
       <button
         id="newEntryButton"
-        class="primary-button"
+        class="primary-button next-button"
         type="button"
       >
 
@@ -835,82 +720,24 @@
         </span>
 
         <span class="button-sub">
-          NEW SCORE ENTRY →
-
+          次の人へ
         </span>
 
       </button>
 
 
-
-      <!-- LIST -->
-
-      <a
-        href="scores.html"
-        class="secondary-link"
-      >
-
-        <span>
-          SCORE LIST
-        </span>
-
-        <small>
-          点数一覧を見る →
-        </small>
-
-      </a>
-
-
-    </section>
+    </div>
 
   </div>
 
 
-
-  <!-- ==================================================
-       ADMIN / RESET AREA
-  =================================================== -->
-
-  <section
-    id="adminArea"
-    class="admin-area"
-  >
-
-
-    <button
-      id="resetDataButton"
-      class="reset-data-button"
-      type="button"
-    >
-
-      <span>
-        ⚠ 全データ初期化
-      </span>
-
-      <small>
-        RESET ALL SCORE DATA
-      </small>
-
-    </button>
-
-
-  </section>
-
-
-
-  <!-- ==================================================
+  <!-- ======================================
        JAVASCRIPT
-  =================================================== -->
+  ======================================= -->
 
   <script
     type="module"
     src="js/input.js"
-  ></script>
-
-
-  <script
-    type="module"
-    src="js/codeRain.js"
   ></script>
 
 
