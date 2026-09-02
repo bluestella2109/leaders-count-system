@@ -1,36 +1,103 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#050505">
+  <meta
+    name="theme-color"
+    content="#050505"
+  >
 
   <title>SCORE LIST</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
 </head>
+
 
 <body class="list-page">
 
-  <div id="codeRain" class="code-rain"></div>
-  <div class="scanlines"></div>
-  <div class="noise"></div>
 
+  <!-- ========================================
+       BACKGROUND EFFECT
+  ========================================= -->
+
+  <div
+    id="codeRain"
+    class="code-rain"
+    aria-hidden="true"
+  ></div>
+
+
+  <div
+    class="scanlines"
+    aria-hidden="true"
+  ></div>
+
+
+  <div
+    class="noise"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- ========================================
+       TOP SYSTEM BAR
+  ========================================= -->
+
+  <header class="list-system-bar">
+
+    <div class="system-name">
+      FESTIVAL SCORE SYSTEM
+    </div>
+
+
+    <div class="system-status">
+
+      <span class="status-dot"></span>
+
+      DATABASE ONLINE
+
+    </div>
+
+  </header>
+
+
+
+  <!-- ========================================
+       MAIN
+  ========================================= -->
 
   <main class="list-container">
 
+
+    <!-- ======================================
+         HEADER
+    ====================================== -->
+
     <header class="list-header">
 
-      <div>
+
+      <div class="list-heading">
 
         <div class="tiny-label">
-          FESTIVAL SCORE DATABASE
+
+          CULTURE FESTIVAL
+          <span>//</span>
+          SCORE DATABASE
+
         </div>
+
 
         <h1
           class="glitch-title list-title"
@@ -39,88 +106,264 @@
           SCORE LIST
         </h1>
 
+
+        <p class="list-description">
+
+          参加者のスコアを確認してください
+
+        </p>
+
       </div>
 
 
-      <a href="index.html" class="back-button">
-        ＋ SCORE
+      <a
+        href="index.html"
+        class="back-button"
+      >
+
+        <span class="back-main">
+          ←
+        </span>
+
+        <span>
+          RETURN
+        </span>
+
       </a>
+
 
     </header>
 
 
-    <!-- 情報表示 -->
+
+    <!-- ======================================
+         DATABASE STATUS
+    ====================================== -->
+
     <section class="database-info">
 
-      <div>
-        <span>ENTRIES</span>
-        <strong id="entryCount">0</strong>
+
+      <div class="database-item">
+
+        <span class="database-label">
+          ENTRIES
+        </span>
+
+        <strong id="entryCount">
+          0
+        </strong>
+
       </div>
 
-      <div>
-        <span>WAITING</span>
-        <strong id="waitingCount">0</strong>
+
+      <div class="database-item">
+
+        <span class="database-label">
+          WAITING
+        </span>
+
+        <strong id="waitingCount">
+          0
+        </strong>
+
       </div>
 
-      <div>
-        <span>COMPLETE</span>
-        <strong id="completeCount">0</strong>
+
+      <div class="database-item">
+
+        <span class="database-label">
+          COMPLETE
+        </span>
+
+        <strong id="completeCount">
+          0
+        </strong>
+
       </div>
+
 
     </section>
 
 
-    <!-- 表示切り替え -->
-    <div class="sort-switch">
 
-      <button
-        id="newestButton"
-        class="sort-button active"
-      >
-        NEWEST
-        <span>新着順</span>
-      </button>
+    <!-- ======================================
+         SORT
+    ====================================== -->
 
-      <button
-        id="rankingButton"
-        class="sort-button"
-      >
-        RANKING
-        <span>ランキング</span>
-      </button>
+    <section class="sort-area">
 
-    </div>
 
+      <div class="sort-heading">
+
+        <span>
+          DISPLAY MODE
+        </span>
+
+        <span>
+          //
+        </span>
+
+        <span id="sortModeText">
+          SORT : NEWEST
+        </span>
+
+      </div>
+
+
+      <div class="sort-switch">
+
+
+        <button
+          id="newestButton"
+          class="sort-button active"
+          type="button"
+        >
+
+          <span class="sort-main">
+            NEWEST
+          </span>
+
+          <span class="sort-sub">
+            新着順
+          </span>
+
+        </button>
+
+
+        <button
+          id="rankingButton"
+          class="sort-button"
+          type="button"
+        >
+
+          <span class="sort-main">
+            RANKING
+          </span>
+
+          <span class="sort-sub">
+            ランキング
+          </span>
+
+        </button>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ======================================
+         TABLE HEADER
+    ====================================== -->
 
     <div class="table-header">
 
-      <div>PLAYER / SCORE</div>
 
-      <div id="sortModeText">
-        SORT : NEWEST
+      <div class="table-player">
+
+        <span class="table-index">
+          01
+        </span>
+
+        PLAYER
+
       </div>
+
+
+      <div class="table-score">
+
+        SCORE
+
+      </div>
+
 
     </div>
 
 
-    <!-- 点数一覧 -->
+
+    <!-- ======================================
+         SCORE LIST
+    ====================================== -->
+
     <section
       id="scoreList"
       class="score-list"
     ></section>
 
 
+
+    <!-- ======================================
+         EMPTY
+    ====================================== -->
+
     <div
       id="emptyMessage"
       class="empty-message hidden"
     >
-      NO DATA
+
+      <div class="empty-code">
+        404
+      </div>
+
+      <div class="empty-title">
+        NO DATA
+      </div>
+
+      <div class="empty-description">
+        SCORE DATABASE IS EMPTY
+      </div>
+
     </div>
+
+
+
+    <!-- ======================================
+         FOOTER
+    ====================================== -->
+
+    <footer class="list-footer">
+
+      <span>
+        SYSTEM://DATABASE
+      </span>
+
+      <span>
+        CONNECTION : ACTIVE
+      </span>
+
+      <span>
+        2026
+      </span>
+
+    </footer>
+
 
   </main>
 
 
-  <script type="module" src="js/scores.js"></script>
+
+  <!-- ========================================
+       CODE RAIN
+  ========================================= -->
+
+  <script
+    type="module"
+    src="js/codeRain.js"
+  ></script>
+
+
+  <!-- ========================================
+       SCORE DATABASE
+  ========================================= -->
+
+  <script
+    type="module"
+    src="js/scores.js"
+  ></script>
+
 
 </body>
+
 </html>
