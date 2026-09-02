@@ -1,3 +1,8 @@
+/* =========================================================
+   FESTIVAL SCORE SYSTEM
+   input.js
+========================================================= */
+
 import { db } from "./firebase.js";
 
 import {
@@ -11,8 +16,7 @@ import {
    ELEMENTS
 ========================================================= */
 
-/* START SCREEN */
-
+// 画面
 const startScreen =
   document.getElementById("startScreen");
 
@@ -20,26 +24,18 @@ const scoreScreen =
   document.getElementById("scoreScreen");
 
 
-/* NICKNAME */
-
-const nicknameModal =
-  document.getElementById("nicknameModal");
-
+// ニックネーム
 const nicknameInput =
   document.getElementById("nicknameInput");
 
 const startButton =
   document.getElementById("startButton");
 
-
-/* PLAYER */
-
 const playerName =
   document.getElementById("playerName");
 
 
-/* SCORE */
-
+// 点数表示
 const quizDisplay =
   document.getElementById("quizDisplay");
 
@@ -50,8 +46,7 @@ const totalPreview =
   document.getElementById("totalPreview");
 
 
-/* SUBMIT */
-
+// 送信
 const submitButton =
   document.getElementById("submitButton");
 
@@ -59,8 +54,7 @@ const sendStatus =
   document.getElementById("sendStatus");
 
 
-/* RESULT */
-
+// 結果
 const resultOverlay =
   document.getElementById("resultOverlay");
 
@@ -80,6 +74,7 @@ const newEntryButton =
   document.getElementById("newEntryButton");
 
 
+
 /* =========================================================
    VARIABLES
 ========================================================= */
@@ -93,81 +88,6 @@ let shootingScore = "";
 let isSending = false;
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-function initialize() {
-
-  /*
-   * 最初はトップ画面だけ表示
-   */
-
-  if (startScreen) {
-    startScreen.classList.remove("hidden");
-  }
-
-  if (scoreScreen) {
-    scoreScreen.classList.add("hidden");
-  }
-
-  if (nicknameModal) {
-    nicknameModal.classList.add("hidden");
-  }
-
-  if (resultOverlay) {
-    resultOverlay.classList.add("hidden");
-  }
-
-
-  updateDisplay();
-
-}
-
-
-initialize();
-
-
-/* =========================================================
-   OPEN NICKNAME SCREEN
-========================================================= */
-
-/*
- * index.html の
- *
- * 点数を入力する
- *
- * ボタンから呼び出される。
- */
-
-window.showScoreScreen = function () {
-
-  if (!nicknameModal) {
-    return;
-  }
-
-
-  nicknameModal.classList.remove("hidden");
-
-
-  /*
-   * 入力欄を自動選択
-   */
-
-  setTimeout(() => {
-
-    if (nicknameInput) {
-
-      nicknameInput.focus();
-
-      nicknameInput.select();
-
-    }
-
-  }, 100);
-
-};
-
 
 /* =========================================================
    START
@@ -175,127 +95,54 @@ window.showScoreScreen = function () {
 
 function startGame() {
 
-  if (!nicknameInput) {
-    return;
-  }
-
-
   const name =
     nicknameInput.value.trim();
 
 
-  /*
-   * ニックネーム未入力
-   */
-
+  // ニックネーム未入力
   if (!name) {
-
-    nicknameInput.classList.add(
-      "input-error"
-    );
 
     nicknameInput.focus();
 
-    return;
+    nicknameInput.style.borderColor =
+      "#d61924";
 
+    return;
   }
 
 
-  /*
-   * 長すぎる名前を防止
-   */
-
+  // 長すぎる名前を防止
   if (name.length > 20) {
 
     sendStatus.textContent =
-      "ニックネームは20文字以内で入力してください。";
+      "ニックネームは20文字以内にしてください。";
 
     return;
-
   }
 
-
-  /*
-   * エラー表示解除
-   */
-
-  nicknameInput.classList.remove(
-    "input-error"
-  );
-
-
-  /*
-   * ニックネーム保存
-   */
 
   nickname = name;
 
 
-  /*
-   * PLAYER表示
-   */
-
-  if (playerName) {
-
-    playerName.textContent =
-      nickname;
-
-  }
+  playerName.textContent =
+    nickname;
 
 
-  /*
-   * ニックネーム画面を閉じる
-   */
-
-  if (nicknameModal) {
-
-    nicknameModal.classList.add(
-      "hidden"
-    );
-
-  }
+  nicknameInput.style.borderColor =
+    "";
 
 
-  /*
-   * トップ画面を閉じる
-   */
+  startScreen.classList.add(
+    "hidden"
+  );
 
-  if (startScreen) {
+  scoreScreen.classList.remove(
+    "hidden"
+  );
 
-    startScreen.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  /*
-   * 点数入力画面を表示
-   */
-
-  if (scoreScreen) {
-
-    scoreScreen.classList.remove(
-      "hidden"
-    );
-
-  }
-
-
-  /*
-   * 初期化
-   */
-
-  quizScore = "";
-
-  shootingScore = "";
 
   updateDisplay();
 
-
-  /*
-   * 画面トップへ
-   */
 
   window.scrollTo({
     top: 0,
@@ -305,7 +152,10 @@ function startGame() {
 }
 
 
-/* START BUTTON */
+
+/* =========================================================
+   START BUTTON
+========================================================= */
 
 if (startButton) {
 
@@ -317,7 +167,10 @@ if (startButton) {
 }
 
 
-/* ENTER KEY */
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
 
 if (nicknameInput) {
 
@@ -339,29 +192,6 @@ if (nicknameInput) {
 }
 
 
-/* =========================================================
-   NICKNAME INPUT CHANGE
-========================================================= */
-
-if (nicknameInput) {
-
-  nicknameInput.addEventListener(
-    "input",
-    () => {
-
-      nicknameInput.classList.remove(
-        "input-error"
-      );
-
-      if (sendStatus) {
-        sendStatus.textContent = "";
-      }
-
-    }
-  );
-
-}
-
 
 /* =========================================================
    KEYPAD
@@ -371,11 +201,9 @@ document
   .querySelectorAll(".keypad")
   .forEach((keypad) => {
 
-
     keypad.addEventListener(
       "click",
       (event) => {
-
 
         const button =
           event.target.closest(".key");
@@ -386,34 +214,22 @@ document
         }
 
 
-        /*
-         * 入力対象
-         *
-         * quiz
-         * shooting
-         */
-
         const target =
           keypad.dataset.target;
 
-
-        /*
-         * 数字
-         */
 
         const value =
           button.dataset.value;
 
 
-        /*
-         * 特殊操作
-         */
-
         const action =
           button.dataset.action;
 
 
-        if (value !== undefined) {
+        // 数字
+        if (
+          value !== undefined
+        ) {
 
           addNumber(
             target,
@@ -423,7 +239,10 @@ document
         }
 
 
-        if (action === "clear") {
+        // CLEAR
+        if (
+          action === "clear"
+        ) {
 
           clearScore(
             target
@@ -432,7 +251,10 @@ document
         }
 
 
-        if (action === "back") {
+        // BACKSPACE
+        if (
+          action === "back"
+        ) {
 
           backspace(
             target
@@ -446,6 +268,7 @@ document
   });
 
 
+
 /* =========================================================
    ADD NUMBER
 ========================================================= */
@@ -455,32 +278,22 @@ function addNumber(
   number
 ) {
 
-
   /*
-   * QUIZ
+   * 最大6桁
    */
 
   if (target === "quiz") {
 
-
-    /*
-     * 最大6桁
-     */
-
-    if (quizScore.length >= 6) {
-
+    if (
+      quizScore.length >= 6
+    ) {
       return;
-
     }
 
 
-    /*
-     * 00... を防止
-     */
-
+    // 先頭0を防止
     if (
-      quizScore === "0"
-      &&
+      quizScore === "0" &&
       number === "0"
     ) {
 
@@ -489,53 +302,37 @@ function addNumber(
     }
 
 
-    /*
-     * 0のあとに数字を入力したら
-     * 0を消して数字にする
-     */
-
+    // 0の後に別の数字を入力した場合
     if (
       quizScore === "0"
-      &&
-      number !== "0"
     ) {
 
-      quizScore = number;
+      quizScore =
+        number;
 
     } else {
 
-      quizScore += number;
+      quizScore +=
+        number;
 
     }
 
   }
 
 
-  /*
-   * SHOOTING
-   */
 
   if (target === "shooting") {
 
-
-    /*
-     * 最大6桁
-     */
-
-    if (shootingScore.length >= 6) {
-
+    if (
+      shootingScore.length >= 6
+    ) {
       return;
-
     }
 
 
-    /*
-     * 00... を防止
-     */
-
+    // 先頭0を防止
     if (
-      shootingScore === "0"
-      &&
+      shootingScore === "0" &&
       number === "0"
     ) {
 
@@ -544,22 +341,18 @@ function addNumber(
     }
 
 
-    /*
-     * 0のあとに数字を入力したら
-     * 0を消して数字にする
-     */
-
+    // 0の後に別の数字
     if (
       shootingScore === "0"
-      &&
-      number !== "0"
     ) {
 
-      shootingScore = number;
+      shootingScore =
+        number;
 
     } else {
 
-      shootingScore += number;
+      shootingScore +=
+        number;
 
     }
 
@@ -571,21 +364,27 @@ function addNumber(
 }
 
 
+
 /* =========================================================
-   CLEAR
+   CLEAR SCORE
 ========================================================= */
 
-function clearScore(target) {
+function clearScore(
+  target
+) {
 
-
-  if (target === "quiz") {
+  if (
+    target === "quiz"
+  ) {
 
     quizScore = "";
 
   }
 
 
-  if (target === "shooting") {
+  if (
+    target === "shooting"
+  ) {
 
     shootingScore = "";
 
@@ -597,14 +396,18 @@ function clearScore(target) {
 }
 
 
+
 /* =========================================================
    BACKSPACE
 ========================================================= */
 
-function backspace(target) {
+function backspace(
+  target
+) {
 
-
-  if (target === "quiz") {
+  if (
+    target === "quiz"
+  ) {
 
     quizScore =
       quizScore.slice(
@@ -615,7 +418,9 @@ function backspace(target) {
   }
 
 
-  if (target === "shooting") {
+  if (
+    target === "shooting"
+  ) {
 
     shootingScore =
       shootingScore.slice(
@@ -631,40 +436,12 @@ function backspace(target) {
 }
 
 
+
 /* =========================================================
-   DISPLAY
+   UPDATE DISPLAY
 ========================================================= */
 
 function updateDisplay() {
-
-
-  /*
-   * QUIZ
-   */
-
-  if (quizDisplay) {
-
-    quizDisplay.textContent =
-      quizScore || "0";
-
-  }
-
-
-  /*
-   * SHOOTING
-   */
-
-  if (shootingDisplay) {
-
-    shootingDisplay.textContent =
-      shootingScore || "0";
-
-  }
-
-
-  /*
-   * TOTAL
-   */
 
   const quiz =
     Number(
@@ -682,6 +459,29 @@ function updateDisplay() {
     quiz + shooting;
 
 
+  // クイズ
+  if (quizDisplay) {
+
+    quizDisplay.textContent =
+      quiz.toLocaleString(
+        "ja-JP"
+      );
+
+  }
+
+
+  // 射的
+  if (shootingDisplay) {
+
+    shootingDisplay.textContent =
+      shooting.toLocaleString(
+        "ja-JP"
+      );
+
+  }
+
+
+  // 合計
   if (totalPreview) {
 
     totalPreview.textContent =
@@ -694,6 +494,7 @@ function updateDisplay() {
 }
 
 
+
 /* =========================================================
    SUBMIT
 ========================================================= */
@@ -702,183 +503,157 @@ if (submitButton) {
 
   submitButton.addEventListener(
     "click",
-    async () => {
-
-
-      /*
-       * 二重送信防止
-       */
-
-      if (isSending) {
-
-        return;
-
-      }
-
-
-      /*
-       * ニックネーム確認
-       */
-
-      if (!nickname) {
-
-        sendStatus.textContent =
-          "ニックネームを入力してください。";
-
-        return;
-
-      }
-
-
-      /*
-       * クイズ未入力
-       */
-
-      if (quizScore === "") {
-
-        sendStatus.textContent =
-          "クイズの点数を入力してください。";
-
-        return;
-
-      }
-
-
-      /*
-       * 射的未入力
-       */
-
-      if (shootingScore === "") {
-
-        sendStatus.textContent =
-          "射的の点数を入力してください。";
-
-        return;
-
-      }
-
-
-      /*
-       * 数値化
-       */
-
-      const quiz =
-        Number(quizScore);
-
-
-      const shooting =
-        Number(shootingScore);
-
-
-      const total =
-        quiz + shooting;
-
-
-      /*
-       * 送信開始
-       */
-
-      isSending = true;
-
-      submitButton.disabled = true;
-
-
-      if (sendStatus) {
-
-        sendStatus.textContent =
-          "SENDING...";
-
-      }
-
-
-      try {
-
-
-        /*
-         * Firestoreへ保存
-         */
-
-        await addDoc(
-          collection(
-            db,
-            "festivalScores"
-          ),
-          {
-
-            nickname:
-              nickname,
-
-            quizScore:
-              quiz,
-
-            shootingScore:
-              shooting,
-
-            totalScore:
-              total,
-
-            completed:
-              false,
-
-            createdAt:
-              serverTimestamp()
-
-          }
-        );
-
-
-        /*
-         * 成功
-         */
-
-        showResult(
-          quiz,
-          shooting,
-          total
-        );
-
-
-        if (sendStatus) {
-
-          sendStatus.textContent =
-            "";
-
-        }
-
-
-      } catch (error) {
-
-
-        console.error(
-          "Firestore error:",
-          error
-        );
-
-
-        if (sendStatus) {
-
-          sendStatus.textContent =
-            "送信に失敗しました。通信状態を確認してください。";
-
-        }
-
-
-      } finally {
-
-        isSending = false;
-
-        submitButton.disabled = false;
-
-      }
-
-    }
+    submitScore
   );
 
 }
 
 
+
 /* =========================================================
-   RESULT
+   SUBMIT FUNCTION
+========================================================= */
+
+async function submitScore() {
+
+  // 二重送信防止
+  if (isSending) {
+    return;
+  }
+
+
+  // ニックネーム確認
+  if (!nickname) {
+
+    sendStatus.textContent =
+      "ニックネームを入力してください。";
+
+    return;
+
+  }
+
+
+  // 点数確認
+  if (
+    quizScore === "" ||
+    shootingScore === ""
+  ) {
+
+    sendStatus.textContent =
+      "クイズと射的の両方を入力してください。";
+
+    return;
+
+  }
+
+
+  const quiz =
+    Number(quizScore);
+
+
+  const shooting =
+    Number(shootingScore);
+
+
+  const total =
+    quiz + shooting;
+
+
+
+  /* -------------------------------------------------------
+     SEND START
+  ------------------------------------------------------- */
+
+  isSending = true;
+
+
+  submitButton.disabled =
+    true;
+
+
+  sendStatus.textContent =
+    "SENDING...";
+
+
+  try {
+
+    /* -----------------------------------------------------
+       FIRESTORE
+    ----------------------------------------------------- */
+
+    await addDoc(
+      collection(
+        db,
+        "festivalScores"
+      ),
+      {
+
+        nickname:
+          nickname,
+
+        quizScore:
+          quiz,
+
+        shootingScore:
+          shooting,
+
+        totalScore:
+          total,
+
+        completed:
+          false,
+
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+
+    /* -----------------------------------------------------
+       SHOW RESULT
+    ----------------------------------------------------- */
+
+    showResult(
+      quiz,
+      shooting,
+      total
+    );
+
+
+    sendStatus.textContent =
+      "";
+
+
+  } catch (error) {
+
+    console.error(
+      "Firestore error:",
+      error
+    );
+
+
+    sendStatus.textContent =
+      "送信に失敗しました。通信状態を確認してください。";
+
+
+  } finally {
+
+    isSending =
+      false;
+
+
+    submitButton.disabled =
+      false;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   SHOW RESULT
 ========================================================= */
 
 function showResult(
@@ -887,11 +662,6 @@ function showResult(
   total
 ) {
 
-
-  /*
-   * ニックネーム
-   */
-
   if (resultName) {
 
     resultName.textContent =
@@ -899,10 +669,6 @@ function showResult(
 
   }
 
-
-  /*
-   * クイズ
-   */
 
   if (resultQuiz) {
 
@@ -914,10 +680,6 @@ function showResult(
   }
 
 
-  /*
-   * 射的
-   */
-
   if (resultShooting) {
 
     resultShooting.textContent =
@@ -928,30 +690,21 @@ function showResult(
   }
 
 
-  /*
-   * 合計
-   */
-
-  const formattedTotal =
-    total.toLocaleString(
-      "ja-JP"
-    );
-
-
   if (resultTotal) {
 
     resultTotal.textContent =
-      formattedTotal;
+      total.toLocaleString(
+        "ja-JP"
+      );
+
 
     resultTotal.dataset.text =
-      formattedTotal;
+      total.toLocaleString(
+        "ja-JP"
+      );
 
   }
 
-
-  /*
-   * 結果画面表示
-   */
 
   if (resultOverlay) {
 
@@ -961,8 +714,8 @@ function showResult(
 
   }
 
-
 }
+
 
 
 /* =========================================================
@@ -975,44 +728,34 @@ if (newEntryButton) {
     "click",
     () => {
 
+      // リセット
+      nickname =
+        "";
 
-      /*
-       * データ初期化
-       */
+      quizScore =
+        "";
 
-      nickname = "";
-
-      quizScore = "";
-
-      shootingScore = "";
+      shootingScore =
+        "";
 
 
-      /*
-       * 入力欄初期化
-       */
-
+      // 入力欄
       if (nicknameInput) {
 
-        nicknameInput.value = "";
+        nicknameInput.value =
+          "";
 
-        nicknameInput.classList.remove(
-          "input-error"
-        );
+        nicknameInput.style.borderColor =
+          "";
 
       }
 
 
-      /*
-       * 点数表示初期化
-       */
-
+      // 表示更新
       updateDisplay();
 
 
-      /*
-       * 結果画面を閉じる
-       */
-
+      // 結果画面を閉じる
       if (resultOverlay) {
 
         resultOverlay.classList.add(
@@ -1022,10 +765,7 @@ if (newEntryButton) {
       }
 
 
-      /*
-       * 点数画面を閉じる
-       */
-
+      // 点数画面を閉じる
       if (scoreScreen) {
 
         scoreScreen.classList.add(
@@ -1035,10 +775,7 @@ if (newEntryButton) {
       }
 
 
-      /*
-       * トップ画面を表示
-       */
-
+      // スタート画面
       if (startScreen) {
 
         startScreen.classList.remove(
@@ -1048,42 +785,32 @@ if (newEntryButton) {
       }
 
 
-      /*
-       * ニックネーム入力画面を表示
-       */
+      if (sendStatus) {
 
-      if (nicknameModal) {
-
-        nicknameModal.classList.remove(
-          "hidden"
-        );
+        sendStatus.textContent =
+          "";
 
       }
 
-
-      /*
-       * ニックネーム入力欄へ
-       */
-
-      setTimeout(() => {
-
-        if (nicknameInput) {
-
-          nicknameInput.focus();
-
-        }
-
-      }, 100);
-
-
-      /*
-       * ページ最上部へ
-       */
 
       window.scrollTo({
         top: 0,
         behavior: "instant"
       });
+
+
+      setTimeout(
+        () => {
+
+          if (nicknameInput) {
+
+            nicknameInput.focus();
+
+          }
+
+        },
+        100
+      );
 
     }
   );
@@ -1091,35 +818,210 @@ if (newEntryButton) {
 }
 
 
+
 /* =========================================================
-   PREVENT DOUBLE TAP ZOOM ON KEYPAD
+   CODE RAIN
 ========================================================= */
 
-document
-  .querySelectorAll(".key")
-  .forEach((button) => {
+function createCodeRain() {
 
-    button.addEventListener(
-      "touchend",
-      (event) => {
-
-        event.preventDefault();
-
-        button.click();
-
-      },
-      {
-        passive: false
-      }
+  const container =
+    document.getElementById(
+      "codeRain"
     );
 
-  });
+
+  if (!container) {
+    return;
+  }
+
+
+  /*
+   * 二重生成防止
+   */
+
+  container.innerHTML =
+    "";
+
+
+  const characters =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>/[]{}#%&";
+
+
+  const width =
+    window.innerWidth;
+
+
+  /*
+   * 画面幅に応じて
+   * コードの列数を調整
+   */
+
+  const columnCount =
+    Math.max(
+      18,
+      Math.floor(
+        width / 32
+      )
+    );
+
+
+  for (
+    let i = 0;
+    i < columnCount;
+    i++
+  ) {
+
+    const column =
+      document.createElement(
+        "div"
+      );
+
+
+    column.className =
+      "code-column";
+
+
+    /*
+     * 一部だけ赤
+     */
+
+    if (
+      Math.random() < 0.12
+    ) {
+
+      column.classList.add(
+        "red"
+      );
+
+    }
+
+
+    let text =
+      "";
+
+
+    const length =
+      20 +
+      Math.floor(
+        Math.random() * 45
+      );
+
+
+    for (
+      let j = 0;
+      j < length;
+      j++
+    ) {
+
+      const random =
+        Math.floor(
+          Math.random() *
+          characters.length
+        );
+
+
+      text +=
+        characters[random];
+
+    }
+
+
+    column.textContent =
+      text;
+
+
+    /*
+     * 横位置
+     */
+
+    column.style.left =
+      `${Math.random() * 100}%`;
+
+
+    /*
+     * アニメーション速度
+     */
+
+    column.style.animationDuration =
+      `${8 + Math.random() * 18}s`;
+
+
+    /*
+     * 開始位置をランダム化
+     */
+
+    column.style.animationDelay =
+      `${Math.random() * -20}s`;
+
+
+    /*
+     * 透明度
+     */
+
+    column.style.opacity =
+      `${0.18 + Math.random() * 0.5}`;
+
+
+    /*
+     * 少しサイズを変える
+     */
+
+    column.style.fontSize =
+      `${10 + Math.random() * 5}px`;
+
+
+    container.appendChild(
+      column
+    );
+
+  }
+
+}
+
 
 
 /* =========================================================
-   SAFETY CHECK
+   INITIALIZE CODE RAIN
 ========================================================= */
 
-console.log(
-  "FESTIVAL SCORE SYSTEM : INPUT MODULE ONLINE"
+createCodeRain();
+
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+let resizeTimer;
+
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    clearTimeout(
+      resizeTimer
+    );
+
+
+    resizeTimer =
+      setTimeout(
+        () => {
+
+          createCodeRain();
+
+        },
+        250
+      );
+
+  }
 );
+
+
+
+/* =========================================================
+   INITIAL DISPLAY
+========================================================= */
+
+updateDisplay();
