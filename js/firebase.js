@@ -9,17 +9,17 @@ import {
 
 const firebaseConfig = {
 
-  apiKey: "ここにAPIキー",
+  apiKey: "AIzaSyCiSxUY5BVu2DB_b2bpe9mZxk5LR4Q7PBQ",
 
-  authDomain: "ここにauthDomain",
+  authDomain: "leaders-count-system.firebaseapp.com",
 
-  projectId: "ここにprojectId",
+  projectId: "leaders-count-system",
 
-  storageBucket: "ここにstorageBucket",
+  storageBucket: "leaders-count-system.firebasestorage.app",
 
-  messagingSenderId: "ここにmessagingSenderId",
+  messagingSenderId: "242036957530",
 
-  appId: "ここにappId"
+  appId: "1:242036957530:web:822d539394f3cb83b6d363"
 
 };
 
