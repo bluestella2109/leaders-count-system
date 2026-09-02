@@ -1,7 +1,7 @@
-/* =========================================================
-   FESTIVAL SCORE SYSTEM
-   input.js
-========================================================= */
+// ========================================
+// FESTIVAL SCORE SYSTEM
+// input.js
+// ========================================
 
 import { db } from "./firebase.js";
 
@@ -12,30 +12,33 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+// ========================================
+// ELEMENTS
+// ========================================
 
-// 画面
+// --- START SCREEN ---
+
 const startScreen =
   document.getElementById("startScreen");
 
-const scoreScreen =
-  document.getElementById("scoreScreen");
-
-
-// ニックネーム
 const nicknameInput =
   document.getElementById("nicknameInput");
 
 const startButton =
   document.getElementById("startButton");
 
+
+// --- SCORE SCREEN ---
+
+const scoreScreen =
+  document.getElementById("scoreScreen");
+
 const playerName =
   document.getElementById("playerName");
 
 
-// 点数表示
+// --- SCORE DISPLAY ---
+
 const quizDisplay =
   document.getElementById("quizDisplay");
 
@@ -46,7 +49,8 @@ const totalPreview =
   document.getElementById("totalPreview");
 
 
-// 送信
+// --- SUBMIT ---
+
 const submitButton =
   document.getElementById("submitButton");
 
@@ -54,15 +58,13 @@ const sendStatus =
   document.getElementById("sendStatus");
 
 
-// 結果
+// --- RESULT ---
+
 const resultOverlay =
   document.getElementById("resultOverlay");
 
 const resultName =
   document.getElementById("resultName");
-
-const resultTotal =
-  document.getElementById("resultTotal");
 
 const resultQuiz =
   document.getElementById("resultQuiz");
@@ -70,14 +72,22 @@ const resultQuiz =
 const resultShooting =
   document.getElementById("resultShooting");
 
+const resultTotal =
+  document.getElementById("resultTotal");
+
 const newEntryButton =
   document.getElementById("newEntryButton");
 
 
+// --- CODE RAIN ---
 
-/* =========================================================
-   VARIABLES
-========================================================= */
+const codeRain =
+  document.getElementById("codeRain");
+
+
+// ========================================
+// VARIABLES
+// ========================================
 
 let nickname = "";
 
@@ -88,34 +98,78 @@ let shootingScore = "";
 let isSending = false;
 
 
+// ========================================
+// UTILITY
+// ========================================
 
-/* =========================================================
-   START
-========================================================= */
+function getNumber(value) {
 
-function startGame() {
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return 0;
+  }
+
+  return number;
+}
+
+
+function formatScore(value) {
+
+  return getNumber(value).toLocaleString("ja-JP");
+
+}
+
+
+// ========================================
+// START
+// ========================================
+
+function startInput() {
+
+  if (!nicknameInput) {
+    return;
+  }
 
   const name =
     nicknameInput.value.trim();
 
 
   // ニックネーム未入力
+
   if (!name) {
+
+    if (sendStatus) {
+      sendStatus.textContent =
+        "ニックネームを入力してください。";
+    }
 
     nicknameInput.focus();
 
-    nicknameInput.style.borderColor =
-      "#d61924";
+    nicknameInput.classList.add("input-error");
+
+    setTimeout(() => {
+
+      nicknameInput.classList.remove(
+        "input-error"
+      );
+
+    }, 700);
 
     return;
   }
 
 
   // 長すぎる名前を防止
+
   if (name.length > 20) {
 
-    sendStatus.textContent =
-      "ニックネームは20文字以内にしてください。";
+    if (sendStatus) {
+      sendStatus.textContent =
+        "ニックネームは20文字以内で入力してください。";
+    }
+
+    nicknameInput.focus();
 
     return;
   }
@@ -124,53 +178,71 @@ function startGame() {
   nickname = name;
 
 
-  playerName.textContent =
-    nickname;
+  // プレイヤー名表示
+
+  if (playerName) {
+
+    playerName.textContent =
+      nickname;
+
+  }
 
 
-  nicknameInput.style.borderColor =
-    "";
+  // ステータスをリセット
+
+  if (sendStatus) {
+    sendStatus.textContent = "";
+  }
 
 
-  startScreen.classList.add(
-    "hidden"
-  );
+  // 画面切り替え
 
-  scoreScreen.classList.remove(
-    "hidden"
-  );
+  if (startScreen) {
+
+    startScreen.classList.add(
+      "hidden"
+    );
+
+  }
 
 
-  updateDisplay();
+  if (scoreScreen) {
+
+    scoreScreen.classList.remove(
+      "hidden"
+    );
+
+  }
 
 
-  window.scrollTo({
-    top: 0,
-    behavior: "instant"
-  });
+  // 最初はクイズ側
+
+  const firstKeypad =
+    document.querySelector(
+      '.keypad[data-target="quiz"]'
+    );
+
+  if (firstKeypad) {
+
+    firstKeypad.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+  }
 
 }
 
-
-
-/* =========================================================
-   START BUTTON
-========================================================= */
 
 if (startButton) {
 
   startButton.addEventListener(
     "click",
-    startGame
+    startInput
   );
 
 }
 
-
-
-/* =========================================================
-   ENTER KEY
-========================================================= */
 
 if (nicknameInput) {
 
@@ -182,7 +254,7 @@ if (nicknameInput) {
 
         event.preventDefault();
 
-        startGame();
+        startInput();
 
       }
 
@@ -192,18 +264,19 @@ if (nicknameInput) {
 }
 
 
-
-/* =========================================================
-   KEYPAD
-========================================================= */
+// ========================================
+// KEYPAD
+// ========================================
 
 document
   .querySelectorAll(".keypad")
   .forEach((keypad) => {
 
+
     keypad.addEventListener(
       "click",
       (event) => {
+
 
         const button =
           event.target.closest(".key");
@@ -214,22 +287,29 @@ document
         }
 
 
+        // 押されたテンキーの対象
+
         const target =
           keypad.dataset.target;
 
+
+        // 数字
 
         const value =
           button.dataset.value;
 
 
+        // 特殊操作
+
         const action =
           button.dataset.action;
 
 
-        // 数字
-        if (
-          value !== undefined
-        ) {
+        // =================================
+        // NUMBER
+        // =================================
+
+        if (value !== undefined) {
 
           addNumber(
             target,
@@ -239,10 +319,11 @@ document
         }
 
 
+        // =================================
         // CLEAR
-        if (
-          action === "clear"
-        ) {
+        // =================================
+
+        if (action === "clear") {
 
           clearScore(
             target
@@ -251,10 +332,11 @@ document
         }
 
 
+        // =================================
         // BACKSPACE
-        if (
-          action === "back"
-        ) {
+        // =================================
+
+        if (action === "back") {
 
           backspace(
             target
@@ -268,32 +350,46 @@ document
   });
 
 
-
-/* =========================================================
-   ADD NUMBER
-========================================================= */
+// ========================================
+// ADD NUMBER
+// ========================================
 
 function addNumber(
   target,
   number
 ) {
 
-  /*
-   * 最大6桁
-   */
+
+  if (
+    target !== "quiz"
+    &&
+    target !== "shooting"
+  ) {
+
+    return;
+
+  }
+
+
+  // ======================================
+  // QUIZ
+  // ======================================
 
   if (target === "quiz") {
 
-    if (
-      quizScore.length >= 6
-    ) {
+
+    // 最大6桁
+
+    if (quizScore.length >= 6) {
       return;
     }
 
 
-    // 先頭0を防止
+    // 0から始めない
+
     if (
-      quizScore === "0" &&
+      quizScore === "0"
+      &&
       number === "0"
     ) {
 
@@ -302,37 +398,44 @@ function addNumber(
     }
 
 
-    // 0の後に別の数字を入力した場合
+    // 0のあとに数字を入力したら置換
+
     if (
       quizScore === "0"
+      &&
+      number !== "0"
     ) {
 
-      quizScore =
-        number;
+      quizScore = number;
 
     } else {
 
-      quizScore +=
-        number;
+      quizScore += number;
 
     }
 
   }
 
 
+  // ======================================
+  // SHOOTING
+  // ======================================
 
   if (target === "shooting") {
 
-    if (
-      shootingScore.length >= 6
-    ) {
+
+    // 最大6桁
+
+    if (shootingScore.length >= 6) {
       return;
     }
 
 
-    // 先頭0を防止
+    // 0から始めない
+
     if (
-      shootingScore === "0" &&
+      shootingScore === "0"
+      &&
       number === "0"
     ) {
 
@@ -341,18 +444,19 @@ function addNumber(
     }
 
 
-    // 0の後に別の数字
+    // 0のあとに数字を入力したら置換
+
     if (
       shootingScore === "0"
+      &&
+      number !== "0"
     ) {
 
-      shootingScore =
-        number;
+      shootingScore = number;
 
     } else {
 
-      shootingScore +=
-        number;
+      shootingScore += number;
 
     }
 
@@ -364,27 +468,21 @@ function addNumber(
 }
 
 
+// ========================================
+// CLEAR
+// ========================================
 
-/* =========================================================
-   CLEAR SCORE
-========================================================= */
+function clearScore(target) {
 
-function clearScore(
-  target
-) {
 
-  if (
-    target === "quiz"
-  ) {
+  if (target === "quiz") {
 
     quizScore = "";
 
   }
 
 
-  if (
-    target === "shooting"
-  ) {
+  if (target === "shooting") {
 
     shootingScore = "";
 
@@ -396,18 +494,14 @@ function clearScore(
 }
 
 
+// ========================================
+// BACKSPACE
+// ========================================
 
-/* =========================================================
-   BACKSPACE
-========================================================= */
+function backspace(target) {
 
-function backspace(
-  target
-) {
 
-  if (
-    target === "quiz"
-  ) {
+  if (target === "quiz") {
 
     quizScore =
       quizScore.slice(
@@ -418,9 +512,7 @@ function backspace(
   }
 
 
-  if (
-    target === "shooting"
-  ) {
+  if (target === "shooting") {
 
     shootingScore =
       shootingScore.slice(
@@ -436,21 +528,47 @@ function backspace(
 }
 
 
-
-/* =========================================================
-   UPDATE DISPLAY
-========================================================= */
+// ========================================
+// DISPLAY
+// ========================================
 
 function updateDisplay() {
 
+
+  // クイズ
+
+  if (quizDisplay) {
+
+    quizDisplay.textContent =
+      formatScore(
+        quizScore || 0
+      );
+
+  }
+
+
+  // 射的
+
+  if (shootingDisplay) {
+
+    shootingDisplay.textContent =
+      formatScore(
+        shootingScore || 0
+      );
+
+  }
+
+
+  // 合計
+
   const quiz =
-    Number(
+    getNumber(
       quizScore || 0
     );
 
 
   const shooting =
-    Number(
+    getNumber(
       shootingScore || 0
     );
 
@@ -459,208 +577,223 @@ function updateDisplay() {
     quiz + shooting;
 
 
-  // クイズ
-  if (quizDisplay) {
-
-    quizDisplay.textContent =
-      quiz.toLocaleString(
-        "ja-JP"
-      );
-
-  }
-
-
-  // 射的
-  if (shootingDisplay) {
-
-    shootingDisplay.textContent =
-      shooting.toLocaleString(
-        "ja-JP"
-      );
-
-  }
-
-
-  // 合計
   if (totalPreview) {
 
     totalPreview.textContent =
-      total.toLocaleString(
-        "ja-JP"
-      );
+      formatScore(total);
 
   }
 
 }
 
 
+// 初期表示
 
-/* =========================================================
-   SUBMIT
-========================================================= */
+updateDisplay();
+
+
+// ========================================
+// SUBMIT
+// ========================================
 
 if (submitButton) {
 
   submitButton.addEventListener(
     "click",
-    submitScore
+    async () => {
+
+
+      // ----------------------------------
+      // 二重送信防止
+      // ----------------------------------
+
+      if (isSending) {
+        return;
+      }
+
+
+      // ----------------------------------
+      // ニックネームチェック
+      // ----------------------------------
+
+      if (!nickname) {
+
+        if (sendStatus) {
+
+          sendStatus.textContent =
+            "先にニックネームを入力してください。";
+
+        }
+
+        return;
+
+      }
+
+
+      // ----------------------------------
+      // 点数チェック
+      // ----------------------------------
+
+      if (
+        quizScore === ""
+        ||
+        shootingScore === ""
+      ) {
+
+        if (sendStatus) {
+
+          sendStatus.textContent =
+            "クイズと射的の両方を入力してください。";
+
+        }
+
+        return;
+
+      }
+
+
+      // ----------------------------------
+      // 数値化
+      // ----------------------------------
+
+      const quiz =
+        getNumber(
+          quizScore
+        );
+
+
+      const shooting =
+        getNumber(
+          shootingScore
+        );
+
+
+      const total =
+        quiz + shooting;
+
+
+      // ----------------------------------
+      // SEND START
+      // ----------------------------------
+
+      isSending = true;
+
+      submitButton.disabled = true;
+
+
+      if (sendStatus) {
+
+        sendStatus.textContent =
+          "SENDING...";
+
+      }
+
+
+      submitButton.classList.add(
+        "sending"
+      );
+
+
+      try {
+
+
+        // =================================
+        // FIRESTORE
+        // =================================
+
+        await addDoc(
+          collection(
+            db,
+            "festivalScores"
+          ),
+          {
+
+            // ニックネーム
+            nickname: nickname,
+
+            // クイズ
+            quizScore: quiz,
+
+            // 射的
+            shootingScore: shooting,
+
+            // 合計
+            totalScore: total,
+
+            // 案内完了
+            completed: false,
+
+            // 登録日時
+            createdAt:
+              serverTimestamp()
+
+          }
+        );
+
+
+        // =================================
+        // SUCCESS
+        // =================================
+
+        if (sendStatus) {
+
+          sendStatus.textContent = "";
+
+        }
+
+
+        showResult(
+          quiz,
+          shooting,
+          total
+        );
+
+
+      } catch (error) {
+
+
+        console.error(
+          "Firestore Error:",
+          error
+        );
+
+
+        if (sendStatus) {
+
+          sendStatus.textContent =
+            "送信に失敗しました。通信状態を確認してください。";
+
+        }
+
+      } finally {
+
+
+        isSending = false;
+
+        submitButton.disabled = false;
+
+        submitButton.classList.remove(
+          "sending"
+        );
+
+      }
+
+    }
   );
 
 }
 
 
-
-/* =========================================================
-   SUBMIT FUNCTION
-========================================================= */
-
-async function submitScore() {
-
-  // 二重送信防止
-  if (isSending) {
-    return;
-  }
-
-
-  // ニックネーム確認
-  if (!nickname) {
-
-    sendStatus.textContent =
-      "ニックネームを入力してください。";
-
-    return;
-
-  }
-
-
-  // 点数確認
-  if (
-    quizScore === "" ||
-    shootingScore === ""
-  ) {
-
-    sendStatus.textContent =
-      "クイズと射的の両方を入力してください。";
-
-    return;
-
-  }
-
-
-  const quiz =
-    Number(quizScore);
-
-
-  const shooting =
-    Number(shootingScore);
-
-
-  const total =
-    quiz + shooting;
-
-
-
-  /* -------------------------------------------------------
-     SEND START
-  ------------------------------------------------------- */
-
-  isSending = true;
-
-
-  submitButton.disabled =
-    true;
-
-
-  sendStatus.textContent =
-    "SENDING...";
-
-
-  try {
-
-    /* -----------------------------------------------------
-       FIRESTORE
-    ----------------------------------------------------- */
-
-    await addDoc(
-      collection(
-        db,
-        "festivalScores"
-      ),
-      {
-
-        nickname:
-          nickname,
-
-        quizScore:
-          quiz,
-
-        shootingScore:
-          shooting,
-
-        totalScore:
-          total,
-
-        completed:
-          false,
-
-        createdAt:
-          serverTimestamp()
-
-      }
-    );
-
-
-    /* -----------------------------------------------------
-       SHOW RESULT
-    ----------------------------------------------------- */
-
-    showResult(
-      quiz,
-      shooting,
-      total
-    );
-
-
-    sendStatus.textContent =
-      "";
-
-
-  } catch (error) {
-
-    console.error(
-      "Firestore error:",
-      error
-    );
-
-
-    sendStatus.textContent =
-      "送信に失敗しました。通信状態を確認してください。";
-
-
-  } finally {
-
-    isSending =
-      false;
-
-
-    submitButton.disabled =
-      false;
-
-  }
-
-}
-
-
-
-/* =========================================================
-   SHOW RESULT
-========================================================= */
+// ========================================
+// RESULT
+// ========================================
 
 function showResult(
   quiz,
   shooting,
   total
 ) {
+
 
   if (resultName) {
 
@@ -673,9 +806,7 @@ function showResult(
   if (resultQuiz) {
 
     resultQuiz.textContent =
-      quiz.toLocaleString(
-        "ja-JP"
-      );
+      formatScore(quiz);
 
   }
 
@@ -683,9 +814,7 @@ function showResult(
   if (resultShooting) {
 
     resultShooting.textContent =
-      shooting.toLocaleString(
-        "ja-JP"
-      );
+      formatScore(shooting);
 
   }
 
@@ -693,15 +822,10 @@ function showResult(
   if (resultTotal) {
 
     resultTotal.textContent =
-      total.toLocaleString(
-        "ja-JP"
-      );
-
+      formatScore(total);
 
     resultTotal.dataset.text =
-      total.toLocaleString(
-        "ja-JP"
-      );
+      formatScore(total);
 
   }
 
@@ -717,10 +841,9 @@ function showResult(
 }
 
 
-
-/* =========================================================
-   NEXT PLAYER
-========================================================= */
+// ========================================
+// NEXT PLAYER
+// ========================================
 
 if (newEntryButton) {
 
@@ -728,34 +851,40 @@ if (newEntryButton) {
     "click",
     () => {
 
-      // リセット
-      nickname =
-        "";
 
-      quizScore =
-        "";
+      // ----------------------------------
+      // DATA RESET
+      // ----------------------------------
 
-      shootingScore =
-        "";
+      nickname = "";
+
+      quizScore = "";
+
+      shootingScore = "";
 
 
-      // 入力欄
+      // ----------------------------------
+      // INPUT RESET
+      // ----------------------------------
+
       if (nicknameInput) {
 
-        nicknameInput.value =
-          "";
-
-        nicknameInput.style.borderColor =
-          "";
+        nicknameInput.value = "";
 
       }
 
 
-      // 表示更新
+      // ----------------------------------
+      // DISPLAY RESET
+      // ----------------------------------
+
       updateDisplay();
 
 
-      // 結果画面を閉じる
+      // ----------------------------------
+      // RESULT CLOSE
+      // ----------------------------------
+
       if (resultOverlay) {
 
         resultOverlay.classList.add(
@@ -765,7 +894,10 @@ if (newEntryButton) {
       }
 
 
-      // 点数画面を閉じる
+      // ----------------------------------
+      // SCREEN
+      // ----------------------------------
+
       if (scoreScreen) {
 
         scoreScreen.classList.add(
@@ -775,7 +907,6 @@ if (newEntryButton) {
       }
 
 
-      // スタート画面
       if (startScreen) {
 
         startScreen.classList.remove(
@@ -785,32 +916,40 @@ if (newEntryButton) {
       }
 
 
+      // ----------------------------------
+      // STATUS RESET
+      // ----------------------------------
+
       if (sendStatus) {
 
-        sendStatus.textContent =
-          "";
+        sendStatus.textContent = "";
 
       }
 
+
+      // ----------------------------------
+      // FOCUS
+      // ----------------------------------
+
+      if (nicknameInput) {
+
+        setTimeout(() => {
+
+          nicknameInput.focus();
+
+        }, 100);
+
+      }
+
+
+      // ----------------------------------
+      // SCROLL TOP
+      // ----------------------------------
 
       window.scrollTo({
         top: 0,
         behavior: "instant"
       });
-
-
-      setTimeout(
-        () => {
-
-          if (nicknameInput) {
-
-            nicknameInput.focus();
-
-          }
-
-        },
-        100
-      );
 
     }
   );
@@ -818,44 +957,34 @@ if (newEntryButton) {
 }
 
 
-
-/* =========================================================
-   CODE RAIN
-========================================================= */
+// ========================================
+// CODE RAIN
+// ========================================
 
 function createCodeRain() {
 
-  const container =
-    document.getElementById(
-      "codeRain"
-    );
 
-
-  if (!container) {
+  if (!codeRain) {
     return;
   }
 
 
-  /*
-   * 二重生成防止
-   */
+  // すでに生成されていたら削除
 
-  container.innerHTML =
-    "";
+  codeRain.innerHTML = "";
 
 
   const characters =
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>/[]{}#%&";
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
+  // --------------------------------------
+  // COLUMN COUNT
+  // --------------------------------------
 
   const width =
     window.innerWidth;
 
-
-  /*
-   * 画面幅に応じて
-   * コードの列数を調整
-   */
 
   const columnCount =
     Math.max(
@@ -866,28 +995,31 @@ function createCodeRain() {
     );
 
 
+  // --------------------------------------
+  // CREATE COLUMNS
+  // --------------------------------------
+
   for (
     let i = 0;
     i < columnCount;
     i++
   ) {
 
+
     const column =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
 
     column.className =
       "code-column";
 
 
-    /*
-     * 一部だけ赤
-     */
+    // ------------------------------------
+    // RED COLUMN
+    // ------------------------------------
 
     if (
-      Math.random() < 0.12
+      Math.random() < 0.13
     ) {
 
       column.classList.add(
@@ -897,12 +1029,15 @@ function createCodeRain() {
     }
 
 
-    let text =
-      "";
+    // ------------------------------------
+    // TEXT
+    // ------------------------------------
+
+    let text = "";
 
 
     const length =
-      20 +
+      25 +
       Math.floor(
         Math.random() * 45
       );
@@ -914,15 +1049,22 @@ function createCodeRain() {
       j++
     ) {
 
+
       const random =
         Math.floor(
-          Math.random() *
+          Math.random()
+          *
           characters.length
         );
 
 
       text +=
         characters[random];
+
+
+      // 少し間隔を空ける
+
+      text += "\n";
 
     }
 
@@ -931,47 +1073,47 @@ function createCodeRain() {
       text;
 
 
-    /*
-     * 横位置
-     */
+    // ------------------------------------
+    // POSITION
+    // ------------------------------------
 
     column.style.left =
       `${Math.random() * 100}%`;
 
 
-    /*
-     * アニメーション速度
-     */
+    // ------------------------------------
+    // SIZE
+    // ------------------------------------
+
+    column.style.fontSize =
+      `${8 + Math.random() * 5}px`;
+
+
+    // ------------------------------------
+    // SPEED
+    // ------------------------------------
 
     column.style.animationDuration =
       `${8 + Math.random() * 18}s`;
 
 
-    /*
-     * 開始位置をランダム化
-     */
+    // ------------------------------------
+    // DELAY
+    // ------------------------------------
 
     column.style.animationDelay =
       `${Math.random() * -20}s`;
 
 
-    /*
-     * 透明度
-     */
+    // ------------------------------------
+    // OPACITY
+    // ------------------------------------
 
     column.style.opacity =
-      `${0.18 + Math.random() * 0.5}`;
+      `${0.12 + Math.random() * 0.35}`;
 
 
-    /*
-     * 少しサイズを変える
-     */
-
-    column.style.fontSize =
-      `${10 + Math.random() * 5}px`;
-
-
-    container.appendChild(
+    codeRain.appendChild(
       column
     );
 
@@ -980,25 +1122,24 @@ function createCodeRain() {
 }
 
 
-
-/* =========================================================
-   INITIALIZE CODE RAIN
-========================================================= */
+// ========================================
+// INITIALIZE CODE RAIN
+// ========================================
 
 createCodeRain();
 
 
+// ========================================
+// RESIZE
+// ========================================
 
-/* =========================================================
-   RESIZE
-========================================================= */
-
-let resizeTimer;
+let resizeTimer = null;
 
 
 window.addEventListener(
   "resize",
   () => {
+
 
     clearTimeout(
       resizeTimer
@@ -1012,16 +1153,87 @@ window.addEventListener(
           createCodeRain();
 
         },
-        250
+        300
       );
 
   }
 );
 
 
+// ========================================
+// PREVENT ACCIDENTAL FORM SUBMIT
+// ========================================
 
-/* =========================================================
-   INITIAL DISPLAY
-========================================================= */
+document.addEventListener(
+  "keydown",
+  (event) => {
 
-updateDisplay();
+
+    // Enterキーで意図しない送信を防ぐ
+
+    if (
+      event.key === "Enter"
+      &&
+      event.target.tagName !== "INPUT"
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  }
+);
+
+
+// ========================================
+// TOUCH FEEDBACK
+// ========================================
+
+document
+  .querySelectorAll(
+    ".key, .sort-button, button"
+  )
+  .forEach(
+    (button) => {
+
+
+      button.addEventListener(
+        "touchstart",
+        () => {
+
+          button.classList.add(
+            "touching"
+          );
+
+        },
+        {
+          passive: true
+        }
+      );
+
+
+      button.addEventListener(
+        "touchend",
+        () => {
+
+          button.classList.remove(
+            "touching"
+          );
+
+        },
+        {
+          passive: true
+        }
+      );
+
+    }
+  );
+
+
+// ========================================
+// DEBUG
+// ========================================
+
+console.log(
+  "FESTIVAL SCORE SYSTEM / input.js READY"
+);
