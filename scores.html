@@ -1,344 +1,122 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#050505"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050505">
   <title>SCORE LIST // FESTIVAL</title>
-
   <link rel="stylesheet" href="css/style.css">
 </head>
-
-
 <body class="scores-page">
 
-  <!-- ========================================
-       BACKGROUND
-  ========================================= -->
-
+  <!-- BACKGROUND EFFECTS -->
   <div id="codeRain" class="code-rain"></div>
-
   <div class="scanlines"></div>
-
   <div class="noise"></div>
 
-
-  <!-- ========================================
-       MAIN
-  ========================================= -->
-
+  <!-- MAIN CONTAINER -->
   <main class="scores-container">
 
-
-    <!-- ======================================
-         HEADER
-    ======================================= -->
-
+    <!-- HEADER -->
     <header class="scores-header">
-
       <div class="header-left">
-
         <div class="system-label">
-          CUSTIVAL SCORE SYSTEM
+          CULTURE FESTIVAL SCORE SYSTEM
         </div>
-
         <h1 class="scores-title">
           SCORE LIST
         </h1>
-
         <div class="header-status">
           <span class="status-dot"></span>
           LIVE DATABASE
         </div>
-
       </div>
-
-
-      <a
-        href="index.html"
-        class="back-button"
-      >
+      <a href="index.html" class="back-button">
         ← MENU
       </a>
-
     </header>
 
-
-
-    <!-- ======================================
-         DATABASE INFO
-    ======================================= -->
-
+    <!-- DATABASE INFO -->
     <section class="database-info">
-
       <div class="info-box">
-
-        <span class="info-label">
-          ENTRIES
-        </span>
-
-        <strong id="entryCount">
-          0
-        </strong>
-
-        <small>
-          TOTAL PLAYERS
-        </small>
-
+        <span class="info-label">ENTRIES</span>
+        <strong id="entryCount">0</strong>
+        <small>TOTAL PLAYERS</small>
       </div>
-
-
       <div class="info-box">
-
-        <span class="info-label">
-          WAITING
-        </span>
-
-        <strong id="waitingCount">
-          0
-        </strong>
-
-        <small>
-          NOT COMPLETED
-        </small>
-
+        <span class="info-label">WAITING</span>
+        <strong id="waitingCount">0</strong>
+        <small>NOT COMPLETED</small>
       </div>
-
-
       <div class="info-box">
-
-        <span class="info-label">
-          COMPLETE
-        </span>
-
-        <strong id="completeCount">
-          0
-        </strong>
-
-        <small>
-          FINISHED
-        </small>
-
+        <span class="info-label">COMPLETE</span>
+        <strong id="completeCount">0</strong>
+        <small>FINISHED</small>
       </div>
-
     </section>
 
-
-
-    <!-- ======================================
-         SORT SWITCH
-    ======================================= -->
-
+    <!-- SORT SWITCH -->
     <section class="sort-section">
-
       <div class="section-label">
         DISPLAY MODE
       </div>
-
-
       <div class="sort-switch">
-
-        <button
-          id="newestButton"
-          class="sort-button active"
-          type="button"
-        >
-
-          <span class="sort-main">
-            NEWEST
-          </span>
-
-          <span class="sort-sub">
-            新着順
-          </span>
-
+        <button id="newestButton" class="sort-button active" type="button">
+          <span class="sort-main">NEWEST</span>
+          <span class="sort-sub">新着順</span>
         </button>
-
-
-        <button
-          id="rankingButton"
-          class="sort-button"
-          type="button"
-        >
-
-          <span class="sort-main">
-            RANKING
-          </span>
-
-          <span class="sort-sub">
-            ランキング順
-          </span>
-
+        <button id="rankingButton" class="sort-button" type="button">
+          <span class="sort-main">RANKING</span>
+          <span class="sort-sub">ランキング順</span>
         </button>
-
       </div>
-
     </section>
 
-
-
-    <!-- ======================================
-         TABLE
-    ======================================= -->
-
+    <!-- TABLE -->
     <section class="score-table-wrapper">
-
-
-      <!-- TABLE HEADER -->
-
       <div class="score-table-header">
-
-        <div class="col-rank">
-          #
-        </div>
-
-        <div class="col-player">
-          ニックネーム
-        </div>
-
-        <div class="col-quiz">
-          クイズ
-        </div>
-
-        <div class="col-shooting">
-          射的
-        </div>
-
-        <div class="col-total">
-          合計
-        </div>
-
-        <div class="col-status">
-          登録日時
-        </div>
-
-        <div class="col-action">
-          操作
-        </div>
-
+        <div class="col-rank">#</div>
+        <div class="col-player">ニックネーム</div>
+        <div class="col-quiz">クイズ</div>
+        <div class="col-shooting">射的</div>
+        <div class="col-total">合計</div>
+        <div class="col-status">登録日時</div>
+        <div class="col-action">操作</div>
       </div>
 
+      <div id="scoreList" class="score-list"></div>
 
-
-      <!-- SCORE ROWS -->
-
-      <div
-        id="scoreList"
-        class="score-list"
-      >
+      <div id="emptyMessage" class="empty-message hidden">
+        <div class="empty-icon">00</div>
+        <div class="empty-title">NO DATA</div>
+        <div class="empty-sub">SCORE DATABASE IS EMPTY</div>
       </div>
-
-
-      <!-- EMPTY -->
-
-      <div
-        id="emptyMessage"
-        class="empty-message hidden"
-      >
-
-        <div class="empty-icon">
-          00
-        </div>
-
-        <div class="empty-title">
-          NO DATA
-        </div>
-
-        <div class="empty-sub">
-          SCORE DATABASE IS EMPTY
-        </div>
-
-      </div>
-
-
     </section>
 
-
-
-    <!-- ======================================
-         ADMIN
-    ======================================= -->
-
+    <!-- ADMIN PANEL -->
     <section class="admin-panel">
-
       <div class="admin-info">
-
-        <div class="admin-warning">
-          !
-        </div>
-
+        <div class="admin-warning">!</div>
         <div>
-
-          <div class="admin-title">
-            ADMIN AREA
-          </div>
-
-          <div class="admin-description">
-            データを初期化すると元に戻せません。
-          </div>
-
+          <div class="admin-title">ADMIN AREA</div>
+          <div class="admin-description">データを初期化すると元に戻せません。</div>
         </div>
-
       </div>
-
-
-      <button
-        id="resetButton"
-        class="reset-button"
-        type="button"
-      >
-
+      <button id="resetButton" class="reset-button" type="button">
         RESET ALL DATA
-
-        <span>
-          全データ初期化
-        </span>
-
+        <span>全データ初期化</span>
       </button>
-
     </section>
 
-
-
-    <!-- ======================================
-         FOOTER
-    ======================================= -->
-
+    <!-- FOOTER -->
     <footer class="scores-footer">
-
-      <span>
-        FESTIVAL // SCORE SYSTEM
-      </span>
-
-      <span>
-        SYSTEM // DATABASE
-      </span>
-
+      <span>FESTIVAL // SCORE SYSTEM</span>
+      <span>SYSTEM // DATABASE</span>
     </footer>
-
 
   </main>
 
-
-  <!-- ========================================
-       JAVASCRIPT
-  ========================================= -->
-
-  <script
-    type="module"
-    src="js/scores.js"
-  ></script>
-
+  <!-- JAVASCRIPT -->
+  <script type="module" src="js/scores.js"></script>
 </body>
-
 </html>
