@@ -29,9 +29,7 @@
 
 </head>
 
-
 <body class="input-page">
-
 
   <!-- ======================================
        BACKGROUND
@@ -55,55 +53,102 @@
 
 
   <!-- ======================================
-       START SCREEN
+       1. MENU SCREEN (TOP)
   ======================================= -->
 
   <main
-    id="startScreen"
-    class="screen start-screen"
+    id="menuScreen"
+    class="screen menu-screen"
   >
 
-    <div class="start-content">
+    <div class="menu-header-bar">
+      <span>CULTURE FESTIVAL // TERMINAL 01</span>
+      <span>FESTIVAL SCORE SYSTEM</span>
+    </div>
 
-
-      <div class="system-label">
-        <span>SYS://</span>
-        SCORE_COLLECTION
-      </div>
-
+    <div class="menu-content">
 
       <h1
         class="glitch-title"
-        data-text="SCORE SYSTEM"
+        data-text="FESTIVAL SCORE SYSTEM"
       >
-        SCORE SYSTEM
+        FESTIVAL SCORE SYSTEM
       </h1>
 
-
-      <p class="system-subtitle">
-        FESTIVAL SCORE DATABASE
+      <p class="menu-subtitle">
+        操作を選択してください
       </p>
 
+      <div class="menu-buttons">
 
-      <div class="terminal-line">
-        <span>&gt;</span>
-        ENTER PLAYER IDENTIFICATION
-        <span class="cursor">_</span>
+        <button
+          id="gotoAuthButton"
+          class="menu-card-button"
+          type="button"
+        >
+          <div class="menu-card-left">
+            <span class="menu-card-num">01</span>
+            <div class="menu-card-texts">
+              <span class="menu-card-main">点を入力する</span>
+              <span class="menu-card-sub">ENTER SCORE</span>
+            </div>
+          </div>
+          <span class="menu-card-arrow">→</span>
+        </button>
+
+        <a
+          href="scores.html"
+          class="menu-card-button"
+        >
+          <div class="menu-card-left">
+            <span class="menu-card-num">02</span>
+            <div class="menu-card-texts">
+              <span class="menu-card-main">点数一覧を見る</span>
+              <span class="menu-card-sub">SCORE DATABASE</span>
+            </div>
+          </div>
+          <span class="menu-card-arrow">→</span>
+        </a>
+
       </div>
 
+    </div>
 
-      <!-- NICKNAME -->
+    <div class="menu-footer">
+      <span>SYSTEM // READY</span>
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       2. AUTHENTICATION SCREEN (NICKNAME)
+  ======================================= -->
+
+  <main
+    id="authScreen"
+    class="screen auth-screen hidden"
+  >
+
+    <div class="menu-header-bar">
+      <span>FESTIVAL SCORE TERMINAL</span>
+      <span>USER AUTHENTICATION</span>
+    </div>
+
+    <div class="auth-content">
+
+      <h2
+        class="glitch-title small"
+        data-text="PLAYER NAME"
+      >
+        PLAYER NAME
+      </h2>
+
+      <p class="system-subtitle">
+        ニックネームを入力してください
+      </p>
 
       <div class="nickname-area">
-
-        <label
-          for="nicknameInput"
-          class="input-label"
-        >
-          NICKNAME
-        </label>
-
-
         <input
           id="nicknameInput"
           class="nickname-input"
@@ -112,80 +157,38 @@
           autocomplete="off"
           autocapitalize="off"
           spellcheck="false"
-          placeholder="ニックネームを入力"
+          placeholder="NICKNAME"
         >
-
-
-        <div class="input-hint">
-          MAX 20 CHARACTERS
-        </div>
-
       </div>
-
-
-      <!-- START -->
 
       <button
         id="startButton"
         class="primary-button start-button"
         type="button"
       >
-
-        <span class="button-main">
-          START
-        </span>
-
-        <span class="button-sub">
-          点数入力を開始
-        </span>
-
+        <span class="button-main">START</span>
+        <span class="button-arrow">→</span>
       </button>
 
-
-      <!-- SCORE LIST -->
-
-      <a
-        href="scores.html"
-        class="secondary-button"
+      <button
+        id="backToMenuButton"
+        class="secondary-outline-button"
+        type="button"
       >
-
-        <span class="button-main">
-          SCORE LIST
-        </span>
-
-        <span class="button-sub">
-          一覧を見る
-        </span>
-
-      </a>
-
-
-      <div
-        id="sendStatus"
-        class="send-status"
-      ></div>
-
+        ← BACK
+      </button>
 
     </div>
 
-
-    <div class="start-footer">
-
-      <span>
-        FESTIVAL // SCORE SYSTEM
-      </span>
-
-      <span>
-        ONLINE
-      </span>
-
+    <div class="menu-footer">
+      <span id="authSystemStatus">SYSTEM // WAITING</span>
     </div>
 
   </main>
 
 
   <!-- ======================================
-       SCORE INPUT SCREEN
+       3. SCORE INPUT SCREEN
   ======================================= -->
 
   <main
@@ -193,434 +196,139 @@
     class="screen score-screen hidden"
   >
 
-
     <!-- HEADER -->
 
     <header class="input-header">
 
-
-      <div class="header-player">
-
-        <span class="header-label">
-          PLAYER
-        </span>
-
-        <strong
-          id="playerName"
-          class="header-name"
-        >
-          ---
-        </strong>
-
+      <div class="header-player-info">
+        <span class="header-label">PLAYER</span>
+        <strong id="playerName" class="header-name">---</strong>
       </div>
 
-
-      <a
-        href="scores.html"
-        class="header-list-button"
+      <button
+        id="menuFromScoreButton"
+        class="header-back-button"
+        type="button"
       >
-        LIST
-      </a>
+        ← MENU
+      </button>
 
     </header>
 
 
-    <!-- ====================================
-         QUIZ
-    ===================================== -->
+    <!-- QUIZ SECTION -->
 
-    <section
-      class="score-section quiz-section"
-    >
-
+    <section class="score-section">
 
       <div class="section-heading">
-
-
         <div>
-
-          <span class="section-index">
-            01
-          </span>
-
-          <h2>
-            QUIZ
-          </h2>
-
-          <p>
-            クイズの点数
-          </p>
-
+          <span class="section-index">01</span>
+          <h2>QUIZ</h2>
+          <p>SCORE</p>
         </div>
-
 
         <div class="score-display-wrap">
-
-          <span
-            id="quizDisplay"
-            class="score-display"
-          >
-            0
-          </span>
-
-          <span class="score-unit">
-            PTS
-          </span>
-
+          <span id="quizDisplay" class="score-display">0</span>
         </div>
-
       </div>
 
-
-      <!-- QUIZ KEYPAD -->
-
-      <div
-        class="keypad"
-        data-target="quiz"
-      >
-
-        <button
-          class="key"
-          type="button"
-          data-value="1"
-        >
-          1
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="2"
-        >
-          2
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="3"
-        >
-          3
-        </button>
-
-
-        <button
-          class="key"
-          type="button"
-          data-value="4"
-        >
-          4
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="5"
-        >
-          5
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="6"
-        >
-          6
-        </button>
-
-
-        <button
-          class="key"
-          type="button"
-          data-value="7"
-        >
-          7
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="8"
-        >
-          8
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="9"
-        >
-          9
-        </button>
-
-
-        <button
-          class="key key-clear"
-          type="button"
-          data-action="clear"
-        >
-          CLR
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="0"
-        >
-          0
-        </button>
-
-        <button
-          class="key key-back"
-          type="button"
-          data-action="back"
-        >
-          ←
-        </button>
-
+      <div class="keypad" data-target="quiz">
+        <button class="key" type="button" data-value="1">1</button>
+        <button class="key" type="button" data-value="2">2</button>
+        <button class="key" type="button" data-value="3">3</button>
+        <button class="key" type="button" data-value="4">4</button>
+        <button class="key" type="button" data-value="5">5</button>
+        <button class="key" type="button" data-value="6">6</button>
+        <button class="key" type="button" data-value="7">7</button>
+        <button class="key" type="button" data-value="8">8</button>
+        <button class="key" type="button" data-value="9">9</button>
+        <button class="key key-clear" type="button" data-action="clear">C</button>
+        <button class="key" type="button" data-value="0">0</button>
+        <button class="key key-back" type="button" data-action="back">←</button>
       </div>
 
     </section>
 
 
-    <!-- ====================================
-         DIVIDER
-    ===================================== -->
+    <!-- SHOOTING SECTION -->
 
-    <div class="score-divider">
+    <section class="score-section">
 
-      <span></span>
+      <div class="section-heading">
+        <div>
+          <span class="section-index">02</span>
+          <h2>SHOOTING</h2>
+          <p>SCORE</p>
+        </div>
 
-      <div>
-        <span>+</span>
+        <div class="score-display-wrap">
+          <span id="shootingDisplay" class="score-display">0</span>
+        </div>
       </div>
 
-      <span></span>
+      <div class="keypad" data-target="shooting">
+        <button class="key" type="button" data-value="1">1</button>
+        <button class="key" type="button" data-value="2">2</button>
+        <button class="key" type="button" data-value="3">3</button>
+        <button class="key" type="button" data-value="4">4</button>
+        <button class="key" type="button" data-value="5">5</button>
+        <button class="key" type="button" data-value="6">6</button>
+        <button class="key" type="button" data-value="7">7</button>
+        <button class="key" type="button" data-value="8">8</button>
+        <button class="key" type="button" data-value="9">9</button>
+        <button class="key key-clear" type="button" data-action="clear">C</button>
+        <button class="key" type="button" data-value="0">0</button>
+        <button class="key key-back" type="button" data-action="back">←</button>
+      </div>
 
+    </section>
+
+
+    <!-- DIVIDER PLUS -->
+
+    <div class="score-divider-plus">
+      <span>+</span>
     </div>
 
 
-    <!-- ====================================
-         SHOOTING
-    ===================================== -->
+    <!-- TOTAL SECTION -->
 
-    <section
-      class="score-section shooting-section"
-    >
-
-
-      <div class="section-heading">
-
-
-        <div>
-
-          <span class="section-index">
-            02
-          </span>
-
-          <h2>
-            SHOOTING
-          </h2>
-
-          <p>
-            射的の点数
-          </p>
-
-        </div>
-
-
-        <div class="score-display-wrap">
-
-          <span
-            id="shootingDisplay"
-            class="score-display"
-          >
-            0
-          </span>
-
-          <span class="score-unit">
-            PTS
-          </span>
-
-        </div>
-
+    <section class="total-section-box">
+      <div class="calculated-label">CALCULATED TOTAL</div>
+      <div class="total-main-row">
+        <span class="total-title-text">TOTAL</span>
+        <span id="totalPreview" class="total-preview-number">0</span>
       </div>
-
-
-      <!-- SHOOTING KEYPAD -->
-
-      <div
-        class="keypad"
-        data-target="shooting"
-      >
-
-        <button
-          class="key"
-          type="button"
-          data-value="1"
-        >
-          1
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="2"
-        >
-          2
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="3"
-        >
-          3
-        </button>
-
-
-        <button
-          class="key"
-          type="button"
-          data-value="4"
-        >
-          4
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="5"
-        >
-          5
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="6"
-        >
-          6
-        </button>
-
-
-        <button
-          class="key"
-          type="button"
-          data-value="7"
-        >
-          7
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="8"
-        >
-          8
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="9"
-        >
-          9
-        </button>
-
-
-        <button
-          class="key key-clear"
-          type="button"
-          data-action="clear"
-        >
-          CLR
-        </button>
-
-        <button
-          class="key"
-          type="button"
-          data-value="0"
-        >
-          0
-        </button>
-
-        <button
-          class="key key-back"
-          type="button"
-          data-action="back"
-        >
-          ←
-        </button>
-
-      </div>
-
     </section>
 
 
-    <!-- ====================================
-         TOTAL
-    ===================================== -->
-
-    <section class="total-section">
-
-
-      <div class="total-label">
-        TOTAL SCORE
-      </div>
-
-
-      <div class="total-value-wrap">
-
-        <strong
-          id="totalPreview"
-          class="total-preview"
-        >
-          0
-        </strong>
-
-        <span>
-          PTS
-        </span>
-
-      </div>
-
-
-    </section>
-
-
-    <!-- ====================================
-         SUBMIT
-    ===================================== -->
+    <!-- SUBMIT -->
 
     <button
       id="submitButton"
-      class="primary-button submit-button"
+      class="primary-button submit-action-button"
       type="button"
     >
-
-      <span class="button-main">
-        SUBMIT SCORE
-      </span>
-
-      <span class="button-sub">
-        点数を送信する
-      </span>
-
+      <span class="button-main">送信</span>
+      <span class="button-sub">SEND SCORE</span>
+      <span class="button-arrow">→</span>
     </button>
 
 
     <div
       id="sendStatus"
-      class="send-status score-status"
+      class="send-status"
     ></div>
 
+    <div class="menu-footer">
+      <span>SYSTEM // INPUT</span>
+    </div>
 
   </main>
 
 
   <!-- ======================================
-       RESULT OVERLAY
+       4. RESULT OVERLAY
   ======================================= -->
 
   <div
@@ -628,103 +336,60 @@
     class="result-overlay hidden"
   >
 
-
     <div class="result-box">
-
 
       <div class="result-top-line">
         SCORE REGISTERED
       </div>
 
-
-      <div class="result-player-label">
-        PLAYER
-      </div>
-
-
       <div
         id="resultName"
         class="result-name"
       >
-        ---
+        PLAYER
       </div>
 
+      <div class="result-registered-msg">
+        さんのスコアを登録しました
+      </div>
 
-      <div class="result-breakdown">
-
-
-        <div class="result-row">
-
-          <span>
-            QUIZ
-          </span>
-
-          <strong id="resultQuiz">
-            0
-          </strong>
-
-          <small>
-            PTS
-          </small>
-
+      <div class="result-total-section">
+        <div class="result-total-label">TOTAL SCORE</div>
+        <div
+          id="resultTotal"
+          class="result-total glitch-number"
+          data-text="0"
+        >
+          230
         </div>
+      </div>
 
-
-        <div class="result-row">
-
-          <span>
-            SHOOTING
-          </span>
-
-          <strong id="resultShooting">
-            0
-          </strong>
-
-          <small>
-            PTS
-          </small>
-
+      <div class="result-breakdown-row">
+        <div class="breakdown-item">
+          <span class="b-label">QUIZ</span>
+          <span id="resultQuiz" class="b-val">120</span>
         </div>
-
-
+        <div class="b-plus">+</div>
+        <div class="breakdown-item">
+          <span class="b-label">SHOOTING</span>
+          <span id="resultShooting" class="b-val">110</span>
+        </div>
       </div>
-
-
-      <div class="result-total-label">
-        TOTAL
-      </div>
-
-
-      <div
-        id="resultTotal"
-        class="result-total glitch-number"
-        data-text="0"
-      >
-        0
-      </div>
-
-
-      <div class="result-total-unit">
-        POINTS
-      </div>
-
 
       <button
         id="newEntryButton"
-        class="primary-button next-button"
+        class="primary-button next-player-btn"
         type="button"
       >
-
-        <span class="button-main">
-          NEXT PLAYER
-        </span>
-
-        <span class="button-sub">
-          次の人へ
-        </span>
-
+        <span class="button-main">NEXT PLAYER</span>
+        <span class="button-arrow">→</span>
       </button>
 
+      <div class="result-list-link-wrap">
+        <a href="scores.html" class="result-list-link">
+          SCORE_LIST →
+        </a>
+      </div>
 
     </div>
 
@@ -739,7 +404,6 @@
     type="module"
     src="js/input.js"
   ></script>
-
 
 </body>
 
