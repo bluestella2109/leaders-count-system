@@ -1,91 +1,37 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
-
-  <meta
-    name="theme-color"
-    content="#050505"
-  >
-
-  <meta
-    name="apple-mobile-web-app-capable"
-    content="yes"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#050505">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>FESTIVAL SCORE SYSTEM</title>
-
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
-
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body class="input-page">
 
-  <!-- ======================================
-       BACKGROUND
-  ======================================= -->
+  <!-- BACKGROUND EFFECTS -->
+  <div id="codeRain" class="code-rain" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
 
-  <div
-    id="codeRain"
-    class="code-rain"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    class="scanlines"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    class="noise"
-    aria-hidden="true"
-  ></div>
-
-
-  <!-- ======================================
-       1. MENU SCREEN (TOP)
-  ======================================= -->
-
-  <main
-    id="menuScreen"
-    class="screen menu-screen"
-  >
-
+  <!-- 1. MENU SCREEN -->
+  <main id="menuScreen" class="screen menu-screen">
     <div class="menu-header-bar">
       <span>CULTURE FESTIVAL // TERMINAL 01</span>
       <span>FESTIVAL SCORE SYSTEM</span>
     </div>
 
     <div class="menu-content">
-
-      <h1
-        class="glitch-title"
-        data-text="FESTIVAL SCORE SYSTEM"
-      >
+      <h1 class="glitch-title" data-text="FESTIVAL SCORE SYSTEM">
         FESTIVAL SCORE SYSTEM
       </h1>
-
       <p class="menu-subtitle">
         操作を選択してください
       </p>
 
       <div class="menu-buttons">
-
-        <button
-          id="gotoAuthButton"
-          class="menu-card-button"
-          type="button"
-        >
+        <button id="gotoAuthButton" class="menu-card-button" type="button">
           <div class="menu-card-left">
             <span class="menu-card-num">01</span>
             <div class="menu-card-texts">
@@ -96,10 +42,7 @@
           <span class="menu-card-arrow">→</span>
         </button>
 
-        <a
-          href="scores.html"
-          class="menu-card-button"
-        >
+        <a href="scores.html" class="menu-card-button">
           <div class="menu-card-left">
             <span class="menu-card-num">02</span>
             <div class="menu-card-texts">
@@ -109,41 +52,25 @@
           </div>
           <span class="menu-card-arrow">→</span>
         </a>
-
       </div>
-
     </div>
 
     <div class="menu-footer">
       <span>SYSTEM // READY</span>
     </div>
-
   </main>
 
-
-  <!-- ======================================
-       2. AUTHENTICATION SCREEN (NICKNAME)
-  ======================================= -->
-
-  <main
-    id="authScreen"
-    class="screen auth-screen hidden"
-  >
-
+  <!-- 2. AUTHENTICATION SCREEN -->
+  <main id="authScreen" class="screen auth-screen hidden">
     <div class="menu-header-bar">
       <span>FESTIVAL SCORE TERMINAL</span>
       <span>USER AUTHENTICATION</span>
     </div>
 
     <div class="auth-content">
-
-      <h2
-        class="glitch-title small"
-        data-text="PLAYER NAME"
-      >
+      <h2 class="glitch-title small" data-text="PLAYER NAME">
         PLAYER NAME
       </h2>
-
       <p class="system-subtitle">
         ニックネームを入力してください
       </p>
@@ -161,72 +88,41 @@
         >
       </div>
 
-      <button
-        id="startButton"
-        class="primary-button start-button"
-        type="button"
-      >
+      <button id="startButton" class="primary-button start-button" type="button">
         <span class="button-main">START</span>
         <span class="button-arrow">→</span>
       </button>
 
-      <button
-        id="backToMenuButton"
-        class="secondary-outline-button"
-        type="button"
-      >
+      <button id="backToMenuButton" class="secondary-outline-button" type="button">
         ← BACK
       </button>
-
     </div>
 
     <div class="menu-footer">
       <span id="authSystemStatus">SYSTEM // WAITING</span>
     </div>
-
   </main>
 
-
-  <!-- ======================================
-       3. SCORE INPUT SCREEN
-  ======================================= -->
-
-  <main
-    id="scoreScreen"
-    class="screen score-screen hidden"
-  >
-
-    <!-- HEADER -->
-
+  <!-- 3. SCORE INPUT SCREEN -->
+  <main id="scoreScreen" class="screen score-screen hidden">
     <header class="input-header">
-
       <div class="header-player-info">
         <span class="header-label">PLAYER</span>
         <strong id="playerName" class="header-name">---</strong>
       </div>
-
-      <button
-        id="menuFromScoreButton"
-        class="header-back-button"
-        type="button"
-      >
+      <button id="menuFromScoreButton" class="header-back-button" type="button">
         ← MENU
       </button>
-
     </header>
 
-
     <!-- QUIZ SECTION -->
-
     <section class="score-section">
-
       <div class="section-heading">
         <div>
           <span class="section-index">01</span>
           <h2>QUIZ</h2>
           <p>SCORE</p>
         </div>
-
         <div class="score-display-wrap">
           <span id="quizDisplay" class="score-display">0</span>
         </div>
@@ -246,21 +142,16 @@
         <button class="key" type="button" data-value="0">0</button>
         <button class="key key-back" type="button" data-action="back">←</button>
       </div>
-
     </section>
 
-
     <!-- SHOOTING SECTION -->
-
     <section class="score-section">
-
       <div class="section-heading">
         <div>
           <span class="section-index">02</span>
           <h2>SHOOTING</h2>
           <p>SCORE</p>
         </div>
-
         <div class="score-display-wrap">
           <span id="shootingDisplay" class="score-display">0</span>
         </div>
@@ -280,19 +171,13 @@
         <button class="key" type="button" data-value="0">0</button>
         <button class="key key-back" type="button" data-action="back">←</button>
       </div>
-
     </section>
-
-
-    <!-- DIVIDER PLUS -->
 
     <div class="score-divider-plus">
       <span>+</span>
     </div>
 
-
     <!-- TOTAL SECTION -->
-
     <section class="total-section-box">
       <div class="calculated-label">CALCULATED TOTAL</div>
       <div class="total-main-row">
@@ -301,86 +186,52 @@
       </div>
     </section>
 
-
-    <!-- SUBMIT -->
-
-    <button
-      id="submitButton"
-      class="primary-button submit-action-button"
-      type="button"
-    >
+    <button id="submitButton" class="primary-button submit-action-button" type="button">
       <span class="button-main">送信</span>
       <span class="button-sub">SEND SCORE</span>
       <span class="button-arrow">→</span>
     </button>
 
-
-    <div
-      id="sendStatus"
-      class="send-status"
-    ></div>
+    <div id="sendStatus" class="send-status"></div>
 
     <div class="menu-footer">
       <span>SYSTEM // INPUT</span>
     </div>
-
   </main>
 
-
-  <!-- ======================================
-       4. RESULT OVERLAY
-  ======================================= -->
-
-  <div
-    id="resultOverlay"
-    class="result-overlay hidden"
-  >
-
+  <!-- 4. RESULT OVERLAY -->
+  <div id="resultOverlay" class="result-overlay hidden">
     <div class="result-box">
-
       <div class="result-top-line">
         SCORE REGISTERED
       </div>
-
-      <div
-        id="resultName"
-        class="result-name"
-      >
+      <div id="resultName" class="result-name">
         PLAYER
       </div>
-
       <div class="result-registered-msg">
         さんのスコアを登録しました
       </div>
 
       <div class="result-total-section">
         <div class="result-total-label">TOTAL SCORE</div>
-        <div
-          id="resultTotal"
-          class="result-total glitch-number"
-          data-text="0"
-        >
-          230
+        <div id="resultTotal" class="result-total glitch-number" data-text="0">
+          0
         </div>
       </div>
 
       <div class="result-breakdown-row">
         <div class="breakdown-item">
           <span class="b-label">QUIZ</span>
-          <span id="resultQuiz" class="b-val">120</span>
+          <span id="resultQuiz" class="b-val">0</span>
         </div>
         <div class="b-plus">+</div>
         <div class="breakdown-item">
           <span class="b-label">SHOOTING</span>
-          <span id="resultShooting" class="b-val">110</span>
+          <span id="resultShooting" class="b-val">0</span>
         </div>
       </div>
 
-      <button
-        id="newEntryButton"
-        class="primary-button next-player-btn"
-        type="button"
-      >
+      <button id="newEntryButton" class="primary-button next-player-btn" type="button">
         <span class="button-main">NEXT PLAYER</span>
         <span class="button-arrow">→</span>
       </button>
@@ -390,21 +241,10 @@
           SCORE_LIST →
         </a>
       </div>
-
     </div>
-
   </div>
 
-
-  <!-- ======================================
-       JAVASCRIPT
-  ======================================= -->
-
-  <script
-    type="module"
-    src="js/input.js"
-  ></script>
-
+  <!-- JAVASCRIPT -->
+  <script type="module" src="js/input.js"></script>
 </body>
-
 </html>
