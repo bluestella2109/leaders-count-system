@@ -56,8 +56,6 @@ let currentPlayerData = {
   shooting: "0"
 };
 
-let activeKeypadTarget = "quiz"; // "quiz" or "shooting"
-
 /* =========================================
    INITIALIZATION
 ========================================= */
