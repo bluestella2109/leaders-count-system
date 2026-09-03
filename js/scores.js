@@ -1,910 +1,299 @@
-import { db } from "./firebase.js";
+/* =========================================
+   FESTIVAL SCORE SYSTEM
+   SCORES.JS
+   Score Database & Ranking Management
+========================================= */
+
+import {
+  db,
+  SCORES_COLLECTION
+} from "./firebase.js";
 
 import {
   collection,
   getDocs,
-  updateDoc,
+  doc,
   deleteDoc,
-  doc
-} from
-  "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 /* =========================================
-   ELEMENTS
+   DOM ELEMENTS
 ========================================= */
 
-const scoreList =
-  document.getElementById("scoreList");
+const entryCountEl = document.getElementById("entryCount");
+const waitingCountEl = document.getElementById("waitingCount");
+const completeCountEl = document.getElementById("completeCount");
+const scoreListEl = document.getElementById("scoreList");
+const emptyMessageEl = document.getElementById("emptyMessage");
 
-const emptyMessage =
-  document.getElementById("emptyMessage");
-
-const entryCount =
-  document.getElementById("entryCount");
-
-const waitingCount =
-  document.getElementById("waitingCount");
-
-const completeCount =
-  document.getElementById("completeCount");
-
-const newestButton =
-  document.getElementById("newestButton");
-
-const rankingButton =
-  document.getElementById("rankingButton");
-
-const resetButton =
-  document.getElementById("resetButton");
-
-
+const newestButton = document.getElementById("newestButton");
+const rankingButton = document.getElementById("rankingButton");
+const resetButton = document.getElementById("resetButton");
 
 /* =========================================
-   VARIABLES
+   STATE
 ========================================= */
 
-let scores = [];
-
-let displayMode = "newest";
-
-
+let scoresData = [];
+let currentSort = "newest"; // "newest" or "ranking"
 
 /* =========================================
-   LOAD DATA
+   INITIALIZATION
 ========================================= */
 
-async function loadScores() {
+window.addEventListener("DOMContentLoaded", () => {
+  initCodeRain();
+  fetchScores();
 
-  try {
-
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "festivalScores"
-        )
-      );
-
-
-    scores =
-      snapshot.docs.map(
-        documentSnapshot => {
-
-          const data =
-            documentSnapshot.data();
-
-          return {
-
-            id:
-              documentSnapshot.id,
-
-            ...data
-
-          };
-
-        }
-      );
-
-
-    calculateRanking();
-
-    render();
-
+  if (newestButton) {
+    newestButton.addEventListener("click", () => {
+      setSortMode("newest");
+    });
   }
-  catch (error) {
 
-    console.error(
-      "Failed to load scores:",
-      error
-    );
+  if (rankingButton) {
+    rankingButton.addEventListener("click", () => {
+      setSortMode("ranking");
+    });
+  }
 
-    scoreList.innerHTML = `
-      <div class="database-error">
-        DATABASE ERROR
+  if (resetButton) {
+    resetButton.addEventListener("click", handleResetAll);
+  }
+});
+
+/* =========================================
+   BACKGROUND CODE RAIN
+========================================= */
+
+function initCodeRain() {
+  const container = document.getElementById("codeRain");
+  if (!container) return;
+
+  const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>/[]{}#%&$@+=-_";
+  const count = Math.max(18, Math.floor(window.innerWidth / 25));
+
+  for (let i = 0; i < count; i++) {
+    const column = document.createElement("div");
+    column.className = "code-column";
+
+    if (Math.random() < 0.10) {
+      column.classList.add("red");
+    }
+
+    let text = "";
+    const length = 18 + Math.floor(Math.random() * 45);
+    for (let j = 0; j < length; j++) {
+      text += characters[Math.floor(Math.random() * characters.length)];
+    }
+
+    column.textContent = text;
+    column.style.left = `${Math.random() * 100}%`;
+    column.style.fontSize = `${8 + Math.random() * 4}px`;
+    column.style.animationDuration = `${10 + Math.random() * 18}s`;
+    column.style.animationDelay = `${Math.random() * -20}s`;
+    column.style.opacity = `${0.15 + Math.random() * 0.45}`;
+
+    container.appendChild(column);
+  }
+}
+
+/* =========================================
+   FETCH SCORES FROM FIRESTORE
+========================================= */
+
+async function fetchScores() {
+  try {
+    const querySnapshot = await getDocs(collection(db, SCORES_COLLECTION));
+    scoresData = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      scoresData.push({
+        id: docSnap.id,
+        name: data.name || "UNKNOWN",
+        quiz: Number(data.quiz) || 0,
+        shooting: Number(data.shooting) || 0,
+        total: (Number(data.quiz) || 0) + (Number(data.shooting) || 0),
+        createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
+        status: data.status || "active" // active or complete
+      });
+    });
+
+    updateDatabaseInfo();
+    renderScores();
+  } catch (error) {
+    console.error("Failed to fetch scores:", error);
+  }
+}
+
+/* =========================================
+   UPDATE DATABASE INFO STATS
+========================================= */
+
+function updateDatabaseInfo() {
+  const totalEntries = scoresData.length;
+  const waitingCount = scoresData.filter(item => item.status !== "complete").length;
+  const completeCount = scoresData.filter(item => item.status === "complete").length;
+
+  if (entryCountEl) entryCountEl.textContent = totalEntries;
+  if (waitingCountEl) waitingCountEl.textContent = waitingCount;
+  if (completeCountEl) completeCountEl.textContent = completeCount;
+}
+
+/* =========================================
+   SORT MODE SWITCH
+========================================= */
+
+function setSortMode(mode) {
+  currentSort = mode;
+
+  if (newestButton && rankingButton) {
+    if (mode === "newest") {
+      newestButton.classList.add("active");
+      rankingButton.classList.remove("active");
+    } else {
+      rankingButton.classList.add("active");
+      newestButton.classList.remove("active");
+    }
+  }
+
+  renderScores();
+}
+
+/* =========================================
+   RENDER SCORES TABLE
+========================================= */
+
+function renderScores() {
+  if (!scoreListEl) return;
+  scoreListEl.innerHTML = "";
+
+  if (scoresData.length === 0) {
+    if (emptyMessageEl) emptyMessageEl.classList.remove("hidden");
+    return;
+  }
+
+  if (emptyMessageEl) emptyMessageEl.classList.add("hidden");
+
+  // Sorting logic
+  let sortedList = [...scoresData];
+  if (currentSort === "ranking") {
+    sortedList.sort((a, b) => {
+      if (b.total !== a.total) {
+        return b.total - a.total; // Total score descending
+      }
+      return b.createdAt - a.createdAt; // Newer first if tie
+    });
+  } else {
+    sortedList.sort((a, b) => b.createdAt - a.createdAt); // Newest first
+  }
+
+  sortedList.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "score-row";
+    if (item.status === "complete") {
+      row.classList.add("is-complete");
+    }
+
+    const rankDisplay = currentSort === "ranking" ? index + 1 : "-";
+    const formattedDate = formatDate(item.createdAt);
+
+    row.innerHTML = `
+      <div class="col-rank">${rankDisplay}</div>
+      <div class="col-player" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+      <div class="col-quiz">${item.quiz}</div>
+      <div class="col-shooting">${item.shooting}</div>
+      <div class="col-total total-cell">${item.total}</div>
+      <div class="col-status status-cell">${formattedDate}</div>
+      <div class="col-action">
+        <button class="complete-button" type="button" data-id="${item.id}" data-status="${item.status}">
+          ${item.status === "complete" ? "DONE" : "COMPLETE"}
+        </button>
       </div>
     `;
 
-  }
+    scoreListEl.appendChild(row);
+  });
 
+  // Bind action buttons
+  const actionButtons = scoreListEl.querySelectorAll(".complete-button");
+  actionButtons.forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const id = e.target.getAttribute("data-id");
+      const currentStatus = e.target.getAttribute("data-status");
+      const newStatus = currentStatus === "complete" ? "active" : "complete";
+      await toggleCompleteStatus(id, newStatus);
+    });
+  });
 }
 
-
-
 /* =========================================
-   CALCULATE RANKING
+   TOGGLE STATUS (COMPLETE / ACTIVE)
 ========================================= */
 
-function calculateRanking() {
-
-  /*
-   * 合計点の高い順に並べる
-   *
-   * 同点の場合は登録時間の早い方を上位
-   */
-
-  const rankingList =
-    [...scores].sort(
-      (a, b) => {
-
-        const totalA =
-          Number(a.totalScore || 0);
-
-        const totalB =
-          Number(b.totalScore || 0);
-
-
-        if (totalB !== totalA) {
-
-          return totalB - totalA;
-
-        }
-
-
-        const timeA =
-          getTime(a.createdAt);
-
-        const timeB =
-          getTime(b.createdAt);
-
-
-        return timeA - timeB;
-
-      }
-    );
-
-
-  /*
-   * ここでランキング順位を
-   * 元データに保存
-   */
-
-  rankingList.forEach(
-    (score, index) => {
-
-      const target =
-        scores.find(
-          item => item.id === score.id
-        );
-
-      if (target) {
-
-        target.rank =
-          index + 1;
-
-      }
-
-    }
-  );
-
-}
-
-
-
-/* =========================================
-   GET TIME
-========================================= */
-
-function getTime(timestamp) {
-
-  if (!timestamp) {
-    return Number.MAX_SAFE_INTEGER;
-  }
-
-
-  if (
-    typeof timestamp.toMillis ===
-    "function"
-  ) {
-
-    return timestamp.toMillis();
-
-  }
-
-
-  if (
-    timestamp.seconds !== undefined
-  ) {
-
-    return (
-      timestamp.seconds * 1000
-      +
-      Math.floor(
-        (timestamp.nanoseconds || 0)
-        / 1000000
-      )
-    );
-
-  }
-
-
-  return Number.MAX_SAFE_INTEGER;
-
-}
-
-
-
-/* =========================================
-   SORT FOR DISPLAY
-========================================= */
-
-function getDisplayScores() {
-
-  const list =
-    [...scores];
-
-
-  if (displayMode === "ranking") {
-
-    /*
-     * ランキング順
-     */
-
-    list.sort(
-      (a, b) =>
-        Number(a.rank || 999999)
-        -
-        Number(b.rank || 999999)
-    );
-
-  }
-  else {
-
-    /*
-     * 新着順
-     */
-
-    list.sort(
-      (a, b) =>
-        getTime(b.createdAt)
-        -
-        getTime(a.createdAt)
-    );
-
-  }
-
-
-  return list;
-
-}
-
-
-
-/* =========================================
-   RENDER
-========================================= */
-
-function render() {
-
-  updateCounters();
-
-
-  const displayScores =
-    getDisplayScores();
-
-
-  scoreList.innerHTML = "";
-
-
-  if (displayScores.length === 0) {
-
-    emptyMessage.classList.remove(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  emptyMessage.classList.add(
-    "hidden"
-  );
-
-
-  displayScores.forEach(
-    score => {
-
-      const row =
-        createScoreRow(score);
-
-      scoreList.appendChild(row);
-
-    }
-  );
-
-}
-
-
-
-/* =========================================
-   COUNTERS
-========================================= */
-
-function updateCounters() {
-
-  const total =
-    scores.length;
-
-
-  const waiting =
-    scores.filter(
-      score =>
-        score.completed !== true
-    ).length;
-
-
-  const complete =
-    scores.filter(
-      score =>
-        score.completed === true
-    ).length;
-
-
-  entryCount.textContent =
-    total;
-
-
-  waitingCount.textContent =
-    waiting;
-
-
-  completeCount.textContent =
-    complete;
-
-}
-
-
-
-/* =========================================
-   CREATE ROW
-========================================= */
-
-function createScoreRow(score) {
-
-  const row =
-    document.createElement("div");
-
-
-  row.className =
-    "score-row";
-
-
-  if (score.completed === true) {
-
-    row.classList.add(
-      "is-complete"
-    );
-
-  }
-
-
-  const rank =
-    String(
-      score.rank || 0
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  const nickname =
-    escapeHTML(
-      score.nickname || "UNKNOWN"
-    );
-
-
-  const quiz =
-    Number(
-      score.quizScore || 0
-    );
-
-
-  const shooting =
-    Number(
-      score.shootingScore || 0
-    );
-
-
-  const total =
-    Number(
-      score.totalScore || 0
-    );
-
-
-
-  /* ======================================
-     ROW HTML
-  ====================================== */
-
-  row.innerHTML = `
-
-    <div class="col-rank rank-cell">
-      ${rank}
-    </div>
-
-
-    <div
-      class="col-player player-cell"
-      title="${nickname}"
-    >
-      ${nickname}
-    </div>
-
-
-    <div class="col-quiz score-cell">
-      ${quiz}
-    </div>
-
-
-    <div class="col-shooting score-cell">
-      ${shooting}
-    </div>
-
-
-    <div class="col-total total-cell">
-      ${total}
-    </div>
-
-
-    <div class="col-status status-cell">
-
-      ${
-        score.completed === true
-
-          ? `
-            <span class="complete-status">
-              ✓ 完了
-            </span>
-          `
-
-          : `
-            <span class="waiting-status">
-              待機
-            </span>
-          `
-      }
-
-    </div>
-
-
-    <div class="col-action action-cell">
-
-      ${
-        score.completed === true
-
-          ? `
-            <span class="completed-action">
-              ✓ 完了
-            </span>
-          `
-
-          : `
-            <button
-              class="complete-button"
-              type="button"
-              data-id="${score.id}"
-            >
-              案内完了
-            </button>
-          `
-      }
-
-    </div>
-
-  `;
-
-
-  const completeButton =
-    row.querySelector(
-      ".complete-button"
-    );
-
-
-  if (completeButton) {
-
-    completeButton.addEventListener(
-      "click",
-      () => {
-
-        completeScore(
-          score.id
-        );
-
-      }
-    );
-
-  }
-
-
-  return row;
-
-}
-
-
-
-/* =========================================
-   COMPLETE SCORE
-========================================= */
-
-async function completeScore(id) {
-
-  const target =
-    scores.find(
-      score =>
-        score.id === id
-    );
-
-
-  if (!target) {
-    return;
-  }
-
-
-  if (target.completed === true) {
-    return;
-  }
-
-
-  const confirmed =
-    confirm(
-      `${target.nickname || "この参加者"}さんを「完了」にしますか？`
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
+async function toggleCompleteStatus(id, newStatus) {
   try {
+    const docRef = doc(db, SCORES_COLLECTION, id);
+    await updateDoc(docRef, { status: newStatus });
 
-    await updateDoc(
-      doc(
-        db,
-        "festivalScores",
-        id
-      ),
-      {
-        completed: true
-      }
-    );
+    // Local state update
+    const target = scoresData.find(item => item.id === id);
+    if (target) {
+      target.status = newStatus;
+    }
 
-
-    target.completed = true;
-
-
-    render();
-
+    updateDatabaseInfo();
+    renderScores();
+  } catch (error) {
+    console.error("Failed to update status:", error);
   }
-  catch (error) {
-
-    console.error(error);
-
-    alert(
-      "更新に失敗しました。"
-    );
-
-  }
-
 }
-
-
 
 /* =========================================
    RESET ALL DATA
 ========================================= */
 
-resetButton.addEventListener(
-  "click",
-  async () => {
+async function handleResetAll() {
+  const confirmed = window.confirm("すべてのデータを初期化しますか？この操作は取り消せません。");
+  if (!confirmed) return;
 
-    if (scores.length === 0) {
+  try {
+    const querySnapshot = await getDocs(collection(db, SCORES_COLLECTION));
+    const deletePromises = querySnapshot.docs.map((docSnap) =>
+      deleteDoc(doc(db, SCORES_COLLECTION, docSnap.id))
+    );
 
-      alert(
-        "削除するデータがありません。"
-      );
+    await Promise.all(deletePromises);
 
-      return;
-
-    }
-
-
-    const firstConfirm =
-      confirm(
-        "本当に全データを初期化しますか？\n\nこの操作は元に戻せません。"
-      );
-
-
-    if (!firstConfirm) {
-      return;
-    }
-
-
-    const secondConfirm =
-      confirm(
-        "【最終確認】\n\nすべての点数データを削除します。"
-      );
-
-
-    if (!secondConfirm) {
-      return;
-    }
-
-
-    resetButton.disabled = true;
-
-    resetButton.textContent =
-      "RESETTING...";
-
-
-    try {
-
-      /*
-       * 全ドキュメントを削除
-       */
-
-      await Promise.all(
-
-        scores.map(
-          score =>
-            deleteDoc(
-              doc(
-                db,
-                "festivalScores",
-                score.id
-              )
-            )
-        )
-
-      );
-
-
-      scores = [];
-
-
-      calculateRanking();
-
-      render();
-
-
-      alert(
-        "全データを初期化しました。"
-      );
-
-    }
-    catch (error) {
-
-      console.error(error);
-
-      alert(
-        "データの初期化に失敗しました。\nFirebaseのルールを確認してください。"
-      );
-
-    }
-    finally {
-
-      resetButton.disabled = false;
-
-      resetButton.innerHTML = `
-        RESET ALL DATA
-        <span>全データ初期化</span>
-      `;
-
-    }
-
+    scoresData = [];
+    updateDatabaseInfo();
+    renderScores();
+    alert("すべてのデータを初期化しました。");
+  } catch (error) {
+    console.error("Failed to reset database:", error);
+    alert("初期化に失敗しました。");
   }
-);
-
-
-
-/* =========================================
-   SORT BUTTON
-========================================= */
-
-newestButton.addEventListener(
-  "click",
-  () => {
-
-    displayMode =
-      "newest";
-
-
-    newestButton.classList.add(
-      "active"
-    );
-
-    rankingButton.classList.remove(
-      "active"
-    );
-
-
-    render();
-
-  }
-);
-
-
-
-rankingButton.addEventListener(
-  "click",
-  () => {
-
-    displayMode =
-      "ranking";
-
-
-    rankingButton.classList.add(
-      "active"
-    );
-
-    newestButton.classList.remove(
-      "active"
-    );
-
-
-    render();
-
-  }
-);
-
-
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
-function escapeHTML(value) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
 }
 
-
-
 /* =========================================
-   CODE RAIN
+   UTILITIES
 ========================================= */
 
-function createCodeRain() {
-
-  const container =
-    document.getElementById(
-      "codeRain"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  const characters =
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>[]{}#$%&/";
-
-
-  const columnCount =
-    Math.max(
-      18,
-      Math.floor(
-        window.innerWidth / 32
-      )
-    );
-
-
-  for (
-    let i = 0;
-    i < columnCount;
-    i++
-  ) {
-
-    const column =
-      document.createElement("div");
-
-
-    column.className =
-      "code-column";
-
-
-    let text = "";
-
-
-    const length =
-      25 +
-      Math.floor(
-        Math.random() * 45
-      );
-
-
-    for (
-      let j = 0;
-      j < length;
-      j++
-    ) {
-
-      text +=
-        characters[
-          Math.floor(
-            Math.random()
-            *
-            characters.length
-          )
-        ];
-
-      text += "\n";
-
-    }
-
-
-    column.textContent =
-      text;
-
-
-    column.style.left =
-      `${Math.random() * 100}%`;
-
-
-    column.style.animationDuration =
-      `${10 + Math.random() * 18}s`;
-
-
-    column.style.animationDelay =
-      `${Math.random() * -20}s`;
-
-
-    column.style.opacity =
-      `${0.12 + Math.random() * 0.30}`;
-
-
-    if (Math.random() < 0.12) {
-
-      column.classList.add(
-        "red"
-      );
-
-    }
-
-
-    container.appendChild(
-      column
-    );
-
-  }
-
+function formatDate(date) {
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  const h = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  return `${m}/${d} ${h}:${min}`;
 }
 
-
-
-/* =========================================
-   START
-========================================= */
-
-createCodeRain();
-
-loadScores();
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
