@@ -43,7 +43,6 @@ let currentSort = "newest"; // "newest" or "ranking"
 ========================================= */
 
 window.addEventListener("DOMContentLoaded", () => {
-  initCodeRain();
   fetchScores();
 
   if (newestButton) {
@@ -62,42 +61,6 @@ window.addEventListener("DOMContentLoaded", () => {
     resetButton.addEventListener("click", handleResetAll);
   }
 });
-
-/* =========================================
-   BACKGROUND CODE RAIN
-========================================= */
-
-function initCodeRain() {
-  const container = document.getElementById("codeRain");
-  if (!container) return;
-
-  const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>/[]{}#%&$@+=-_";
-  const count = Math.max(18, Math.floor(window.innerWidth / 25));
-
-  for (let i = 0; i < count; i++) {
-    const column = document.createElement("div");
-    column.className = "code-column";
-
-    if (Math.random() < 0.10) {
-      column.classList.add("red");
-    }
-
-    let text = "";
-    const length = 18 + Math.floor(Math.random() * 45);
-    for (let j = 0; j < length; j++) {
-      text += characters[Math.floor(Math.random() * characters.length)];
-    }
-
-    column.textContent = text;
-    column.style.left = `${Math.random() * 100}%`;
-    column.style.fontSize = `${8 + Math.random() * 4}px`;
-    column.style.animationDuration = `${10 + Math.random() * 18}s`;
-    column.style.animationDelay = `${Math.random() * -20}s`;
-    column.style.opacity = `${0.15 + Math.random() * 0.45}`;
-
-    container.appendChild(column);
-  }
-}
 
 /* =========================================
    FETCH SCORES FROM FIRESTORE
